@@ -135,7 +135,8 @@ html(style='font-size: 16px;' lang='en')
                       label.u-label(for='message-01bb') Lệnh truy vấn SQL
                       textarea#message-01bb.u-border-1.u-border-grey-30.u-input.u-input-rectangle.u-white(placeholder='Nhập lệnh truy vấn tại đây...' rows='10' cols='50' name='SQLQuery' required='')
                     .u-align-left.u-form-group.u-form-submit
-                      a.u-border-none.u-btn.u-btn-submit.u-button-style.u-custom-color-1.u-btn-3(onclick='KiemThuTestCase()') Kiểm thử
+                    a.u-border-none.u-btn.u-btn-submit.u-dialog-link.u-button-style.u-custom-color-1.u-btn-3(style="left: 10px" href='#sec-949c' onclick='KiemThuTestCase()') Kiểm thử
+                      //a.u-border-none.u-btn.u-btn-submit.u-button-style.u-custom-color-1.u-btn-3(onclick='KiemThuTestCase()') Kiểm thử
                 a.u-border-none.u-btn.u-button-style.u-dialog-link.u-palette-4-base.u-btn-4(href='#sec-949c' onclick='TaoCauHoiVaTestcase()') Lưu câu hỏi
                 //a.u-border-none.u-btn.u-button-style.u-palette-4-base.u-btn-4(onclick='TaoCauHoiVaTestcase()') Lưu câu hỏi
 
@@ -319,5 +320,5 @@ html(style='font-size: 16px;' lang='en')
       let text = await response.json(); 
       console.log(text)
       //alert(text.message);
-      document.querySelector("#encodedOutput").innerHTML = text.result;
+      document.querySelector("#encoded").innerHTML = text.result;
     }
