@@ -10,6 +10,35 @@ const configAdmin = {
     port: 1433
 }
 
+async function LayCauHoi(MaCH) {
+    try {
+        let SQLQuery = `SELECT TieuDe, MucDo, NoiDung, LuocDo, Input
+            FROM dbo.Admin_CauHoi LEFT JOIN dbo.Admin_TestCase ON Admin_TestCase.MaCH = Admin_CauHoi.MaCH
+            WHERE Admin_CauHoi.MaCH = '${MaCH}'`;
+
+        let result = await TruyVan(SQLQuery);
+        console.log("Lấy câu hỏi", result);
+        if(result.statusCode != 200) 
+            return ({
+                statusCode: 400,
+                message: 'Lấy câu hỏi thất bại'
+            })
+        else {
+            return ({
+                statusCode: 200,
+                message: 'Lấy câu hỏi thành công',
+                data: result.result.recordset[0]
+            })
+        }
+    } catch(err) {
+        console.log(err);
+        return ({
+            statusCode: 400,
+            message: 'Lấy câu hỏi thất bại'
+        })
+    }
+}
+
 async function ThemCauHoi(data) {
     try {
         let SQLQuery = `insert into Admin_CauHoi (MucDo, TieuDe, NoiDung, LuocDo, TinhTrang) 
@@ -108,6 +137,42 @@ async function ThemTestCase(MaCH, SQLQuery) {
         }
     } catch(err) {
         GhiLog(`Lỗi Insert TestCase (admin.models) - ${SQLQuery}\t${err}`);
+        return ({ 
+            statusCode: 400,
+            message: 'Lỗi truy vấn SQL!',
+            alert: 'Kiểm tra lại câu lệnh SQL!'
+        });
+    }
+}
+
+async function SuaTestCase(MaCH, SQLQuery) {
+    try {    
+        let QueryData = await XuLySQL(SQLQuery);
+        if(QueryData.statusCode != 200) 
+            return QueryData;
+        SQLQuery = SQLQuery.replace(/'/g, '"');
+        //Gọi truy vấn lưu kết quả testcase và câu lệnh mẫu
+        let UpdateSQLQuery = `update Admin_TestCase 
+            set Input = '${SQLQuery}', Output = '${JSON.stringify(QueryData.result)}' 
+            where MaCH = '${MaCH}'`;
+        // let InsertSQLQuery = `insert into Admin_TestCase (MaCH, Input, Output) 
+        //     values ('${MaCH}', '${SQLQuery}', '${JSON.stringify(QueryData.result)}')`;
+        let ResultQueryInsert = await TruyVan(UpdateSQLQuery);
+
+        if(ResultQueryInsert.statusCode != 200) {
+            GhiLog(`Lỗi Update TestCase (admin.models) - ${InsertSQLQuery}\t${ResultQueryInsert}`);
+            return ResultQueryInsert;
+        }
+
+        console.log("Sửa Testcase (admin.models)", ResultQueryInsert.result);
+
+        return {
+            statusCode: 200,
+            message: 'Thành công',
+            result: ResultQueryInsert.result.recordsets
+        }
+    } catch(err) {
+        GhiLog(`Lỗi Update TestCase (admin.models) - ${SQLQuery}\t${err}`);
         return ({ 
             statusCode: 400,
             message: 'Lỗi truy vấn SQL!',
@@ -218,6 +283,44 @@ async function TaoQuanHe(SQLSchema) {
     }
 }
 
+async function ChinhSuaCauHoi(MaCH, data) {
+    try {
+        let SQLQuery = `update Admin_CauHoi 
+            set LuocDo =  N'${data.LuocDo}', MucDo = N'${data.MucDo}', TieuDe = N'${data.TieuDe}', NoiDung = N'${data.NoiDung}'
+            where MaCH = '${MaCH}'`;
+
+        let result = await TruyVan(SQLQuery);
+        console.log("Sửa Câu Hỏi ", result);
+        if(result.statusCode != 200) 
+            return ({
+                statusCode: 400,
+                message: 'Sửa Câu Hỏi Thất Bại'
+            })
+        else {
+            result = await SuaTestCase(MaCH, data.SQLQuery);
+            if(result.statusCode != 200)
+                return ({
+                    statusCode: 400,
+                    message: 'Sửa Câu Hỏi Thất Bại'
+                })
+            else 
+                return ({
+                    statusCode: 200,
+                    message: `Sửa Câu Hỏi Thành Công - Mã số câu hỏi: ${MaCH}`,
+                    MaCH: MaCH
+                })
+        }
+    } catch(err) {  
+        console.log(err);
+        return ({
+            statusCode: 400,
+            message: 'Thêm Câu Hỏi Thất Bại'
+        })
+    }
+}
+
+exports.ChinhSuaCauHoi = ChinhSuaCauHoi;
+exports.LayCauHoi = LayCauHoi;
 exports.LayBaiTap = LayBaiTap;
 exports.ThemCauHoi = ThemCauHoi;
 exports.ThemTestCase = ThemTestCase;

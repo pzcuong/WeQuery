@@ -69,3 +69,12 @@ WHERE SV.MaSV = SVDT.MaSV AND SVDT.MaDT = DT.MaDT AND SV.GioiTinh = "Male" AND D
 3/9/2022 10:52:10 - Lỗi truy vấn SQL - [object Object]	RequestError: There are fewer columns in the INSERT statement than values specified in the VALUES clause. The number of values in the VALUES clause must match the number of columns specified in the INSERT statement.
 3/9/2022 10:54:36 - Lỗi truy vấn SQL - [object Object]	RequestError: There is already an object named 'SANPHAM' in the database.
 3/9/2022 10:54:50 - Lỗi truy vấn SQL - [object Object]	RequestError: Cannot insert the value NULL into column 'MASP', table 'WeQuery.dbo.SANPHAM'; column does not allow nulls. INSERT fails.
+3/9/2022 21:40:59 - Lỗi truy vấn SQL - select masp, tensp
+from dbo.sanpham
+where nuocsx = "trung quoc"	RequestError: Invalid column name 'trung quoc'.
+3/9/2022 21:43:2 - Lỗi truy vấn SQL - select masp, tensp
+from dbo.sanpham
+where nuocsx = "trung quoc"	RequestError: Invalid column name 'trung quoc'.
+3/9/2022 21:44:26 - Lỗi truy vấn SQL - select masp, tensp
+from dbo.sanpham
+where nuocsx = "trung quoc"	RequestError: Invalid column name 'trung quoc'.

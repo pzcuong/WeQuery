@@ -7,10 +7,6 @@ const authMiddleware = require('../auth/auth.middlewares');
 const isAuthAdmin = authMiddleware.isAuthAdmin;
 const adminController = require('../admin/admin.controller');
 
-router.route('/ThemTestCase/:MaCH')
-	.get(isAuthAdmin, adminController.LayCauHoi)
-	.post(isAuthAdmin, adminController.ThemTestCase);
-
 router.route('/QuanLyBaiTap/')
 	.get(isAuthAdmin, adminController.DanhSachBaiTap)
 	.post(isAuthAdmin, adminController.ThemBaiTap);
@@ -24,5 +20,9 @@ router.route('/QuanLyBaiTap/:MaBT/ThemCauHoi')
     	res.send(html)
 	})
 	.post(isAuthAdmin, adminController.ThemCauHoi);
+
+router.route('/ChinhSua/:MaCH') 
+	.get(isAuthAdmin, adminController.LayCauHoi)
+	.post(isAuthAdmin, adminController.ChinhSuaCauHoi);
 
 module.exports = router;

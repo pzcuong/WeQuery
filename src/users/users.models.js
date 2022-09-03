@@ -483,7 +483,7 @@ async function LayNoiDungBaiTap(MaBT, MaCH, user) {
         WHERE BTCH.MaBT IN (
             SELECT BTN.MaBT
             FROM Admin_BaiTapTheoNhom BTN INNER JOIN Admin_ThanhVienNhom TVN ON TVN.MaNhom = BTN.MaNhom
-            WHERE TVN.Username = N'${user.username}' AND BTN.MaBT = '${MaBT}'
+            WHERE TVN.Username = N'${user.username}' AND BTN.MaBT = N'${MaBT}'
         )`;
         let result = await TruyVan("Admin", SQLQuery);
 

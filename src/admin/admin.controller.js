@@ -5,6 +5,7 @@ const usersModel = require('../users/users.models');
 async function ThemCauHoi(req, res) {
     try {
         const data = req.body;
+        const MaBT = req.params.MaBT;
 
         if(data.type == 'TaoQuanHe') {
             if(!data.SQLSchema)
@@ -26,7 +27,8 @@ async function ThemCauHoi(req, res) {
             if(!data.TieuDe || !data.NoiDung || !data.SQLQuery)
                 return res.status(400).send({message: 'Missing fields'});
             const result = await adminModel.ThemCauHoi(data);
-            await adminModel.ThemCauHoiVaoBaiTap(data.MaBT, result.MaCH);
+
+            await adminModel.ThemCauHoiVaoBaiTap(MaBT, result.MaCH);
             if(result.statusCode === 200)
                 return res.send({
                     statusCode: 200,
@@ -64,11 +66,10 @@ async function ThemCauHoi(req, res) {
 
 async function LayCauHoi(req, res, next) {
     const MaCH = req.params.MaCH;
-    let result = await usersModel.LayCauHoi(MaCH, req.user.result);
+    let result = await adminModel.LayCauHoi(MaCH, req.user.result);
     if (result.statusCode == 200) {
-        let html = pug.renderFile('public/admin/ThemTestCase.pug', {
-            message: result.message,
-            schemas: result.schemas
+        let html = pug.renderFile('public/admin/ChinhSuaCauHoi.pug', {
+            data: result.data
         });
 
         res.send(html);
@@ -78,6 +79,67 @@ async function LayCauHoi(req, res, next) {
             redirect: '/admin/ThemTestCase/1'
         });
         res.send(html);
+    }
+}
+
+async function ChinhSuaCauHoi(req, res, next) {
+    try {
+        const data = req.body;
+        const MaCH = req.params.MaCH;
+
+        if(data.type == 'TaoQuanHe') {
+            if(!data.SQLSchema)
+                return res.status(400).send({message: 'Missing fields'});
+
+            const result = await adminModel.TaoQuanHe(data);
+            if(result.statusCode === 200)
+                return res.send({
+                    statusCode: 200,
+                    message: result.message
+                });
+            else
+                return res.send({
+                    statusCode: 400,
+                    message: 'Tạo quan hệ thất bại'
+                });
+        }
+        else if(data.type == 'SuaCauHoi') {
+            if(!data.TieuDe || !data.NoiDung || !data.SQLQuery)
+                return res.status(400).send({message: 'Missing fields'});
+            const result = await adminModel.ChinhSuaCauHoi(MaCH, data);
+
+            if(result.statusCode === 200)
+                return res.send({
+                    statusCode: 200,
+                    message: result.message
+                });
+            else
+                return res.send({
+                    statusCode: 400,
+                    message: 'Thêm câu hỏi thất bại'
+                });
+        }
+        else if(data.type == 'KiemThuTestCase') {
+            if(!data.SQLQuery)
+                return res.status(400).send({message: 'Missing fields'});
+            const result = await adminModel.XuLySQL(data.SQLQuery);
+            console.log(result);
+            if(result.statusCode === 200)
+                return res.send({
+                    statusCode: 200,
+                    message: result.message,
+                    result: JSON.stringify(result.result)
+                });
+            else
+                return res.send({
+                    statusCode: 400,
+                    message: 'Thêm câu hỏi thất bại'
+                });
+        }
+        else 
+            return res.status(400).send({message: 'Không xác định được loại câu hỏi'});
+    } catch (error) {
+        console.log(error);
     }
 }
 
@@ -163,3 +225,4 @@ exports.LayCauHoi = LayCauHoi;
 exports.DanhSachBaiTap = DanhSachBaiTap;
 exports.ThemBaiTap = ThemBaiTap;
 exports.LayBaiTap = LayBaiTap;
+exports.ChinhSuaCauHoi = ChinhSuaCauHoi;

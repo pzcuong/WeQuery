@@ -98,11 +98,11 @@ html(style='font-size: 16px;' lang='en')
                   form.u-clearfix.u-form-spacing-10.u-form-vertical.u-inner-form(action='#' method='POST' source='custom' name='form' style='padding: 10px;' id='formCH')
                     .u-form-group.u-form-name.u-form-partition-factor-2
                       label.u-label(for='name-f3b5') Tên câu hỏi
-                      input#name-f3b5.u-border-1.u-border-grey-30.u-input.u-input-rectangle.u-white(type='text' placeholder='Tiêu đề câu hỏi...' name='TieuDe' required='')
+                      input#name-f3b5.u-border-1.u-border-grey-30.u-input.u-input-rectangle.u-white(type='text' placeholder='Tiêu đề câu hỏi...' name='TieuDe' required='' value=data.TieuDe)
                     .u-form-group.u-form-partition-factor-2.u-form-select.u-form-group-2
                       label.u-label(for='select-3832') Độ khó
                       .u-form-select-wrapper
-                        select#select-3832.u-border-1.u-border-grey-30.u-input.u-input-rectangle.u-white(name='DoKho' required='required')
+                        select#select-3832.u-border-1.u-border-grey-30.u-input.u-input-rectangle.u-white(name='DoKho' required='required' value=data.DoKho)
                           option(value='Dễ') Dễ
                           option(value='Trung bình') Trung bình
                           option(value='Khó') Khó
@@ -110,7 +110,7 @@ html(style='font-size: 16px;' lang='en')
                           path(fill='currentColor' d='M4 8L0 4h8z')
                     .u-form-group.u-form-textarea.u-form-group-3
                       label.u-label(for='textarea-3eac') Nội dung câu hỏi
-                      textarea#textarea-3eac.u-border-1.u-border-grey-30.u-input.u-input-rectangle.u-white(rows='10' cols='50' name='NoiDung' required='' placeholder='Nội dung...')
+                      textarea#textarea-3eac.u-border-1.u-border-grey-30.u-input.u-input-rectangle.u-white(rows='10' cols='50' name='NoiDung' required='' placeholder='Nội dung...') #{data.NoiDung}
 
             #tab-3a42.u-container-style.u-tab-pane(role='tabpanel' aria-labelledby='link-tab-3a42')
               .u-container-layout.u-container-layout-2
@@ -118,7 +118,7 @@ html(style='font-size: 16px;' lang='en')
                   form.u-clearfix.u-form-spacing-10.u-form-vertical.u-inner-form(action='#' method='POST' source='custom' name='form-1' style='padding: 10px;' id='formQH')
                     .u-form-group.u-form-name.u-label-top
                       label.u-label(for='name-0b5c') Tên lược đồ
-                      input#name-0b5c.u-border-1.u-border-grey-30.u-input.u-input-rectangle.u-white(type='text' placeholder='Nhập tên lược đồ sử dụng...' name='LuocDo' required='')
+                      input#name-0b5c.u-border-1.u-border-grey-30.u-input.u-input-rectangle.u-white(type='text' placeholder='Nhập tên lược đồ sử dụng...' name='LuocDo' required='' value=data.LuocDo)
                     .u-form-group.u-form-message.u-label-top
                       label.u-label(for='message-0b5c') Lược đồ
                       textarea#message-0b5c.u-border-1.u-border-grey-30.u-input.u-input-rectangle.u-white(placeholder='Tạo quan hệ mới với lệnh SQL' rows='10' cols='50' name='SQLSchema' required='')
@@ -133,10 +133,10 @@ html(style='font-size: 16px;' lang='en')
                   form.u-clearfix.u-form-spacing-10.u-form-vertical.u-inner-form(action='#' method='POST' source='custom' name='form-2' style='padding: 10px;' id='formOutput')
                     .u-form-group.u-form-message
                       label.u-label(for='message-01bb') Lệnh truy vấn SQL
-                      textarea#message-01bb.u-border-1.u-border-grey-30.u-input.u-input-rectangle.u-white(placeholder='Nhập lệnh truy vấn tại đây...' rows='10' cols='50' name='SQLQuery' required='')
+                      textarea#message-01bb.u-border-1.u-border-grey-30.u-input.u-input-rectangle.u-white(placeholder='Nhập lệnh truy vấn tại đây...' rows='10' cols='50' name='SQLQuery' required='') #{data.Input}
                     .u-align-left.u-form-group.u-form-submit
-                      a.u-border-none.u-btn.u-btn-submit.u-button-style.u-custom-color-1.u-btn-3(onclick='KiemThuTestCase()') Kiểm thử
-                a.u-border-none.u-btn.u-button-style.u-dialog-link.u-palette-4-base.u-btn-4(href='#sec-949c' onclick='TaoCauHoiVaTestcase()') Lưu câu hỏi
+                    a.u-border-none.u-btn.u-btn-submit.u-dialog-link.u-button-style.u-custom-color-1.u-btn-3(style="left: 10px" href='#sec-949c' onclick='KiemThuTestCase()') Kiểm thử
+                a.u-border-none.u-btn.u-button-style.u-dialog-link.u-palette-4-base.u-btn-4(href='#sec-949c' onclick='TaoCauHoiVaTestcase() ') Lưu câu hỏi
                 //a.u-border-none.u-btn.u-button-style.u-palette-4-base.u-btn-4(onclick='TaoCauHoiVaTestcase()') Lưu câu hỏi
 
     section#sec-949c.u-align-center.u-black.u-clearfix.u-container-style.u-dialog-block.u-opacity.u-opacity-70.u-dialog-section-7
@@ -280,10 +280,10 @@ html(style='font-size: 16px;' lang='en')
         NoiDung: formCH.querySelector("textarea[name='NoiDung']").value,
         MucDo: formCH.querySelector("select[name='DoKho']").value,
         SQLQuery: formOutput.querySelector("textarea[name='SQLQuery']").value,
-        type: 'TaoCauHoi'
+        type: 'SuaCauHoi'
       }
 
-      let response = await fetch('./ThemCauHoi', {
+      let response = await fetch('./', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -307,7 +307,7 @@ html(style='font-size: 16px;' lang='en')
         type: 'KiemThuTestCase'
       }
 
-      let response = await fetch('./ThemCauHoi', {
+      let response = await fetch('./', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -319,5 +319,5 @@ html(style='font-size: 16px;' lang='en')
       let text = await response.json(); 
       console.log(text)
       //alert(text.message);
-      document.querySelector("#encodedOutput").innerHTML = text.result;
+      document.querySelector("#encoded").innerHTML = text.result;
     }

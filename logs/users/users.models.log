@@ -272,3 +272,25 @@ select * from detai	RequestError: Incorrect syntax near the keyword 'from'.
 3/9/2022 14:6:49 - Lỗi LayNoiDungBaiTap - TypeError: Cannot read properties of undefined (reading 'MaCH')
 3/9/2022 14:7:34 - Lỗi LayNoiDungBaiTap - TypeError: Cannot read properties of undefined (reading 'MaCH')
 3/9/2022 14:8:16 - Lỗi LayNoiDungBaiTap - TypeError: Cannot read properties of undefined (reading 'MaCH')
+3/9/2022 17:5:37 - Lỗi truy vấn SQL - SELECT CH.MaCH, CH.MucDo, CH.TieuDe, CH.NoiDung, CH.LuocDo, KQ.KetQua, KQ.SQLQuery, KQ.ThoiGian, BTCH.MaBT
+        FROM (
+                SELECT MaCH, LS.KetQua, LS.SQLQuery, LS.ThoiGian
+                FROM Admin_SQLSubmitHistory LS 
+                WHERE LS.Username = N'20521150' AND LS.KetQua = N'100'
+            ) KQ RIGHT JOIN Admin_BaiTapCauHoi BTCH ON BTCH.MACH = KQ.MaCH INNER JOIN Admin_CauHoi CH ON CH.MaCH = BTCH.MACH 
+        WHERE BTCH.MaBT IN (
+            SELECT BTN.MaBT
+            FROM Admin_BaiTapTheoNhom BTN INNER JOIN Admin_ThanhVienNhom TVN ON TVN.MaNhom = BTN.MaNhom
+            WHERE TVN.Username = N'20521150' AND BTN.MaBT = '3'
+        )	RequestError: Conversion failed when converting the nvarchar value 'undefined' to data type int.
+3/9/2022 17:6:36 - Lỗi truy vấn SQL - SELECT CH.MaCH, CH.MucDo, CH.TieuDe, CH.NoiDung, CH.LuocDo, KQ.KetQua, KQ.SQLQuery, KQ.ThoiGian, BTCH.MaBT
+        FROM (
+                SELECT MaCH, LS.KetQua, LS.SQLQuery, LS.ThoiGian
+                FROM Admin_SQLSubmitHistory LS 
+                WHERE LS.Username = N'20521150' AND LS.KetQua = N'100'
+            ) KQ RIGHT JOIN Admin_BaiTapCauHoi BTCH ON BTCH.MACH = KQ.MaCH INNER JOIN Admin_CauHoi CH ON CH.MaCH = BTCH.MACH 
+        WHERE BTCH.MaBT IN (
+            SELECT BTN.MaBT
+            FROM Admin_BaiTapTheoNhom BTN INNER JOIN Admin_ThanhVienNhom TVN ON TVN.MaNhom = BTN.MaNhom
+            WHERE TVN.Username = N'20521150' AND BTN.MaBT = N'3'
+        )	RequestError: Conversion failed when converting the nvarchar value 'undefined' to data type int.
