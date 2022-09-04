@@ -80,6 +80,14 @@ html(style='font-size: 16px;' lang='en')
                       a.u-button-style.u-nav-link.u-white(href='/user/DoiMatKhau') Đổi mật khẩu
                     li.u-nav-item
                       a.u-button-style.u-nav-link.u-white(onclick="eraseCookie('x_authorization')") Đăng xuất
+              li.u-nav-item
+                a.u-button-style.u-nav-link() Admin
+                .u-nav-popup
+                  ul.u-h-spacing-20.u-nav.u-unstyled.u-v-spacing-10.u-nav-2
+                    li.u-nav-item
+                      a.u-button-style.u-nav-link.u-white(href='/admin/QuanLyBaiTap') Quản lý bài tập
+                    li.u-nav-item
+                      a.u-button-style.u-nav-link.u-white(href='/admin/QuanLyCauHoi') Quản lý câu hỏi
 
     section#sec-c3e1.u-align-center.u-clearfix.u-section-1
       .u-clearfix.u-sheet.u-valign-top.u-sheet-1
@@ -102,7 +110,7 @@ html(style='font-size: 16px;' lang='en')
                 tr(style='height: 65px;')
                   td.u-table-cell
                       a.u-active-none.u-border-none.u-btn.u-button-link.u-button-style.u-hover-none.u-none.u-text-palette-1-base.u-btn-1(href='/admin/QuanLyBaiTap/'+question.MaBT+'/') #{question.TieuDe}
-                  td.u-table-cell #{question.SoBaiTap}
+                  td.u-table-cell #{question.SoBT}
                   td.u-table-cell #{question.DaThucHien}
                   td.u-table-cell #{question.DaHoanThanh}
 

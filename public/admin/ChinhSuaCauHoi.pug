@@ -80,7 +80,15 @@ html(style='font-size: 16px;' lang='en')
                       a.u-button-style.u-nav-link.u-white(href='/user/DoiMatKhau') Đổi mật khẩu
                     li.u-nav-item
                       a.u-button-style.u-nav-link.u-white(onclick="eraseCookie('x_authorization')") Đăng xuất
-                      
+              li.u-nav-item
+                a.u-button-style.u-nav-link() Admin
+                .u-nav-popup
+                  ul.u-h-spacing-20.u-nav.u-unstyled.u-v-spacing-10.u-nav-2
+                    li.u-nav-item
+                      a.u-button-style.u-nav-link.u-white(href='/admin/QuanLyBaiTap') Quản lý bài tập
+                    li.u-nav-item
+                      a.u-button-style.u-nav-link.u-white(href='/admin/QuanLyCauHoi') Quản lý câu hỏi
+                           
     section#sec-20af.u-align-left.u-clearfix.u-section-1
       .u-clearfix.u-sheet.u-sheet-1
         .u-expanded-width.u-tab-links-align-left.u-tabs.u-tabs-1(style='margin: 0 auto;')
@@ -247,6 +255,7 @@ html(style='font-size: 16px;' lang='en')
   
   script.
     async function TaoQuanHe() {
+      document.querySelector("#encoded").innerHTML = "Đang xử lý..."
       var form = document.querySelector("#formQH");
 
       data = {
@@ -272,6 +281,7 @@ html(style='font-size: 16px;' lang='en')
 
   script.
     async function TaoCauHoiVaTestcase() {
+      document.querySelector("#encoded").innerHTML = "Đang xử lý..."
       var formCH = document.querySelector("#formCH");
       var formOutput = document.querySelector("#formOutput");
 
@@ -300,6 +310,7 @@ html(style='font-size: 16px;' lang='en')
 
   script.
     async function KiemThuTestCase() {
+      document.querySelector("#encoded").innerHTML = "Đang xử lý..."
       var formOutput = document.querySelector("#formOutput");
 
       data = {
@@ -319,5 +330,8 @@ html(style='font-size: 16px;' lang='en')
       let text = await response.json(); 
       console.log(text)
       //alert(text.message);
-      document.querySelector("#encoded").innerHTML = text.result;
+      if(text.statusCode != 200)
+        document.querySelector("#encoded").innerHTML = text.message;
+      else
+        document.querySelector("#encoded").innerHTML = text.result;
     }

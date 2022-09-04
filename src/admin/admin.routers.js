@@ -19,10 +19,20 @@ router.route('/QuanLyBaiTap/:MaBT/ThemCauHoi')
 		let html = pug.renderFile('public/admin/ThemMoiCauHoi.pug');
     	res.send(html)
 	})
-	.post(isAuthAdmin, adminController.ThemCauHoi);
+	.post(isAuthAdmin, adminController.ThemCauHoiTrongBaiTap);
 
 router.route('/ChinhSua/:MaCH') 
 	.get(isAuthAdmin, adminController.LayCauHoi)
 	.post(isAuthAdmin, adminController.ChinhSuaCauHoi);
+
+router.route('/QuanLyCauHoi/')
+	.get(isAuthAdmin, adminController.DanhSachCauHoi)
+
+router.route('/ThemCauHoi')
+	.get(isAuthAdmin, (req, res) => {
+		let html = pug.renderFile('public/admin/ThemMoiCauHoi.pug');
+		res.send(html)
+	})
+	.post(isAuthAdmin, adminController.ThemMoiCauHoi);
 
 module.exports = router;

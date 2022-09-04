@@ -100,7 +100,7 @@ async function getInfoUser (username) {
                 alert: 'Username không hợp lệ!'
             });
         else {
-            let SQLQuery = `select username, fullname, SinhNhat, email, phoneNumber from Admin_Users where username = '${username}'`;
+            let SQLQuery = `select username, fullname, SinhNhat, email, phoneNumber, role from Admin_Users where username = '${username}'`;
             let result = await TruyVan("Admin", SQLQuery);
 
             if(result.statusCode == 200)
@@ -618,6 +618,8 @@ async function LuuKetQuaTruyVan(Username, MaCH, SQLQuery, KetQua) {
     }
 }
 
+const spreadsheet = require('../spreadsheets/spreadsheets.models');
+
 async function GhiLog(data) {
     let date = new Date();
     let day = date.getDate();
@@ -630,7 +632,9 @@ async function GhiLog(data) {
     let time = `${day}/${month}/${year} ${hour}:${minute}:${second}`;
     let log = `${time} - ${data}`;
 
-    fs.appendFileSync('./logs/users/users.models.log', log + '\n');
+    //fs.appendFileSync('./logs/users/users.models.log', log + '\n');
 }
 
 exports.TruyVan = TruyVan;
+
+

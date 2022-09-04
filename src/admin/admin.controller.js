@@ -2,7 +2,7 @@ const pug = require('pug');
 const adminModel = require('../admin/admin.models');
 const usersModel = require('../users/users.models');
 
-async function ThemCauHoi(req, res) {
+async function ThemCauHoiTrongBaiTap(req, res) {
     try {
         const data = req.body;
         const MaBT = req.params.MaBT;
@@ -61,6 +61,50 @@ async function ThemCauHoi(req, res) {
             return res.status(400).send({message: 'Không xác định được loại câu hỏi'});
     } catch (error) {
         console.log(error);
+    }
+}
+
+async function ThemMoiCauHoi(req, res) {
+    try {
+        const data = req.body;
+        if(data.type == 'TaoCauHoi') {
+            if(!data.TieuDe || !data.NoiDung || !data.SQLQuery)
+                    return res.status(400).send({message: 'Missing fields'});
+            const result = await adminModel.ThemCauHoi(data);
+
+            if(result.statusCode === 200)
+                return res.send({
+                    statusCode: 200,
+                    message: result.message
+                });
+            else
+                return res.send({
+                    statusCode: 400,
+                    message: 'Thêm câu hỏi thất bại'
+                });
+        } 
+        else if(data.type == 'KiemThuTestCase') {
+            if(!data.SQLQuery)
+                return res.status(400).send({message: 'Missing fields Testcase'});
+            const result = await adminModel.XuLySQL(data.SQLQuery);
+            console.log(result);
+            if(result.statusCode === 200)
+                return res.send({
+                    statusCode: 200,
+                    message: result.message,
+                    result: JSON.stringify(result.result)
+                });
+            else
+                return res.send({
+                    statusCode: 400,
+                    message: 'Thêm câu hỏi thất bại'
+                });
+        }
+        else 
+            return res.status(400).send({message: 'Không xác định được loại câu hỏi'});
+    } catch (error) {
+        console.log(error);
+        return res.status(400).send({message: 'Thêm câu hỏi thất bại'});
     }
 }
 
@@ -156,7 +200,23 @@ async function ThemTestCase(req, res, next) {
         return res.status(400).send({message: 'Thêm testcase thất bại'});
 }
 
-async function DanhSachBaiTap(req, res) {
+async function DanhSachCauHoi(req, res) { 
+    let result = await adminModel.DanhSachCauHoi();
+    if(result.statusCode === 200) {
+        let html = pug.renderFile('public/admin/QuanLyCauHoi.pug', {
+            questionList: result.result.recordset,
+        });
+        res.send(html);
+    } else {
+        let html = pug.renderFile('public/404.pug', { 
+            message: result.message,
+            redirect: '/admin/QuanLyCauHoi'
+        });
+        res.send(html);
+    }
+}
+
+async function DanhSachBaiTap(req, res) { 
     let result = await adminModel.DanhSachBaiTap();
     let dsNhom = await adminModel.DanhSachNhom();
     if(result.statusCode === 200) {
@@ -219,10 +279,12 @@ async function LayBaiTap(req, res) {
     }
 }
 
-exports.ThemCauHoi = ThemCauHoi;
+exports.ThemCauHoiTrongBaiTap = ThemCauHoiTrongBaiTap;
 exports.ThemTestCase = ThemTestCase;
 exports.LayCauHoi = LayCauHoi;
 exports.DanhSachBaiTap = DanhSachBaiTap;
 exports.ThemBaiTap = ThemBaiTap;
 exports.LayBaiTap = LayBaiTap;
 exports.ChinhSuaCauHoi = ChinhSuaCauHoi;
+exports.DanhSachCauHoi = DanhSachCauHoi;
+exports.ThemMoiCauHoi = ThemMoiCauHoi;

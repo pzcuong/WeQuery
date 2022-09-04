@@ -78,3 +78,18 @@ where nuocsx = "trung quoc"	RequestError: Invalid column name 'trung quoc'.
 3/9/2022 21:44:26 - Lỗi truy vấn SQL - select masp, tensp
 from dbo.sanpham
 where nuocsx = "trung quoc"	RequestError: Invalid column name 'trung quoc'.
+4/9/2022 19:43:4 - Lỗi truy vấn SQL - select * from dbo.sanpham
+where nuocsx = "trung quoc" or nuocsx = "thai lan"
+intersect
+select * from dbo.sanpham
+where gia between "30000" and "40000"	RequestError: Invalid column name '40000'.
+4/9/2022 19:44:36 - Lỗi truy vấn SQL - select * from dbo.sanpham
+where nuocsx = "trung quoc" or nuocsx = "thai lan"
+intersect
+select * from dbo.sanpham
+where gia between "30000" and "40000"	RequestError: Invalid column name '40000'.
+4/9/2022 19:45:40 - Lỗi truy vấn SQL - select * from dbo.sanpham
+where nuocsx = "trung quoc" or nuocsx = "thai lan"
+intersect
+select * from dbo.sanpham
+where gia between "30000" and "40000"	RequestError: Invalid column name '40000'.

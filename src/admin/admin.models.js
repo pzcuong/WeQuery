@@ -319,6 +319,23 @@ async function ChinhSuaCauHoi(MaCH, data) {
     }
 }
 
+async function DanhSachCauHoi() {
+    try {
+        let SQLQuery = `SELECT * FROM dbo.Admin_CauHoi`;
+        let result = await TruyVan(SQLQuery);
+        console.log("Danh sách bài tập", result);
+        return result;
+    } catch(err) {
+        console.log(err);
+        return ({ 
+            statusCode: 400,
+            message: 'Lỗi truy vấn SQL!',
+            alert: 'Kiểm tra lại câu lệnh SQL!'
+        });
+    }
+}
+
+exports.DanhSachCauHoi = DanhSachCauHoi;
 exports.ChinhSuaCauHoi = ChinhSuaCauHoi;
 exports.LayCauHoi = LayCauHoi;
 exports.LayBaiTap = LayBaiTap;
