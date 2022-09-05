@@ -449,5 +449,5 @@ async function GhiLog(data) {
     let time = `${day}/${month}/${year} ${hour}:${minute}:${second}`;
     let log = `${time} - ${data}`;
 
-    fs.appendFileSync('./logs/admin/admin.models.log', log + '\n');
+    //fs.appendFileSync('./logs/admin/admin.models.log', log + '\n');
 }
