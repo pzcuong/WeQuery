@@ -252,9 +252,47 @@ async function ThemBaiTap(data) {
     }
 }
 
+async function SuaBaiTap(data, MaBT) {
+    try {
+        if(data.TrangThai) 
+            data.TrangThai = 1;
+        else
+            data.TrangThai = 0;
+        let SQLQuery = `update Admin_BaiTap 
+        set TieuDe = N'${data.TieuDe}', TgianBD = '${data.TgianBD}', TgianKT = '${data.TgianKT}', TrangThai = '${data.TrangThai}' 
+        where MaBT = '${MaBT}'`;
+
+        let result = await TruyVan(SQLQuery);
+        console.log("Sửa Bài Tập ", result);
+        if(result.statusCode != 200) 
+            return ({
+                statusCode: 400,
+                message: 'Sửa Bài Tập Thất Bại'
+            })
+        else {
+            SQLQuery = `update Admin_BaiTapTheoNhom 
+            set MaNhom = '${data.MaNhom}' 
+            where MaBT = '${MaBT}'`;
+            //SQLQuery = `insert into Admin_BaiTapTheoNhom (MaBT, MaNhom) values ('${result.result.recordset[0].MaBT}', '${data.MaNhom}')`;
+            result = await TruyVan(SQLQuery);
+            console.log("Sửa Bài Tập ", result);
+            return ({
+                statusCode: 200,
+                message: `Sửa Bài Tập Thành Công`,
+            })
+        }
+    } catch(err) {  
+        console.log(err);
+        return ({
+            statusCode: 400,
+            message: 'Thêm Bài Tập Thất Bại'
+        })
+    }
+} 
+
 async function LayBaiTap(MaBT) {
     try {
-        let SQLQuery = `SELECT Admin_BaiTap.TieuDe as TieuDeBaiTap, Admin_CauHoi.TieuDe, Admin_BaiTapCauHoi.MaCH, MucDo, LuocDo
+        let SQLQuery = `SELECT Admin_BaiTap.TieuDe as TieuDeBaiTap, Admin_CauHoi.TieuDe, Admin_BaiTapCauHoi.MaCH, MucDo, LuocDo, TgianBD, TgianKT, TrangThai
         FROM dbo.Admin_BaiTap LEFT JOIN dbo.Admin_BaiTapCauHoi ON Admin_BaiTapCauHoi.MaBT = Admin_BaiTap.MaBT LEFT JOIN dbo.Admin_CauHoi ON Admin_CauHoi.MaCH = Admin_BaiTapCauHoi.MaCH
         WHERE Admin_BaiTap.MaBT = '${MaBT}'`;   
         let result = await TruyVan(SQLQuery);
@@ -347,6 +385,7 @@ exports.ThemBaiTap = ThemBaiTap;
 exports.TaoQuanHe = TaoQuanHe;
 exports.XuLySQL = XuLySQL;
 exports.ThemCauHoiVaoBaiTap = ThemCauHoiVaoBaiTap;
+exports.SuaBaiTap = SuaBaiTap;
 
 async function TruyVan(SQLQuery) {
     try {

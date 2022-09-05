@@ -442,7 +442,7 @@ async function LayDanhSachBaiTap(user) {
         let SQLQuery = `
         SELECT BT.MaBT, BT.TieuDe, BT.TgianBD, BT.TgianKT, BT.TrangThai
         FROM Admin_BaiTapTheoNhom BTNhom INNER JOIN Admin_BaiTap BT ON BT.MaBT = BTNhom.MaBT
-        WHERE BTNhom.MaNhom IN (
+        WHERE TrangThai = '1' AND BTNhom.MaNhom IN (
             SELECT MaNhom
             FROM Admin_ThanhVienNhom
             WHERE Username = N'${user.username}'

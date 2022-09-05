@@ -88,18 +88,20 @@ html(style='font-size: 16px;' lang='en')
                       a.u-button-style.u-nav-link.u-white(href='/admin/QuanLyBaiTap') Quản lý bài tập
                     li.u-nav-item
                       a.u-button-style.u-nav-link.u-white(href='/admin/QuanLyCauHoi') Quản lý câu hỏi
-
+    
     section#sec-a37c.u-align-center.u-clearfix.u-section-1
-      .u-clearfix.u-sheet.u-valign-middle.u-sheet-1
-        h1.u-text.u-text-default.u-text-1
+      .u-clearfix.u-sheet.u-sheet-1
+        h2.u-text.u-text-default.u-text-1
           | #{TieuDeBaiTap}
           br
         .u-expanded-width.u-tab-links-align-left.u-tabs.u-tabs-1
-          ul.u-tab-list.u-unstyled(role='tablist')
+          ul.u-spacing-10.u-tab-list.u-unstyled(role='tablist')
             li.u-tab-item(role='presentation')
-              a#link-tab-0da5.active.u-active-white.u-border-2.u-border-active-custom-color-1.u-border-grey-15.u-border-hover-grey-15.u-border-no-left.u-border-no-right.u-border-no-top.u-button-style.u-grey-10.u-hover-grey-10.u-tab-link.u-tab-link-1(href='#tab-0da5' role='tab' aria-controls='tab-0da5' aria-selected='true') Danh sách câu hỏi
+              a#link-tab-0da5.active.u-active-custom-color-1.u-border-active-custom-color-1.u-border-hover-grey-15.u-button-style.u-tab-link.u-tab-link-1(href='#tab-0da5' role='tab' aria-controls='tab-0da5' aria-selected='true') Danh sách câu hỏi
+            li.u-tab-item(role='presentation')
+              a#link-tab-8609.u-active-custom-color-1.u-button-style.u-tab-link.u-tab-link-2(href='#tab-8609' role='tab' aria-controls='tab-8609' aria-selected='false') Chỉnh sửa
           .u-tab-content
-            #tab-0da5.u-container-style.u-tab-active.u-tab-pane.u-white.u-tab-pane-1(role='tabpanel' aria-labelledby='link-tab-0da5')
+            #tab-0da5.u-container-style.u-shape-rectangle.u-tab-active.u-tab-pane(role='tabpanel' aria-labelledby='link-tab-0da5')
               .u-container-layout.u-container-layout-1
                 .u-table.u-table-responsive.u-table-1
                   table.u-table-entity
@@ -108,14 +110,13 @@ html(style='font-size: 16px;' lang='en')
                       col(width='12.3%')
                       col(width='52.3%')
                       col(width='25%')
-                    thead.u-align-center.u-custom-color-1.u-table-header
+                    thead.u-align-center.u-custom-color-1.u-table-header.u-table-header-1
                       tr(style='height: 33px;')
                         th.u-border-1.u-border-custom-color-2.u-table-cell ID Câu hỏi
                         th.u-border-1.u-border-custom-color-2.u-table-cell Độ khó
                         th.u-border-1.u-border-custom-color-2.u-table-cell Tên câu hỏi
                         th.u-border-1.u-border-custom-color-2.u-table-cell Lược đồ
                     tbody.u-table-body
-                  
                       each question in questionList
                         tr(style='height: 75px;')
                             td.u-border-1.u-border-grey-30.u-first-column.u-grey-5.u-table-cell.u-table-cell-7 #{question.MaCH}
@@ -126,5 +127,79 @@ html(style='font-size: 16px;' lang='en')
                 a.u-btn.u-button-style.u-custom-color-1.u-btn-1(href='' style='font-weight: 100') Thêm từ thư viện
                 a.u-border-none.u-btn.u-btn-round.u-button-style.u-palette-4-base.u-radius-2.u-btn-2(href='./ThemCauHoi')
                   span(style='font-weight: 100; padding-top: 10px; padding-bottom: 10px') Tạo câu hỏi mới 
+                  span.u-icon.u-text-white
+                    svg.u-svg-content(viewBox='0 0 512 512' x='0px' y='0px' style='width: 1em; height: 1em;')
+                      path(d='M506.134,241.843c-0.006-0.006-0.011-0.013-0.018-0.019l-104.504-104c-7.829-7.791-20.492-7.762-28.285,0.068 c-7.792,7.829-7.762,20.492,0.067,28.284L443.558,236H20c-11.046,0-20,8.954-20,20c0,11.046,8.954,20,20,20h423.557 l-70.162,69.824c-7.829,7.792-7.859,20.455-0.067,28.284c7.793,7.831,20.457,7.858,28.285,0.068l104.504-104 c0.006-.006,0.011-.013,0.018-.019C513.968,262.339,513.943,249.635,506.134,241.843z')
+                    img
+            #tab-8609.u-container-style.u-shape-rectangle.u-tab-pane(role='tabpanel' aria-labelledby='link-tab-8609')
+              
+              .u-container-layout.u-container-layout-2
+                .u-form.u-form-1
+                  form.u-clearfix.u-form-spacing-10.u-form-vertical.u-inner-form(action='#' method='POST' source='custom' name='form' style='padding: 10px;' id='formElem')
+                    .u-form-group.u-form-name
+                      label.u-label(for='name-570b') Tên bài tập
+                      input#name-570b.u-border-1.u-border-grey-30.u-input.u-input-rectangle.u-white(type='text' placeholder='Nhập vào tên bài tập' name='TieuDe' required='' value=questionList[0].TieuDeBaiTap)
+                    .u-form-group.u-form-select.u-form-group-2
+                      label.u-label(for='select-b344') Chọn nhóm
+                      .u-form-select-wrapper
+                        select#select-872c.u-border-1.u-border-grey-30.u-input.u-input-rectangle.u-white(name='MaNhom' required='required')
+                          each Nhom in dsNhom
+                              option(value=Nhom.MaNhom) #{Nhom.TenNhom}
+                        svg.u-caret(xmlns='http://www.w3.org/2000/svg' width='14' height='12' version='1')
+                          path(fill='currentColor' d='M4 8L0 4h8z')
+                    .u-form-date.u-form-group.u-form-partition-factor-2.u-form-group-3
+                      label.u-label(for='date-7664') Thời gian bắt đầu
+                      input#date-7664.u-border-1.u-border-grey-30.u-input.u-input-rectangle.u-white(type='datetime-local' placeholder='MM/DD/YYYY' name='TgianBD' required='' value=questionList[0].TgianBD)
+                    .u-form-date.u-form-group.u-form-partition-factor-2.u-form-group-4
+                      label.u-label(for='date-adde') Thời gian kết thúc
+                      input#date-adde.u-border-1.u-border-grey-30.u-input.u-input-rectangle.u-white(type='datetime-local' placeholder='MM/DD/YYYY' name='TgianKT' required='' value=questionList[0].TgianKT)
+                    .u-form-checkbox.u-form-group.u-form-group-5
+                      if (questionList[0].TrangThai == 1)
+                        input#checkbox-1d1a.u-checkbox-input(type='checkbox' name='TrangThai' value='1' checked)
+                      else
+                        input#checkbox-1d1a.u-checkbox-input(type='checkbox' name='TrangThai' value='0')
+                      label.u-label(for='checkbox-9835') Check nếu mở câu hỏi
+                    .u-align-left.u-form-group.u-form-submit
+                      a.u-border-none.u-btn.u-btn-submit.u-button-style.u-custom-color-1.u-btn-3(onclick='SuaBaiTap()') Submit
+              p#encoded
 
-                    
+script. 
+    async function SuaBaiTap() {
+        document.querySelector("#encoded").innerHTML = "Đang xử lý...";
+        var form = document.querySelector("#formElem");
+
+        let TgianBD = form.querySelector('input[name="TgianBD"]').value;
+        let TgianKT = form.querySelector('input[name="TgianKT"]').value;
+        TgianBD = new Date(TgianBD);
+        TgianKT = new Date(TgianKT);
+        TgianBD.setSeconds(0);
+        TgianBD.setMilliseconds(000);
+        TgianKT.setSeconds(0);
+        TgianKT.setMilliseconds(000);
+
+        data = {
+            TieuDe: form.querySelector('input[name="TieuDe"]').value,
+            MaNhom: form.querySelector('select[name="MaNhom"]').value,
+            TgianBD: TgianBD,
+            TgianKT: TgianKT,
+            TrangThai: form.querySelector('input[name="TrangThai"]').checked,
+        }
+
+        let url = window.location.href;
+
+        let response = await fetch(url, {
+                method: 'POST', 
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+                json: true
+        })
+
+        //selector button class btn btn-success from document
+        //document.querySelector('')
+        let text = await response.json(); 
+        console.log(text)
+
+        document.querySelector("#encoded").innerHTML = text.message;
+    }

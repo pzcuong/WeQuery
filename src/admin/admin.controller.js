@@ -257,14 +257,40 @@ async function ThemBaiTap(req, res) {
     }
 }
 
+async function SuaBaiTap(req, res) {
+    try {
+        const data = req.body;
+        const MaBT = req.params.MaBT;
+        console.log(data);
+        
+        if(!data.TieuDe || !data.MaNhom || !data.TgianBD || !data.TgianKT)
+            return res.status(400).send({message: 'Missing fields'});
+        const result = await adminModel.SuaBaiTap(data, MaBT);
+        if(result.statusCode === 200)
+            return res.send({
+                statusCode: 200,
+                message: result.message
+            });
+        else
+            return res.send({
+                statusCode: 400,
+                message: 'Sửa bài tập thất bại'
+            });
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 async function LayBaiTap(req, res) {
     try {
         const MaBT = req.params.MaBT;
         let result = await adminModel.LayBaiTap(MaBT);
+        let dsNhom = await adminModel.DanhSachNhom();
         if(result.statusCode === 200) {
             let html = pug.renderFile('public/admin/QuanLyCauHoiTrongBaiTap.pug', {
                 TieuDeBaiTap: result.result.recordset[0].TieuDeBaiTap,
                 questionList: result.result.recordset,
+                dsNhom: dsNhom.result.recordset
             });
             res.send(html);
         } else {
@@ -288,3 +314,4 @@ exports.LayBaiTap = LayBaiTap;
 exports.ChinhSuaCauHoi = ChinhSuaCauHoi;
 exports.DanhSachCauHoi = DanhSachCauHoi;
 exports.ThemMoiCauHoi = ThemMoiCauHoi;
+exports.SuaBaiTap = SuaBaiTap;

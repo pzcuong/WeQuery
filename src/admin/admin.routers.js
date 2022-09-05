@@ -13,6 +13,7 @@ router.route('/QuanLyBaiTap/')
 
 router.route('/QuanLyBaiTap/:MaBT')
 	.get(isAuthAdmin, adminController.LayBaiTap)
+	.post(isAuthAdmin, adminController.SuaBaiTap)
 
 router.route('/QuanLyBaiTap/:MaBT/ThemCauHoi')
 	.get(isAuthAdmin, (req, res) => {
