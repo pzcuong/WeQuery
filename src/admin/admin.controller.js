@@ -286,11 +286,14 @@ async function LayBaiTap(req, res) {
         const MaBT = req.params.MaBT;
         let result = await adminModel.LayBaiTap(MaBT);
         let dsNhom = await adminModel.DanhSachNhom();
+        let BXH = await adminModel.BangXepHang(MaBT);
+        console.log(BXH.user);
         if(result.statusCode === 200) {
             let html = pug.renderFile('public/admin/QuanLyCauHoiTrongBaiTap.pug', {
                 TieuDeBaiTap: result.result.recordset[0].TieuDeBaiTap,
                 questionList: result.result.recordset,
-                dsNhom: dsNhom.result.recordset
+                dsNhom: dsNhom.result.recordset,
+                BXH: BXH
             });
             res.send(html);
         } else {

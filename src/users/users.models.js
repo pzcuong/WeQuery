@@ -305,10 +305,9 @@ async function LayCauHoi(MaCH, user) {
     try {
         console.log(user)
         //let SQLQuery = `select * from Admin_CauHoi where MaCH = ${MaCH}`;
-        let SQLQuery = `SELECT CH.MaCH, CH.MucDo, CH.TieuDe, CH.NoiDung, CH.LuocDo, LS.SQLQuery, LS.KetQua, LS.ThoiGian
-            FROM Admin_CauHoi CH LEFT JOIN Admin_SQLSubmitHistory LS ON LS.MaCH = CH.MaCH
-            WHERE (Username = N'${user.username}' OR Username IS NULL) AND CH.MaCH = N'${MaCH}' AND CH.TinhTrang = 1
-            ORDER BY LS.ThoiGian DESC`;
+        let SQLQuery = `SELECT CH.MaCH, CH.MucDo, CH.TieuDe, CH.NoiDung, CH.LuocDo
+            FROM Admin_CauHoi CH
+            WHERE CH.MaCH = N'${MaCH}' AND CH.TinhTrang = 1`;
         let result = await TruyVan("Admin", SQLQuery);
 
         if(result.statusCode == 200 && result.result.recordset.length > 0) { // Có câu hỏi
@@ -319,6 +318,13 @@ async function LayCauHoi(MaCH, user) {
             const LuocDo = data.LuocDo.match(regex);
 
             console.log(LuocDo);
+
+            SQLQuery = `
+            SELECT LS.SQLQuery, LS.KetQua, LS.ThoiGian
+            FROM dbo.Admin_SQLSubmitHistory LS
+            WHERE (Username = N'${user.username}' OR Username IS NULL) AND LS.MaCH = N'${MaCH}'
+            ORDER BY LS.ThoiGian DESC`;
+            result = await TruyVan("Admin", SQLQuery);
             if(LuocDo != null) 
                 for (let i = 0; i < LuocDo.length; i++)
                     schema[i] = LuocDo[i];

@@ -26,6 +26,7 @@ async function LayCauHoi(req, res, next) {
     try {
         const MaCH = req.params.MaCH;
         let result = await usersModel.LayCauHoi(MaCH, req.user.result);
+        
         if (result.statusCode == 200) {
             //result.message.NoiDung = html2pug(result.message.NoiDung, { commas: true, fragment: true });
             let html = pug.renderFile('public/user/TestSQL.pug', {

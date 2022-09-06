@@ -373,6 +373,51 @@ async function DanhSachCauHoi() {
     }
 }
 
+async function BangXepHang(MaBT) {
+    try {
+        let SQLQuery = `SELECT Admin_Users.username, fullname, KQ.KetQua, Admin_BaiTapCauHoi.MaCH, MaBT
+        FROM dbo.Admin_ThanhVienNhom INNER JOIN dbo.Admin_Users ON Admin_Users.username = Admin_ThanhVienNhom.Username LEFT JOIN (
+            SELECT Username, MAX(KetQua) AS KetQua, MaCH
+            FROM dbo.Admin_SQLSubmitHistory
+            GROUP BY Username, MaCH) KQ ON KQ.Username = Admin_Users.username LEFT JOIN dbo.Admin_BaiTapCauHoi ON Admin_BaiTapCauHoi.MaCH = KQ.MaCH
+        WHERE MaBT = N'${MaBT}'
+        ORDER BY Admin_BaiTapCauHoi.MaCH ASC`;
+        let result = await TruyVan(SQLQuery);
+        result = result.result.recordset;
+        console.log("Bảng xếp hạng", result);
+        let user = {};
+        let dsCH = [];
+        for(let i = 0; i < result.length; i++) 
+            if(!dsCH.includes(result[i].MaCH)) 
+                dsCH.push(result[i].MaCH);
+
+        for(let i = 0; i < result.length; i++) {
+            if(user[result[i].username] == undefined) 
+                user[result[i].username] = [];
+            
+            user[result[i].username].push({
+                "username": result[i].username,
+                "fullname": result[i].fullname,
+                "MaCH": result[i].MaCH, 
+                "KetQua": result[i].KetQua
+            });
+        }
+        let data = {
+            "dsCH": dsCH,
+            "user": user
+        }
+        console.log("Danh sách câu hỏi", data);
+        return data;
+    } catch(err) {
+        console.log(err);
+        return ({ 
+            statusCode: 400,
+            message: 'Lỗi truy vấn SQL!',
+            alert: 'Kiểm tra lại câu lệnh SQL!'
+        });
+    }   
+}
+
 exports.DanhSachCauHoi = DanhSachCauHoi;
 exports.ChinhSuaCauHoi = ChinhSuaCauHoi;
 exports.LayCauHoi = LayCauHoi;
@@ -386,6 +431,7 @@ exports.TaoQuanHe = TaoQuanHe;
 exports.XuLySQL = XuLySQL;
 exports.ThemCauHoiVaoBaiTap = ThemCauHoiVaoBaiTap;
 exports.SuaBaiTap = SuaBaiTap;
+exports.BangXepHang = BangXepHang;
 
 async function TruyVan(SQLQuery) {
     try {
