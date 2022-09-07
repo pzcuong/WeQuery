@@ -83,63 +83,51 @@ html(style='font-size: 16px;' lang='en')
 
     section#sec-5722.u-align-center.u-clearfix.u-grey-15.u-section-1
       .u-clearfix.u-sheet.u-sheet-1
-        .u-expanded-width.u-tabs.u-tabs-1
+        h3.u-text.u-text-custom-color-1.u-text-default.u-text-1 #{message.TieuDe} (#{message.MucDo})
+        .u-tabs.u-tabs-1
           ul.u-border-2.u-border-grey-75.u-tab-list.u-unstyled(role='tablist')
-            li.u-tab-item(role='presentation')
-              a#link-tab-0da5.active.u-active-custom-color-1.u-button-style.u-custom-color-2.u-tab-link.u-tab-link-1(href='#tab-0da5' role='tab' aria-controls='tab-0da5' aria-selected='true') Câu hỏi
-            li.u-tab-item(role='presentation')
+            li.u-tab-item.u-tab-item-1(role='presentation')
+              a#link-tab-0da5.active.u-active-custom-color-1.u-button-style.u-custom-color-2.u-tab-link.u-tab-link-1(href='#tab-0da5' role='tab' aria-controls='tab-0da5' aria-selected='true') Nội dung
+            li.u-tab-item.u-tab-item-2(role='presentation')
               a#link-tab-14b7.u-active-custom-color-1.u-button-style.u-custom-color-2.u-tab-link.u-tab-link-2(href='#tab-14b7' role='tab' aria-controls='tab-14b7' aria-selected='false') Lịch sử nộp bài
-            li.u-tab-item(role='presentation')
-              a#link-tab-2917.u-active-custom-color-1.u-button-style.u-custom-color-2.u-tab-link.u-tab-link-3(href='#tab-2917' role='tab' aria-controls='tab-2917' aria-selected='false') Đánh giá
+            //- li.u-tab-item.u-tab-item-3(role='presentation')
+            //-   a#link-tab-2917.u-active-custom-color-1.u-button-style.u-custom-color-2.u-tab-link.u-tab-link-3(href='#tab-2917' role='tab' aria-controls='tab-2917' aria-selected='false') Danh sách câu hỏi
           .u-tab-content
             #tab-0da5.u-container-style.u-tab-active.u-tab-pane.u-white.u-tab-pane-1(role='tabpanel' aria-labelledby='link-tab-0da5')
               .u-container-layout.u-container-layout-1
-                h3.u-text.u-text-default.u-text-1 #{message.TieuDe} (#{message.MucDo})
-                .u-clearfix.u-expanded-width.u-layout-wrap.u-layout-wrap-1(style="margin-top: 0px;")
+                .u-clearfix.u-expanded-width.u-layout-wrap.u-layout-wrap-1
                   .u-layout
                     .u-layout-row
                       .u-container-style.u-layout-cell.u-size-30.u-layout-cell-1
                         .u-container-layout.u-container-layout-2
-                          h3.u-text.u-text-custom-color-1.u-text-default.u-text-3 Nội dung câu hỏi:
-                          
-                          .fr-view.u-clearfix.u-rich-text.u-text 
+                          h4.u-text.u-text-custom-color-1.u-text-2 #{message.TieuDe} (#{message.MucDo})
+                          .fr-view.u-clearfix.u-rich-text.u-text.u-text-3
                             #{message.NoiDung}/
-
-                          
-                          
-                          - var count = 0;
-                          each schema in schemas 
-                            //img(src='/public/image/schema_'+ schema +'.png' alt='' id="img_schema_"+ count++)
-                            img.u-expanded-width.u-image.u-image-default(src='/public/schema/schema_'+ schema +'.png' alt='' data-image-width='1545' data-image-height='147')
                       .u-container-style.u-layout-cell.u-size-30.u-layout-cell-2
                         .u-container-layout.u-container-layout-3
-                          h3.u-text.u-text-custom-color-1.u-text-default.u-text-3(style="padding-left: 10px;") Lệnh truy vấn MS SQL Server
-                          h4#encoded(style="color: red;margin-top: 10px;margin-bottom: 10px;")
                           .u-form.u-form-1
                             form.u-clearfix.u-form-spacing-10.u-form-vertical.u-inner-form(action='/NopBaiSQL' method='POST' source='custom' name='form' style='padding: 10px;' id='formElem')
                               .u-form-group.u-form-message
-                                //label.u-label.u-text-black.u-label-1(for='message-79f8') Lệnh truy vấn MS SQL Server
+                                label.u-custom-font.u-heading-font.u-label.u-text-custom-color-1.u-label-1(for='message-79f8') Lệnh truy vấn MS SQL Server
                                 textarea#message-79f8.u-border-1.u-border-grey-30.u-input.u-input-rectangle.u-white(placeholder='/* Nhập lệnh truy vấn ở đây */' rows='20' cols='50' name='SQLQuery' required='')
                               .u-align-left.u-form-group.u-form-submit
-                                a.btn.u-border-none.u-btn.u-btn-submit.u-button-style.u-custom-color-1.u-btn-1(onclick="SubmitSQL()") Nộp bài
-                                input.u-form-control-hidden(type='submit' value='submit') 
+                                a.u-border-none.u-btn.u-btn-submit.u-button-style.u-custom-color-1.u-dialog-link.u-btn-1(href='#popup' onclick='SubmitSQL()') Nộp bài
+                          a.u-border-none.u-btn.u-button-style.u-custom-color-1.u-dialog-link.u-btn-2(href='#popup' onclick='SubmitSQL()') Nộp bài
             #tab-14b7.u-container-style.u-tab-pane.u-white.u-tab-pane-2(role='tabpanel' aria-labelledby='link-tab-14b7')
               .u-container-layout.u-container-layout-4
-                .u-expanded-width.u-table.u-table-responsive.u-table-1
-                  table.u-table-entity(style="width: 95%; margin: auto;")
+                .u-table.u-table-responsive.u-table-1
+                  table.u-table-entity
                     colgroup
-                      col(width='60.5%')
-                      col(width='15.8%')
-                      col(width='23.7%')
-                    
-                    //Lấy dữ liệu lịch sử
-                    if history.length > 0 && history[0].KetQua != null
-                      thead.u-align-center.u-custom-color-1.u-table-header.u-table-header-1
-                            tr(style='height: 45px;')
-                              th.u-border-1.u-border-custom-color-1.u-table-cell Câu lệnh SQL
-                              th.u-border-1.u-border-custom-color-1.u-table-cell Kết quả
-                              th.u-border-1.u-border-custom-color-1.u-table-cell Thời gian nộp bài
+                      col(width='55%')
+                      col(width='15%')
+                      col(width='30%')
 
+                    if history.length > 0 && history[0].KetQua != null
+                     thead.u-align-center.u-custom-color-1.u-table-header.u-table-header-1
+                      tr(style='height: 29px;')
+                        th.u-border-1.u-border-custom-color-1.u-table-cell Câu lệnh SQL
+                        th.u-border-1.u-border-custom-color-1.u-table-cell Kết quả
+                        th.u-border-1.u-border-custom-color-1.u-table-cell Thời gian nộp bài
                       - const options = {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', timeZone: "Asia/Jakarta"};
 
                       each ls of history
@@ -150,10 +138,77 @@ html(style='font-size: 16px;' lang='en')
                             td.u-border-1.u-border-grey-30.u-table-cell #{new Date(ls.ThoiGian).toLocaleString("vi-VN", options)}
                     else
                       h3.u-text.u-text-custom-color-1.u-text-default.u-text-3(style="padding-left: 10px;") Không có lịch sử!
-
             #tab-2917.u-container-style.u-tab-pane.u-white.u-tab-pane-3(role='tabpanel' aria-labelledby='link-tab-2917')
-              .u-container-layout.u-container-layout-5
-                h4.u-text.u-text-default.u-text-4 Be The First To Review This Product!
-                p.u-text.u-text-default.u-text-5
-                  | Sample text. Click to select the text box. Click again or double click to start editing the text.
-                a.u-btn.u-button-style.u-btn-2(href='') write product review
+              
+    section#popup.u-align-center.u-black.u-clearfix.u-container-style.u-dialog-block.u-opacity.u-opacity-70.u-dialog-section-8
+      .u-container-style.u-dialog.u-radius-10.u-shape-round.u-white.u-dialog-1
+        .u-container-layout.u-container-layout-1
+          h2.u-align-center.u-text.u-text-1 Kết quả thực thi
+          h4#encoded.u-align-center.u-text.u-text-default.u-text-2(style="margin: auto;padding-top: 20px;")
+        button.u-dialog-close-button.u-icon.u-text-grey-50.u-icon-1.btn
+          svg.u-svg-link(preserveAspectRatio='xMidYMin slice' viewBox='0 0 413.348 413.348' style='')
+            use(xmlns:xlink='http://www.w3.org/1999/xlink' xlink:href='#svg-5801')
+          svg#svg-5801.u-svg-content(xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' xml:space='preserve' viewBox='0 0 413.348 413.348')
+            path(d='m413.348 24.354-24.354-24.354-182.32 182.32-182.32-182.32-24.354 24.354 182.32 182.32-182.32 182.32 24.354 24.354 182.32-182.32 182.32 182.32 24.354-24.354-182.32-182.32z')
+    style.
+      .u-dialog-section-8 {
+      min-height: 826px;
+      }
+      .u-dialog-section-8 .u-dialog-1 {
+      width: 566px;
+      min-height: 255px;
+      height: auto;
+      box-shadow: 5px 5px 20px 0 rgba(0,0,0,0.4);
+      margin: 230px auto 60px;
+      }
+      .u-dialog-section-8 .u-container-layout-1 {
+      padding: 40px 30px;
+      }
+      .u-dialog-section-8 .u-text-1 {
+      font-size: 2.5rem;
+      letter-spacing: 1px;
+      text-transform: none;
+      font-weight: normal;
+      margin: 30px 0 0;
+      }
+      .u-dialog-section-8 .u-text-2 {
+      margin: 20px 0 0;
+      }
+      .u-dialog-section-8 .u-icon-1 {
+      width: 15px;
+      height: 15px;
+      left: auto;
+      top: 17px;
+      position: absolute;
+      right: 16px;
+      }
+      @media (max-width: 1199px) {
+      .u-dialog-section-8 .u-text-1 {
+      width: 297px;
+      }
+      }
+      @media (max-width: 991px) {
+      .u-dialog-section-8 .u-container-layout-1 {
+      padding-top: 30px;
+      padding-bottom: 30px;
+      }
+      }
+      @media (max-width: 767px) {
+      .u-dialog-section-8 .u-dialog-1 {
+      width: 540px;
+      }
+      }
+      @media (max-width: 575px) {
+      .u-dialog-section-8 .u-dialog-1 {
+      width: 340px;
+      }
+      .u-dialog-section-8 .u-container-layout-1 {
+      padding-left: 20px;
+      padding-right: 20px;
+      }
+      .u-dialog-section-8 .u-text-1 {
+      font-size: 2.25rem;
+      margin-left: 2px;
+      margin-right: 2px;
+      }
+      }

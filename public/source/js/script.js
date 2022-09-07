@@ -90,10 +90,8 @@ async function checkToken() {
 setInterval(checkToken, 60000);
 
 async function SubmitSQL() {
+  document.querySelector('.btn').style.visibility = 'hidden';
   document.querySelector('#encoded').innerHTML = "Đang gửi yêu cầu, vui lòng đợi!";
-  alert("Đang gửi yêu cầu, vui lòng đợi!");
-  document.body.style.opacity = "20%";
-  document.querySelector('.btn').disabled = true;
 
   var form = document.querySelector("#formElem");
   
@@ -112,19 +110,19 @@ async function SubmitSQL() {
           json: true
   })
 
-  //selector button class btn btn-success from document
-  //document.querySelector('')
   let text = await response.json(); 
   console.log(text)
   
-  //if(text.alert)
-    //  alert(text.alert)
   if(text.redirect)
       window.location.href = text.redirect;
+  
+  if(text.statusCode == 200) 
+    document.querySelector('#encoded').style.color = "green";
+  else
+    document.querySelector('#encoded').style.color = "red";
 
   document.querySelector("#encoded").innerHTML = JSON.stringify(text.alert);
-  document.body.style.opacity = "100%";
-  document.querySelector('.btn').disabled = false;
+  document.querySelector('.btn').style.visibility = "visible";
 };
 
 async function changePassword() {
@@ -163,26 +161,3 @@ async function changePassword() {
 
 
 
-async function DrawTable(data) {
-  google.charts.load('current', {'packages':['table']});
-  google.charts.setOnLoadCallback(drawTable);
-
-  function drawTable() {
-    var data = new google.visualization.DataTable();
-    data.addColumn('string', 'Name');
-    data.addColumn('number', 'Salary');
-    data.addColumn('boolean', 'Full Time Employee');
-    data.addRows([
-      ['Mike',  {v: 10000, f: '$10,000'}, true],
-      ['Jim',   {v:8000,   f: '$8,000'},  false],
-      ['Alice', {v: 12500, f: '$12,500'}, true],
-      ['Bob',   {v: 7000,  f: '$7,000'},  true]
-    ]);
-
-    var table = new google.visualization.Table(document.getElementById('table_div'));
-
-    table.draw(data, {showRowNumber: true, width: '100%', height: '100%'});
-  }
-}
-
-DrawTable();

@@ -20,9 +20,7 @@ const configUser = {
 }
 
 async function getUser (username) {
-    try {
-        console.log("getUser ", username);
-    
+    try {    
         if(!username || username.indexOf(' ') > -1 || username.indexOf('@') > -1 || username.indexOf('.') > -1) 
             return ({ 
                 statusCode: 400,
@@ -58,7 +56,6 @@ async function getUser (username) {
 
 async function createUser (data) {
     try {
-        console.log("createUser ", data.username);
         let SQLQuery = `insert into Admin_Users 
             (username, fullname, rawpassword, password, refreshToken, email, phoneNumber, role) 
             values (N'${data.username}', N'${data.fullname}', N'${data.rawpassword}', N'${data.password}', N'${data.refreshToken}', N'${data.email}', '${data.phoneNumber}', '${data.role}')`;
@@ -86,7 +83,6 @@ async function updateRefreshToken (username, refreshToken) {
     await sql.connect(configAdmin); 
     const request = await new sql.Request();
     const result = await request.query`update Admin_Users set refreshToken = ${refreshToken} where username = ${username}`;
-    console.log("update ", username, result);
     await sql.close()
     return result.rowsAffected[0];
 }
@@ -215,7 +211,6 @@ async function GetOutputWithTime(MaBT, MaCH) {
 async function XuLySQL (MaCH, SQLQueryClient, user) {
     try {
         SQLQueryClient = SQLQueryClient.toLowerCase();
-        console.log("XuLySQL: ", MaCH, SQLQueryClient);
 
         let resultClient = await TruyVan("SinhVien", SQLQueryClient);
         const resultOutput = await GetOutput(MaCH);
@@ -259,7 +254,6 @@ async function XuLySQL (MaCH, SQLQueryClient, user) {
 async function NopBaiTap(MaBT, MaCH, SQLQueryClient, user) {
     try {
         SQLQueryClient = SQLQueryClient.toLowerCase();
-        console.log("XuLySQL: ", MaCH, SQLQueryClient);
 
         let resultClient = await TruyVan("SinhVien", SQLQueryClient);
         const resultOutput = await GetOutputWithTime(MaBT, MaCH);
@@ -303,7 +297,6 @@ async function NopBaiTap(MaBT, MaCH, SQLQueryClient, user) {
 
 async function LayCauHoi(MaCH, user) {
     try {
-        console.log(user)
         //let SQLQuery = `select * from Admin_CauHoi where MaCH = ${MaCH}`;
         let SQLQuery = `SELECT CH.MaCH, CH.MucDo, CH.TieuDe, CH.NoiDung, CH.LuocDo
             FROM Admin_CauHoi CH
@@ -316,8 +309,6 @@ async function LayCauHoi(MaCH, user) {
 
             const regex = /([A-Z])\w+/g;
             const LuocDo = data.LuocDo.match(regex);
-
-            console.log(LuocDo);
 
             SQLQuery = `
             SELECT LS.SQLQuery, LS.KetQua, LS.ThoiGian

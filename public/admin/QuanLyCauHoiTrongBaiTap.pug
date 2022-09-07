@@ -174,11 +174,17 @@ html(style='font-size: 16px;' lang='en')
                         svg.u-caret(xmlns='http://www.w3.org/2000/svg' width='14' height='12' version='1')
                           path(fill='currentColor' d='M4 8L0 4h8z')
                     .u-form-date.u-form-group.u-form-partition-factor-2.u-form-group-3
-                      label.u-label(for='date-7664') Thời gian bắt đầu
-                      input#date-7664.u-border-1.u-border-grey-30.u-input.u-input-rectangle.u-white(type='datetime-local' placeholder='MM/DD/YYYY' name='TgianBD' required='' value=questionList[0].TgianBD)
+                      - var TgianBD = new Date(questionList[0].TgianBD);
+                      - TgianBD = TgianBD.setHours(TgianBD.getHours() + 7);
+                      - TgianBD = new Date(TgianBD);
+                      - var TgianKT = new Date(questionList[0].TgianKT);
+                      - TgianKT = TgianKT.setHours(TgianKT.getHours() + 7);
+                      - TgianKT = new Date(TgianKT);
+                      
+                      input#date-7664.u-border-1.u-border-grey-30.u-input.u-input-rectangle.u-white(type='datetime-local' step="1" placeholder='MM/DD/YYYY' name='TgianBD' required='' value=TgianBD.toISOString().slice(0,16))
                     .u-form-date.u-form-group.u-form-partition-factor-2.u-form-group-4
                       label.u-label(for='date-adde') Thời gian kết thúc
-                      input#date-adde.u-border-1.u-border-grey-30.u-input.u-input-rectangle.u-white(type='datetime-local' placeholder='MM/DD/YYYY' name='TgianKT' required='' value=questionList[0].TgianKT)
+                      input#date-adde.u-border-1.u-border-grey-30.u-input.u-input-rectangle.u-white(type='datetime-local' step="1" placeholder='MM/DD/YYYY' name='TgianKT' required='' value=TgianKT.toISOString().slice(0,16))
                     .u-form-checkbox.u-form-group.u-form-group-5
                       if (questionList[0].TrangThai == 1)
                         input#checkbox-1d1a.u-checkbox-input(type='checkbox' name='TrangThai' value='1' checked)

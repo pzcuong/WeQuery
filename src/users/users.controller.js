@@ -3,7 +3,6 @@ var pug = require('pug');
 
 async function TestSQL(req, res) {
     const MaCH = req.params.MaCH;
-    console.log("Xử lý câu hỏi", MaCH);
     if(req.body.SQLQuery) {
         const result = await usersModel.XuLySQL(MaCH, req.body.SQLQuery, req.user.result);
         //console.log(result)
@@ -87,7 +86,6 @@ async function LayLichSuTruyVan(req, res, next) {
 
 async function LayDanhSachBaiTap(req, res, next) {
     let result = await usersModel.LayDanhSachBaiTap(req.user.result);
-    console.log(result);
     let html = pug.renderFile('public/user/BaiTap.pug', {
         status: result.statusCode,
         questionList: result.message
