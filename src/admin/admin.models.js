@@ -324,7 +324,7 @@ async function TaoQuanHe(SQLSchema) {
 async function ChinhSuaCauHoi(MaCH, data) {
     try {
         let SQLQuery = `update Admin_CauHoi 
-            set LuocDo =  N'${data.LuocDo}', MucDo = N'${data.MucDo}', TieuDe = N'${data.TieuDe}', NoiDung = N'${data.NoiDung}'
+            set LuocDo =  N'${data.LuocDo}', MucDo = N'${data.MucDo}', TieuDe = N'${data.TieuDe}', NoiDung = N'${data.NoiDung}', TinhTrang = '${data.TinhTrang}'
             where MaCH = '${MaCH}'`;
 
         let result = await TruyVan(SQLQuery);
@@ -418,6 +418,21 @@ async function BangXepHang(MaBT) {
     }   
 }
 
+async function XoaCauHoi(MaCH) {
+    try {
+        let SQLQuery = `DELETE FROM Admin_CauHoi WHERE MaCH = '${MaCH}'`;
+        let result = await TruyVan(SQLQuery);
+        return result;
+    } catch(err) {
+        console.log(err);
+        return ({ 
+            statusCode: 400,
+            message: 'Lỗi truy vấn SQL!',
+            alert: 'Kiểm tra lại câu lệnh SQL!'
+        });
+    }   
+}
+
 exports.DanhSachCauHoi = DanhSachCauHoi;
 exports.ChinhSuaCauHoi = ChinhSuaCauHoi;
 exports.LayCauHoi = LayCauHoi;
@@ -432,6 +447,7 @@ exports.XuLySQL = XuLySQL;
 exports.ThemCauHoiVaoBaiTap = ThemCauHoiVaoBaiTap;
 exports.SuaBaiTap = SuaBaiTap;
 exports.BangXepHang = BangXepHang;
+exports.XoaCauHoi = XoaCauHoi;
 
 async function TruyVan(SQLQuery) {
     try {

@@ -99,6 +99,8 @@ html(style='font-size: 16px;' lang='en')
               a#link-tab-3a42.u-active-custom-color-1.u-button-style.u-tab-link.u-tab-link-2(href='#tab-3a42' role='tab' aria-controls='tab-3a42' aria-selected='false') Quan hệ
             li.u-tab-item.u-tab-item-3(role='presentation')
               a#tab-d7e7.u-active-custom-color-1.u-button-style.u-tab-link.u-tab-link-3(href='#link-tab-d7e7' role='tab' aria-controls='link-tab-d7e7' aria-selected='false') Output
+          a.u-border-none.u-btn.u-button-style.u-custom-color-3.u-hover-palette-2-base.u-btn-1.del_btn(onclick="XoaCauHoi()") Xóa câu hỏi
+
           .u-tab-content
             #tab-4d57.u-container-style.u-tab-active.u-tab-pane(role='tabpanel' aria-labelledby='link-tab-4d57')
               .u-container-layout.u-container-layout-1
@@ -119,6 +121,9 @@ html(style='font-size: 16px;' lang='en')
                     .u-form-group.u-form-textarea.u-form-group-3
                       label.u-label(for='textarea-3eac') Nội dung câu hỏi
                       textarea#textarea-3eac.u-border-1.u-border-grey-30.u-input.u-input-rectangle.u-white(rows='10' cols='50' name='NoiDung' required='' placeholder='Nội dung...') #{data.NoiDung}
+                    .u-form-checkbox.u-form-group.u-form-group-4
+                      input#checkbox-81cb(type='checkbox' name='TinhTrang' value='True' required='required' checked='checked')
+                      label.u-label(for='checkbox-81cb') Công khai câu hỏi
 
             #tab-3a42.u-container-style.u-tab-pane(role='tabpanel' aria-labelledby='link-tab-3a42')
               .u-container-layout.u-container-layout-2
@@ -284,12 +289,19 @@ html(style='font-size: 16px;' lang='en')
       document.querySelector("#encoded").innerHTML = "Đang xử lý..."
       var formCH = document.querySelector("#formCH");
       var formOutput = document.querySelector("#formOutput");
+      var TinhTrang = form.querySelector("input[name='TinhTrang']").value;
+      if(TinhTrang.checked == true) {
+        TinhTrang = 1;
+      } else {
+        TinhTrang = 0;
+      }
 
       data = {
         TieuDe: formCH.querySelector("input[name='TieuDe']").value,
         NoiDung: formCH.querySelector("textarea[name='NoiDung']").value,
         MucDo: formCH.querySelector("select[name='DoKho']").value,
         SQLQuery: formOutput.querySelector("textarea[name='SQLQuery']").value,
+        TinhTrang: TinhTrang,
         type: 'SuaCauHoi'
       }
 
@@ -334,4 +346,31 @@ html(style='font-size: 16px;' lang='en')
         document.querySelector("#encoded").innerHTML = text.message;
       else
         document.querySelector("#encoded").innerHTML = text.result;
+    }
+  
+  script.
+    async function XoaCauHoi() {
+      console.log("XoaCauHoi")
+      if(!window.confirm("Bạn có chắc chắn muốn xóa câu hỏi này không?")) 
+        return;
+      
+
+      data = {
+        type: 'XoaCauHoi'
+      }
+
+      let response = await fetch('./', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+        json: true
+      })
+
+      let text = await response.json(); 
+      console.log(text)
+      //alert(text.message);
+      window.alert(text.message);
+      window.location.href = "/admin/QuanLyCauHoi";
     }

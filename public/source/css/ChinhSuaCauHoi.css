@@ -1,18 +1,20 @@
 .u-section-1 .u-sheet-1 {
-    min-height: 572px;
+    min-height: 765px;
   }
-
-  .del_btn {
-    margin: 0 auto;
-    left: 995px;
-    position: absolute;
+  
+  .u-section-1 .u-btn-1 {
+    border-style: none;
+    letter-spacing: 1px;
+    background-image: none;
+    font-weight: 600;
+    margin: 88px 0 0 auto;
   }
   
   .u-section-1 .u-tabs-1 {
     min-height: 375px;
     height: auto;
-    margin-top: 88px;
-    margin-bottom: 60px;
+    margin-top: -45px;
+    margin-bottom: 0;
   }
   
   .u-section-1 .u-tab-link-1 {
@@ -49,7 +51,11 @@
     margin-left: 0;
   }
   
-  .u-section-1 .u-btn-1 {
+  .u-section-1 .u-form-group-4 {
+    margin-left: 0;
+  }
+  
+  .u-section-1 .u-btn-2 {
     background-image: none;
   }
   
@@ -63,7 +69,7 @@
     margin: 0;
   }
   
-  .u-section-1 .u-btn-2 {
+  .u-section-1 .u-btn-3 {
     background-image: none;
   }
   
@@ -77,11 +83,11 @@
     margin: 0;
   }
   
-  .u-section-1 .u-btn-3 {
+  .u-section-1 .u-btn-4 {
     background-image: none;
   }
   
-  .u-section-1 .u-btn-4 {
+  .u-section-1 .u-btn-5 {
     background-image: none;
     margin: -56px auto 11px 155px;
   }
@@ -99,7 +105,7 @@
       width: 880px;
     }
   
-    .u-section-1 .u-btn-4 {
+    .u-section-1 .u-btn-5 {
       margin-left: 0;
     }
   }
@@ -148,6 +154,14 @@
   }
   
   @media (max-width: 575px) {
+    .u-section-1 .u-btn-1 {
+      margin-top: 221px;
+    }
+  
+    .u-section-1 .u-tabs-1 {
+      margin-top: -179px;
+    }
+  
     .u-section-1 .u-form-1 {
       width: 320px;
     }

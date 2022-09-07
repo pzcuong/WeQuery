@@ -109,18 +109,27 @@ async function ThemMoiCauHoi(req, res) {
 }
 
 async function LayCauHoi(req, res, next) {
-    const MaCH = req.params.MaCH;
-    let result = await adminModel.LayCauHoi(MaCH, req.user.result);
-    if (result.statusCode == 200) {
-        let html = pug.renderFile('public/admin/ChinhSuaCauHoi.pug', {
-            data: result.data
-        });
+    try {
+        const MaCH = req.params.MaCH;
+        let result = await adminModel.LayCauHoi(MaCH, req.user.result);
+        if (result.statusCode == 200) {
+            let html = pug.renderFile('public/admin/ChinhSuaCauHoi.pug', {
+                data: result.data
+            });
 
-        res.send(html);
-    } else {
+            res.send(html);
+        } else {
+            let html = pug.renderFile('public/404.pug', { 
+                message: result.message,
+                redirect: '/admin/ThemTestCase/1'
+            });
+            res.send(html);
+        }
+    } catch (error) {
         let html = pug.renderFile('public/404.pug', { 
-            message: result.message,
-            redirect: '/admin/ThemTestCase/1'
+            message: "Không tồn tại câu hỏi",
+            redirect: '/admin/QuanLyCauHoi/',
+            href: "Đi đến trang quản lý câu hỏi"
         });
         res.send(html);
     }
@@ -179,6 +188,18 @@ async function ChinhSuaCauHoi(req, res, next) {
                     statusCode: 400,
                     message: 'Thêm câu hỏi thất bại'
                 });
+        }
+        else if (data.type == 'XoaCauHoi') {
+            const result = await adminModel.XoaCauHoi(MaCH);
+            if(result.statusCode === 200)
+                return res.send({
+                    statusCode: 200,
+                    message: result.message
+                });
+            return res.send({
+                statusCode: 400,
+                message: 'Xóa câu hỏi thất bại'
+            });
         }
         else 
             return res.status(400).send({message: 'Không xác định được loại câu hỏi'});
