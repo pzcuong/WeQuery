@@ -42,7 +42,7 @@ async function LayCauHoi(MaCH) {
 async function ThemCauHoi(data) {
     try {
         let SQLQuery = `insert into Admin_CauHoi (MucDo, TieuDe, NoiDung, LuocDo, TinhTrang) 
-            values (N'${data.MucDo}', N'${data.TieuDe}', N'${data.NoiDung}', N'${data.LuocDo}', 1)`;
+            values (N'${data.MucDo}', N'${data.TieuDe}', N'${data.NoiDung}', N'${data.LuocDo}', '${data.TinhTrang}')`;
         let result = await TruyVan(SQLQuery);
         console.log("Thêm Câu Hỏi ", result);
         if(result.statusCode != 200) 
@@ -183,7 +183,7 @@ async function SuaTestCase(MaCH, SQLQuery) {
 
 async function DanhSachBaiTap() {
     try {
-        let SQLQuery = `SELECT Admin_BaiTap.MaBT, TieuDe, COUNT(Admin_BaiTapCauHoi.MaCH) AS SoBT, COUNT(Username) AS DaThucHien
+        let SQLQuery = `SELECT DISTINCT Admin_BaiTap.MaBT, TieuDe, COUNT(DISTINCT Admin_BaiTapCauHoi.MaCH) AS SoBT, COUNT(Username) AS DaThucHien
         FROM dbo.Admin_BaiTap LEFT JOIN dbo.Admin_BaiTapCauHoi ON Admin_BaiTapCauHoi.MaBT = Admin_BaiTap.MaBT LEFT JOIN dbo.Admin_SQLSubmitHistory ON Admin_SQLSubmitHistory.MaCH = Admin_BaiTapCauHoi.MaCH
         GROUP BY Admin_BaiTap.MaBT, TieuDe`;
         let result = await TruyVan(SQLQuery);
@@ -478,7 +478,7 @@ async function TruyVanDacBiet(SQLQuery) {
         let pool = await new sql.ConnectionPool(configAdmin);
         let result = await pool.connect();
         console.log("TruyVanDacBiet", SQLQuery);
-        let queryResult = await result.query(SQLQuery.SQLSchema);
+        let queryResult = await result.batch(SQLQuery.SQLSchema);
         //create new table with the same schema as the table you want to copy
         //console.log("Admin, QueryResult", queryResult);
         await pool.close();

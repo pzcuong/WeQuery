@@ -119,6 +119,9 @@ html(style='font-size: 16px;' lang='en')
                     .u-form-group.u-form-textarea.u-form-group-3
                       label.u-label(for='textarea-3eac') Nội dung câu hỏi
                       textarea#textarea-3eac.u-border-1.u-border-grey-30.u-input.u-input-rectangle.u-white(rows='10' cols='50' name='NoiDung' required='' placeholder='Nội dung...')
+                    .u-form-checkbox.u-form-group.u-form-group-4
+                      input#checkbox-81cb(type='checkbox' name='TinhTrang' value='True' required='required' checked='checked')
+                      label.u-label(for='checkbox-81cb') Công khai câu hỏi
 
             #tab-3a42.u-container-style.u-tab-pane(role='tabpanel' aria-labelledby='link-tab-3a42')
               .u-container-layout.u-container-layout-2
@@ -286,12 +289,19 @@ html(style='font-size: 16px;' lang='en')
 
       var formCH = document.querySelector("#formCH");
       var formOutput = document.querySelector("#formOutput");
+      var TinhTrang = formCH.querySelector("input[name='TinhTrang']").value;
+      if(TinhTrang.checked == true) {
+        TinhTrang = 1;
+      } else {
+        TinhTrang = 0;
+      }
 
       data = {
         TieuDe: formCH.querySelector("input[name='TieuDe']").value,
         NoiDung: formCH.querySelector("textarea[name='NoiDung']").value,
         MucDo: formCH.querySelector("select[name='DoKho']").value,
         SQLQuery: formOutput.querySelector("textarea[name='SQLQuery']").value,
+        TinhTrang: TinhTrang,
         type: 'TaoCauHoi'
       }
 
@@ -307,7 +317,16 @@ html(style='font-size: 16px;' lang='en')
       let text = await response.json(); 
       console.log(text)
       //alert(text.message);
-      document.querySelector("#encoded").innerHTML = text.message;
+      document.querySelector("#encoded").innerHTML = text.message;  
+      
+      if(text.statusCode == 200) {
+        if(confirm("Bạn có muốn thêm câu hỏi này bài tập này không?")) {
+          window.location.href = window.location.href;
+        } else {
+          var url = window.location.href;
+          window.location.href = url.substring(0, url.lastIndexOf('/'));
+        }
+      }
     }
 
   script.

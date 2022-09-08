@@ -4,6 +4,7 @@ var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser')
 var jwt = require('jsonwebtoken');
 var pug = require('pug');
+var compression = require('compression');
 
 const authRoute = require('./src/auth/auth.routers');
 const userRoute = require('./src/users/users.routers');
@@ -18,6 +19,7 @@ app.use(cookieParser());
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(compression());
 app.use('/public', express.static('./public'));
 
 console.log(process.env.PORT);

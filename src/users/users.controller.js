@@ -59,6 +59,7 @@ async function LayCauHoi(req, res, next) {
 async function LayDanhSachCauHoi(req, res, next) {
     try {
         let userCH = req.user.result.username + ":CH";
+        console.log(userCH);
         let value = myCache.get(userCH);
         if(value != undefined) {
             let html = pug.renderFile('public/user/LuyenTap.pug', {
