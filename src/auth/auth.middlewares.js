@@ -28,8 +28,6 @@ async function isAuth(req, res, next) {
 			}); */
 	}
 
-	console.log(verified);
-
 	const user = await userModle.getInfoUser(verified.data.payload.username);
 	req.user = user;
 

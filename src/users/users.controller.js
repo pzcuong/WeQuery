@@ -1,5 +1,7 @@
 const usersModel = require('../users/users.models');
 var pug = require('pug');
+const NodeCache = require( "node-cache" );
+const myCache = new NodeCache( { stdTTL: 100, checkperiod: 60 } );
 
 async function TestSQL(req, res) {
     const MaCH = req.params.MaCH;
@@ -55,14 +57,31 @@ async function LayCauHoi(req, res, next) {
 }
 
 async function LayDanhSachCauHoi(req, res, next) {
-    let result = await usersModel.LayDanhSachCauHoi(req.user.result);
-    //console.log(result.message[0]);
-
-    let html = pug.renderFile('public/user/LuyenTap.pug', {
-        questionList: result.message[0]
-    });
-
-    res.send(html);
+    try {
+        let userCH = req.user.result.username + ":CH";
+        let value = myCache.get(userCH);
+        if(value != undefined) {
+            let html = pug.renderFile('public/user/LuyenTap.pug', {
+                questionList: value
+            });
+            return res.send(html);
+        } else {
+            let result = await usersModel.LayDanhSachCauHoi(req.user.result);
+            myCache.set(userCH, result.message[0]);
+            let html = pug.renderFile('public/user/LuyenTap.pug', {
+                questionList: result.message[0]
+            });
+            return res.send(html);
+        }
+    } catch (error) {
+        console.log(error);
+        let html = pug.renderFile('public/404.pug', {
+            message: "Lỗi không xác định",
+            redirect: '/user/LuyenTap/',
+            href: "Đi đến trang câu hỏi"
+        });
+        res.send(html);
+    }
 }
 
 async function LayLichSuTruyVan(req, res, next) {
@@ -85,13 +104,34 @@ async function LayLichSuTruyVan(req, res, next) {
 }
 
 async function LayDanhSachBaiTap(req, res, next) {
-    let result = await usersModel.LayDanhSachBaiTap(req.user.result);
-    let html = pug.renderFile('public/user/BaiTap.pug', {
-        status: result.statusCode,
-        questionList: result.message
-    });
-
-    res.send(html);
+    try {
+        let userCH = req.user.result.username + ":CH";
+        let value = myCache.get(userCH);
+        if(value != undefined) {
+            let result = await usersModel.LayDanhSachBaiTap(req.user.result);
+            let html = pug.renderFile('public/user/BaiTap.pug', {
+                status: value.statusCode,
+                questionList: value.message
+            });
+            return res.send(html);
+        } else {
+            let result = await usersModel.LayDanhSachBaiTap(req.user.result);
+            myCache.set(userCH, result);
+            let html = pug.renderFile('public/user/BaiTap.pug', {
+                status: result.statusCode,
+                questionList: result.message
+            });
+            res.send(html);
+        }
+    } catch (error) {
+        console.log(error);
+        let html = pug.renderFile('public/404.pug', {
+            message: "Lỗi không xác định",
+            redirect: '/user/BaiTap/',
+            href: "Đi đến trang câu hỏi"
+        });
+        res.send(html);
+    }
 }
 
 async function LayNoiDungBaiTap(req, res, next) {
