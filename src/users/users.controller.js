@@ -5,6 +5,7 @@ const myCache = new NodeCache( { stdTTL: 100, checkperiod: 60 } );
 
 async function TestSQL(req, res) {
     const MaCH = req.params.MaCH;
+    console.log(req.body.SQLQuery)
     if(req.body.SQLQuery) {
         const result = await usersModel.XuLySQL(MaCH, req.body.SQLQuery, req.user.result);
         //console.log(result)
