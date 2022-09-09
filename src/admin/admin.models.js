@@ -1,5 +1,6 @@
 const sql = require("mssql");
 var fs = require('fs');
+var json2html = require('json2html');
 require('dotenv').config();
 
 const configAdmin = {
@@ -96,10 +97,12 @@ async function XuLySQL(SQLQuery) {
     SQLQuery = SQLQuery.toLowerCase();
     try {
         const result = await TruyVan(SQLQuery);
+        console.log(result.result.recordset)
         return ({
             statusCode: result.statusCode,
             message: 'Thành công',
-            result: result.result.recordsets
+            result: result.result.recordset,
+            html: json2html.render(result.result.recordset)
         });
     } catch(err) {
         console.log(err);

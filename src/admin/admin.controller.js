@@ -44,12 +44,13 @@ async function ThemCauHoiTrongBaiTap(req, res) {
             if(!data.SQLQuery)
                 return res.status(400).send({message: 'Missing fields'});
             const result = await adminModel.XuLySQL(data.SQLQuery);
-            console.log(result);
+            //console.log(result);
             if(result.statusCode === 200)
                 return res.send({
                     statusCode: 200,
                     message: result.message,
-                    result: JSON.stringify(result.result)
+                    //result: JSON.stringify(result.result)
+                    result: result.html
                 });
             else
                 return res.send({
@@ -176,12 +177,13 @@ async function ChinhSuaCauHoi(req, res, next) {
             if(!data.SQLQuery)
                 return res.status(400).send({message: 'Missing fields'});
             const result = await adminModel.XuLySQL(data.SQLQuery);
-            console.log(result);
+            //console.log(result);
             if(result.statusCode === 200)
                 return res.send({
                     statusCode: 200,
                     message: result.message,
-                    result: JSON.stringify(result.result)
+                    //result: JSON.stringify(result.result),
+                    result: result.html
                 });
             else
                 return res.send({
