@@ -153,7 +153,7 @@ async function login(req, res, next) {
             });
 
     let user = await userModel.getUser(username);
-    console.log(user.result.refreshToken);
+    //console.log(user.result.refreshToken);
 
     if(user.statusCode == 200){
         if(user.result.refreshToken == null) {
