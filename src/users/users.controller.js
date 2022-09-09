@@ -58,7 +58,7 @@ async function LayCauHoi(req, res, next) {
 
 async function LayDanhSachCauHoi(req, res, next) {
     try {
-        let userCH = req.user.result.username + ":CH";
+        let userCH = req.user.result.username + ":DSCH";
         console.log(userCH);
         let value = myCache.get(userCH);
         if(value != undefined) {
@@ -106,7 +106,7 @@ async function LayLichSuTruyVan(req, res, next) {
 
 async function LayDanhSachBaiTap(req, res, next) {
     try {
-        let userCH = req.user.result.username + ":CH";
+        let userCH = req.user.result.username + ":DSBT";
         let value = myCache.get(userCH);
         if(value != undefined) {
             let result = await usersModel.LayDanhSachBaiTap(req.user.result);
