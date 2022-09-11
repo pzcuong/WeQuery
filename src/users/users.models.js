@@ -1,6 +1,9 @@
 const sql = require("mssql");
 const fs = require('fs');
-const stringComparison = require('string-comparison')
+const stringComparison = require('string-comparison');
+const NodeCache = require( "node-cache" );
+const myCache = new NodeCache( { stdTTL: 100, checkperiod: 60 } );
+
 
 require('dotenv').config();
 
@@ -89,29 +92,46 @@ async function updateRefreshToken (username, refreshToken) {
 
 async function getInfoUser (username) {
     try {
-        if(username == undefined || username.indexOf(' ') > -1 || username.indexOf('@') > -1 || username.indexOf('.') > -1) 
-            return ({ 
-                statusCode: 400,
-                message: 'Username không hợp lệ!', 
-                alert: 'Username không hợp lệ!'
-            });
-        else {
-            let SQLQuery = `select username, fullname, SinhNhat, email, phoneNumber, role from Admin_Users where username = '${username}'`;
-            let result = await TruyVan("Admin", SQLQuery);
+        let userCache = username + ":InfoUser";
+        let value = myCache.get(userCache);
+        if(value == undefined) {
+            if(username == undefined || username.indexOf(' ') > -1 || username.indexOf('@') > -1 || username.indexOf('.') > -1) 
+                return ({ 
+                    statusCode: 400,
+                    message: 'Username không hợp lệ!', 
+                    alert: 'Username không hợp lệ!'
+                });
+            else {
+                let SQLQuery = `
+                    SELECT Admin_Users.username, fullname, SinhNhat, email, phoneNumber, role, MaNhom
+                    FROM Admin_Users INNER JOIN dbo.Admin_ThanhVienNhom ON Admin_ThanhVienNhom.Username = Admin_Users.username
+                    WHERE Admin_Users.username = '${username}'
+                `;
+                let result = await TruyVan("Admin", SQLQuery);
+                myCache.set(userCache, result.result.recordset, 1800);
 
-            if(result.statusCode == 200)
-                return { 
-                    statusCode: 200,
-                    message: 'Thành công',
-                    result: result.result.recordset[0],
-                    table: result.result.recordset
-                };
-            else
-                return ({
-                    statusCode: 404,
-                    message: 'Không tìm thấy user',
-                    alert: 'Không tìm thấy user'
-                })
+                if(result.statusCode == 200)
+                    return { 
+                        statusCode: 200,
+                        message: 'Thành công',
+                        result: result.result.recordset[0],
+                        table: result.result.recordset
+                    };
+                else
+                    return ({
+                        statusCode: 404,
+                        message: 'Không tìm thấy user',
+                        alert: 'Không tìm thấy user'
+                    })
+            }
+        } else {
+            console.log("Lấy thông tin user từ cache");
+            return ({
+                statusCode: 200,
+                message: 'Thành công',
+                result: value[0],
+                table: value
+            })
         }
     } catch(err) {
         console.log("Lỗi getInfoUser (users.models)", err);
@@ -471,67 +491,98 @@ async function LayDanhSachBaiTap(user) {
 
 async function LayNoiDungBaiTap(MaBT, MaCH, user) {
     try {
-        let SQLQuery = `SELECT CH.MaCH, CH.MucDo, CH.TieuDe, CH.NoiDung, CH.LuocDo, KQ.KetQua, KQ.SQLQuery, KQ.ThoiGian, BTCH.MaBT
-        FROM (
-                SELECT MaCH, LS.KetQua, LS.SQLQuery, LS.ThoiGian
-                FROM Admin_SQLSubmitHistory LS 
-                WHERE LS.Username = N'${user.username}' AND LS.KetQua = N'100'
-            ) KQ RIGHT JOIN Admin_BaiTapCauHoi BTCH ON BTCH.MACH = KQ.MaCH INNER JOIN Admin_CauHoi CH ON CH.MaCH = BTCH.MACH 
-        WHERE BTCH.MaBT IN (
-            SELECT BTN.MaBT
-            FROM Admin_BaiTapTheoNhom BTN INNER JOIN Admin_ThanhVienNhom TVN ON TVN.MaNhom = BTN.MaNhom
-            WHERE TVN.Username = N'${user.username}' AND BTN.MaBT = N'${MaBT}'
-        )`;
-        let result = await TruyVan("Admin", SQLQuery);
+        let userCache = user.MaNhom + "-BT:" + MaBT + "-CH:" + MaCH;
+        console.log(userCache);
+        let value = myCache.get(userCache);
+        if(value == undefined) {
+            let SQLQuery = `SELECT DISTINCT CH.MaCH, CH.MucDo, CH.TieuDe, CH.NoiDung, CH.LuocDo, KQ.KetQua, BTCH.MaBT
+            FROM (
+                    SELECT MaCH, LS.KetQua, LS.SQLQuery, LS.ThoiGian
+                    FROM Admin_SQLSubmitHistory LS 
+                    WHERE LS.Username = N'${user.username}' AND LS.KetQua = N'100'
+                ) KQ RIGHT JOIN Admin_BaiTapCauHoi BTCH ON BTCH.MACH = KQ.MaCH INNER JOIN Admin_CauHoi CH ON CH.MaCH = BTCH.MACH 
+            WHERE BTCH.MaBT IN (
+                SELECT BTN.MaBT
+                FROM Admin_BaiTapTheoNhom BTN INNER JOIN Admin_ThanhVienNhom TVN ON TVN.MaNhom = BTN.MaNhom
+                WHERE TVN.Username = N'${user.username}' AND BTN.MaBT = N'${MaBT}'
+            )`;
+            let result = await TruyVan("Admin", SQLQuery);
 
-        if(result.statusCode == 200 && result.result.recordset.length > 0) { // Có câu hỏi
-            let history;
-            let index = 0;
-            for (; index < result.result.recordset.length; index++) {
-                if(result.result.recordset[index].MaCH == MaCH)
-                    break;
-            };
+            if(result.statusCode == 200 && result.result.recordset.length > 0) { // Có câu hỏi
+                let history;
+                let index = 0;
+                for (; index < result.result.recordset.length; index++) {
+                    if(result.result.recordset[index].MaCH == MaCH)
+                        break;
+                };
 
-            if(index == result.result.recordset.length) {
-                index = 0;
-                MaCH = result.result.recordset[index].MaCH;
+                if(index == result.result.recordset.length) {
+                    index = 0;
+                    MaCH = result.result.recordset[index].MaCH;
+
+                    return ({
+                        statusCode: 302,
+                        url: `/user/BaiTap/${MaBT}/${MaCH}`,
+                    })
+                }
+
+                if (result.result.recordset[index].KetQua == 'NULL') 
+                    history = null;
+                else {
+                    let SQLQuery = `SELECT SQLQuery, KetQua, ThoiGian
+                        FROM dbo.Admin_SQLSubmitHistory 
+                        WHERE MaCH = N'${MaCH}' AND Username = N'${user.username}'
+                        ORDER BY ThoiGian DESC`;
+                    let resultHistory = await TruyVan("Admin", SQLQuery);
+                    history = resultHistory.result.recordset;
+                }
+                let data = result.result.recordset[index];
+                let schema = {};
+
+                const regex = /([A-Z])\w+/g;
+                const LuocDo = data.LuocDo.match(regex);
+
+                //console.log(LuocDo);
+                if(LuocDo != null) 
+                    for (let i = 0; i < LuocDo.length; i++)
+                        schema[i] = LuocDo[i];
+
+                myCache.set(userCache, { 
+                    statusCode: 200,
+                    message: data,
+                    schemas: schema,
+                    anotherQuestion: result.result.recordset
+                }, 60*2);
+
+                return ({ 
+                    statusCode: 200,
+                    message: data,
+                    schemas: schema,
+                    history: history,
+                    anotherQuestion: result.result.recordset
+                });
+                
             }
-
-            if (result.result.recordset[index].KetQua == 'NULL') 
-                history = null;
-            else {
-                let SQLQuery = `SELECT SQLQuery, KetQua, ThoiGian
-                    FROM dbo.Admin_SQLSubmitHistory 
-                    WHERE MaCH = N'${MaCH}' AND Username = N'${user.username}'
-                    ORDER BY ThoiGian DESC`;
-                let resultHistory = await TruyVan("Admin", SQLQuery);
-                history = resultHistory.result.recordset;
-            }
-            let data = result.result.recordset[index];
-            let schema = {};
-
-            const regex = /([A-Z])\w+/g;
-            const LuocDo = data.LuocDo.match(regex);
-
-            //console.log(LuocDo);
-            if(LuocDo != null) 
-                for (let i = 0; i < LuocDo.length; i++)
-                    schema[i] = LuocDo[i];
-
-            return ({ 
-                statusCode: 200,
-                message: data,
-                schemas: schema,
+            else
+                return ({ 
+                    statusCode: 404,
+                    message: 'Không có câu hỏi nào'
+                });
+        } else {
+            let SQLQuery = `SELECT SQLQuery, KetQua, ThoiGian
+            FROM dbo.Admin_SQLSubmitHistory 
+            WHERE MaCH = N'${MaCH}' AND Username = N'${user.username}'
+            ORDER BY ThoiGian DESC`;
+            let resultHistory = await TruyVan("Admin", SQLQuery);
+            history = resultHistory.result.recordset;
+            return {
+                statusCode: value.statusCode,
+                message: value.message,
+                schemas: value.schemas,
                 history: history,
-                anotherQuestion: result.result.recordset
-            });
-            
-        }
-        else
-            return { 
-                statusCode: 404,
-                message: 'Không có câu hỏi nào'
+                anotherQuestion: value.anotherQuestion
             };
+        }
     } catch(err) {
         console.log("Lỗi LayNoiDungBaiTap (users.models)", err);
         GhiLog(`Lỗi LayNoiDungBaiTap - ${err}`);

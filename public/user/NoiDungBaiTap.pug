@@ -15,6 +15,19 @@ html(style='font-size: 16px;' lang='en')
     meta(name='theme-color' content='#478ac9')
     meta(property='og:title' content='Nộp bài SQL')
     meta(property='og:type' content='website')
+    script(language='javascript' type='text/javascript' src='/public/editarea/edit_area/edit_area_full.js')
+    script.
+      editAreaLoader.init({
+        id : "message-79f8",
+        start_highlight: true,
+        word_wrap: true,
+        allow_toggle: false,
+        syntax: "sql",
+        EA_load_callback: "editAreaLoaded",
+        show_line_colors: true,
+        font_size: 13,
+      });
+
   body.u-body.u-xl-mode(data-lang='en')
     header#sec-8082.u-align-center-sm.u-align-center-xs.u-clearfix.u-header.u-header
       .u-clearfix.u-sheet.u-valign-middle.u-sheet-1
@@ -111,8 +124,8 @@ html(style='font-size: 16px;' lang='en')
                                 label.u-custom-font.u-heading-font.u-label.u-text-custom-color-1.u-label-1(for='message-79f8') Lệnh truy vấn MS SQL Server
                                 textarea#message-79f8.u-border-1.u-border-grey-30.u-input.u-input-rectangle.u-white(placeholder='/* Nhập lệnh truy vấn ở đây */' rows='20' cols='50' name='SQLQuery' required='')
                               .u-align-left.u-form-group.u-form-submit
-                                a.u-border-none.u-btn.u-btn-submit.u-button-style.u-custom-color-1.u-dialog-link.u-btn-1(href='#popup' onclick='SubmitSQL()') Nộp bài
-                          a.u-border-none.u-btn.u-button-style.u-custom-color-1.u-dialog-link.u-btn-2(href='#popup' onclick='SubmitSQL()') Nộp bài
+                                a.u-border-none.u-btn.u-btn-submit.u-button-style.u-custom-color-1.u-dialog-link.u-btn-1(href='#popup' onclick='SubmitSQLWithEditor()') Nộp bài
+                          a.u-border-none.u-btn.u-button-style.u-custom-color-1.u-dialog-link.u-btn-2(href='#popup' onclick='SubmitSQLWithEditor()') Nộp bài
             #tab-14b7.u-container-style.u-tab-pane.u-white.u-tab-pane-2(role='tabpanel' aria-labelledby='link-tab-14b7')
               .u-container-layout.u-container-layout-4
                 .u-table.u-table-responsive.u-table-1
@@ -238,3 +251,40 @@ html(style='font-size: 16px;' lang='en')
       margin-right: 2px;
       }
       }
+
+script. 
+  async function SubmitSQLWithEditor() {
+    document.querySelector('.btn').style.visibility = 'hidden';
+    document.querySelector('#encoded').innerHTML = "Đang gửi yêu cầu, vui lòng đợi!";
+
+    var SQLQuery = editAreaLoader.getValue("message-79f8")
+    
+    data = {
+        SQLQuery : SQLQuery,
+    }
+
+    let url = window.location.href;
+
+    let response = await fetch(url, {
+            method: 'POST', 
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+            json: true
+    })
+
+    let text = await response.json(); 
+    console.log(text)
+    
+    if(text.redirect)
+        window.location.href = text.redirect;
+    
+    if(text.statusCode == 200) 
+      document.querySelector('#encoded').style.color = "green";
+    else
+      document.querySelector('#encoded').style.color = "red";
+
+    document.querySelector("#encoded").innerHTML = JSON.stringify(text.alert);
+    document.querySelector('.btn').style.visibility = "visible";
+  };

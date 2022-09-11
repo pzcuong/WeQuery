@@ -151,7 +151,10 @@ async function LayNoiDungBaiTap(req, res, next) {
         });
 
         res.send(html);
-    } else {
+    } else if (result.statusCode == 302) 
+        res.redirect(result.url);
+    else {
+        console.log(result);
         let html = pug.renderFile('public/404.pug', { 
             message: result.message,
             redirect: '/user/profile/',
