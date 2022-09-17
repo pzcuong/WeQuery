@@ -10,6 +10,7 @@ const userController = require('./users.controller');
 const isAuth = authMiddleware.isAuth;
 
 router.get('/profile', isAuth, async (req, res) => {
+	console.log(req.user);
 	let html = pug.renderFile('public/user/profile.pug', {
 		user: req.user.result,
 		image: req.image,

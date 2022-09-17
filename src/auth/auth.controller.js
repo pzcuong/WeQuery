@@ -108,7 +108,7 @@ async function register(req, res, next) {
                     message: 'Tạo tài khoản thành công',
                     username: username,
                     accessToken: accessToken.accessToken,
-                    redirect: '/user/profile'
+                    redirect: '/user/login'
                 });
         else
             return res

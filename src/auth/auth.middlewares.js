@@ -29,6 +29,7 @@ async function isAuth(req, res, next) {
 	}
 
 	const user = await userModle.getInfoUser(verified.data.payload.username);
+	console.log(user);
 	req.user = user;
 
 	return next();

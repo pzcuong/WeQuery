@@ -104,11 +104,12 @@ async function getInfoUser (username) {
             else {
                 let SQLQuery = `
                     SELECT Admin_Users.username, fullname, SinhNhat, email, phoneNumber, role, MaNhom
-                    FROM Admin_Users INNER JOIN dbo.Admin_ThanhVienNhom ON Admin_ThanhVienNhom.Username = Admin_Users.username
+                    FROM Admin_Users FULL JOIN dbo.Admin_ThanhVienNhom ON Admin_ThanhVienNhom.Username = Admin_Users.username
                     WHERE Admin_Users.username = '${username}'
                 `;
                 let result = await TruyVan("Admin", SQLQuery);
                 myCache.set(userCache, result.result.recordset, 1800);
+                console.log(result)
 
                 if(result.statusCode == 200)
                     return { 
