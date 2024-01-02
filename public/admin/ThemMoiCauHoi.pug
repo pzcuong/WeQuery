@@ -286,7 +286,7 @@ html(style='font-size: 16px;' lang='en')
   script.
     async function TaoCauHoiVaTestcase() {
       document.querySelector("#encoded").innerHTML = "Đang xử lý..."
-
+      var form = document.querySelector("#formQH");
       var formCH = document.querySelector("#formCH");
       var formOutput = document.querySelector("#formOutput");
       var TinhTrang = formCH.querySelector("input[name='TinhTrang']").value;
@@ -301,9 +301,12 @@ html(style='font-size: 16px;' lang='en')
         NoiDung: formCH.querySelector("textarea[name='NoiDung']").value,
         MucDo: formCH.querySelector("select[name='DoKho']").value,
         SQLQuery: formOutput.querySelector("textarea[name='SQLQuery']").value,
+        LuocDo: form.querySelector("input[name='LuocDo']").value,
         TinhTrang: TinhTrang,
         type: 'TaoCauHoi'
       }
+
+      console.log(data)
 
       let response = await fetch('./ThemCauHoi', {
         method: 'POST',
