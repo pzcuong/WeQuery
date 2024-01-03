@@ -495,9 +495,17 @@ async function ThemSinhVien(data) {
 
 async function SuaThongTinSinhVien(data) {
   try {
-    let SQLQuery = `update Admin_Users 
-            set fullname = N'${data.fullname}', email = '${data.email}', phoneNumber = '${data.phoneNumber}', SinhNhat = '${data.SinhNhat}'
-            where username = '${data.username}'`;
+    const SALT_ROUNDS = 10;
+    const hashPassword = bcrypt.hashSync(data.password, SALT_ROUNDS);
+
+    let SQLQuery =
+      `UPDATE Admin_Users 
+      SET fullname = N'${data.fullname}', 
+          email = '${data.email}', 
+          phoneNumber = '${data.phoneNumber}', 
+          SinhNhat = '${data.SinhNhat}'` +
+      (data.password ? `, password = '${data.hashPassword}'` : "") +
+      ` WHERE username = '${data.username}'`;
 
     let result = await TruyVan(SQLQuery);
     if (result.statusCode != 200)
@@ -507,9 +515,16 @@ async function SuaThongTinSinhVien(data) {
       };
     else {
       if (data.MaNhom) {
-        SQLQuery = `update Admin_ThanhVienNhom 
-                set MaNhom = '${data.MaNhom}'
-                where Username = '${data.username}'`;
+        SQLQuery = `
+          MERGE Admin_ThanhVienNhom AS target
+          USING (SELECT '${data.username}' AS username, '${data.MaNhom}' AS MaNhom) AS source
+          ON (target.username = source.username)
+          WHEN MATCHED THEN 
+            UPDATE SET MaNhom = source.MaNhom
+          WHEN NOT MATCHED THEN 
+            INSERT (username, MaNhom) 
+            VALUES (source.username, source.MaNhom);
+        `;
         result = await TruyVan(SQLQuery);
       }
       return {

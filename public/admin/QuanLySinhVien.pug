@@ -32,6 +32,8 @@ html(style='font-size: 16px;' lang='en')
               col(width='19%')
 
             tbody.u-table-alt-palette-1-light-3.u-table-body
+              - const options = {year: 'numeric', month: 'long', day: 'numeric', timeZone: "Asia/Jakarta"};
+
               tr(style='height: 65px;')
                 td.u-table-cell Username
                 td.u-table-cell Họ tên
@@ -44,7 +46,7 @@ html(style='font-size: 16px;' lang='en')
                 tr(style='height: 65px;' onclick=`showUpdateModal("${student.username.toString()}")`)
                   td.u-table-cell #{student.username}
                   td.u-table-cell #{student.fullname}
-                  td.u-table-cell #{student.SinhNhat}
+                  td.u-table-cell #{student.SinhNhat ? student.SinhNhat.toLocaleString('vi-VN',  options) : ""}
                   td.u-table-cell #{student.email}
                   td.u-table-cell #{student.phoneNumber}
                   td.u-table-cell #{student.MaNhom}
