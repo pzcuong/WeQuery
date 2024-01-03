@@ -41,7 +41,7 @@ html(style='font-size: 16px;' lang='en')
                 td.u-table-cell Đội / Nhóm
                 
               each student in studentList
-                tr(style='height: 65px;' onclick=`showUpdateModal(${student.username})`)
+                tr(style='height: 65px;' onclick=`showUpdateModal("${student.username.toString()}")`)
                   td.u-table-cell #{student.username}
                   td.u-table-cell #{student.fullname}
                   td.u-table-cell #{student.SinhNhat}
@@ -229,7 +229,8 @@ script.
       var elements = document.getElementsByTagName('h2')[0];
       elements.innerHTML = 'Chỉnh sửa sinh viên';
 
-      const student = studentList.find(student => student.Username == username);
+      const student = studentList.find(student => student.username == username);
+      console.log(student)
 
       document.getElementsByName('username')[0].value = student.username;
       document.getElementsByName('fullname')[0].value = student.fullname;
