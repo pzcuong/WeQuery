@@ -64,6 +64,26 @@ async function ThemCauHoiTrongBaiTap(req, res) {
   }
 }
 
+async function SuaThongTinSinhVien(req, res) {
+  try {
+    const data = req.body;
+
+    const result = await adminModel.SuaThongTinSinhVien(data);
+    if (result.statusCode === 200)
+      return res.send({
+        statusCode: 200,
+        message: result.message,
+      });
+    else
+      return res.send({
+        statusCode: 400,
+        message: "Thêm sinh vien thất bại",
+      });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 async function ThemMoiCauHoi(req, res) {
   try {
     const data = req.body;
@@ -426,3 +446,4 @@ exports.DanhSachSinhVien = DanhSachSinhVien;
 exports.DanhSachNhomSV = DanhSachNhomSV;
 exports.ThemNhom = ThemNhom;
 exports.ThemSinhVien = ThemSinhVien;
+exports.SuaThongTinSinhVien = SuaThongTinSinhVien;

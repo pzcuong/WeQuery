@@ -493,6 +493,40 @@ async function ThemSinhVien(data) {
   }
 }
 
+async function SuaThongTinSinhVien(data) {
+  try {
+    let SQLQuery = `update Admin_Users 
+            set fullname = N'${data.fullname}', email = '${data.email}', phoneNumber = '${data.phoneNumber}', SinhNhat = '${data.SinhNhat}'
+            where username = '${data.username}'`;
+
+    let result = await TruyVan(SQLQuery);
+    if (result.statusCode != 200)
+      return {
+        statusCode: 400,
+        message: "Sửa Thông Tin Sinh Viên Thất Bại",
+      };
+    else {
+      if (data.MaNhom) {
+        SQLQuery = `update Admin_ThanhVienNhom 
+                set MaNhom = '${data.MaNhom}'
+                where Username = '${data.username}'`;
+        result = await TruyVan(SQLQuery);
+      }
+      return {
+        statusCode: 200,
+        message: `Sửa Thông Tin Sinh Viên Thành Công`,
+      };
+    }
+  } catch (err) {
+    console.log(err);
+    return {
+      statusCode: 400,
+      message: "Sửa Thông Tin Sinh Viên Thất Bại",
+    };
+  }
+}
+
+exports.SuaThongTinSinhVien = SuaThongTinSinhVien;
 exports.ThemSinhVien = ThemSinhVien;
 exports.DanhSachCauHoi = DanhSachCauHoi;
 exports.ChinhSuaCauHoi = ChinhSuaCauHoi;

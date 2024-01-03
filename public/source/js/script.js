@@ -127,7 +127,6 @@ async function changePassword() {
   var form = document.querySelector("#formElem");
 
   data = {
-    username: form.querySelector("input[name=username]").value,
     password: form.querySelector("input[name=password]").value,
     newPassword: form.querySelector("input[name=newpassword]").value,
     confirmPassword: form.querySelector("input[name=confirmNewPassword]").value,
@@ -143,7 +142,6 @@ async function changePassword() {
   });
 
   let text = await response.json();
-  console.log(text);
   alert(text.message);
   if (text.redirect) window.location.href = text.redirect;
   //document.querySelector("#encoded").innerHTML = text.message;

@@ -47,7 +47,8 @@ router
 router
   .route("/QuanLySinhVien/")
   .get(isAuthAdmin, adminController.DanhSachSinhVien)
-  .post(isAuthAdmin, adminController.ThemSinhVien);
+  .post(isAuthAdmin, adminController.ThemSinhVien)
+  .patch(isAuthAdmin, adminController.SuaThongTinSinhVien);
 
 router
   .route("/QuanLyNhom/")

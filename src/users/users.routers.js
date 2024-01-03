@@ -4,7 +4,8 @@ var pug = require("pug");
 const router = express.Router();
 
 const authMiddleware = require("../auth/auth.middlewares");
-const authController = require("../auth/auth.controller");
+const AuthController = require("../auth/auth.controller");
+const authController = new AuthController();
 const userController = require("./users.controller");
 
 const isAuth = authMiddleware.isAuth;

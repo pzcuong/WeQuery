@@ -40,6 +40,7 @@ async function getUser(username) {
         "Admin",
         `select * from Admin_Users where username = '${username}'`
       );
+      console.log(result);
       if (result.statusCode == 200 && result.result.recordset.length > 0)
         return {
           statusCode: 200,

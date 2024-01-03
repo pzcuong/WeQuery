@@ -20,7 +20,7 @@ html(style='font-size: 16px;' lang='en')
 
     section#sec-c3e1.u-align-center.u-clearfix.u-section-1
       .u-clearfix.u-sheet.u-valign-top.u-sheet-1
-        a.u-border-none.u-btn.u-button-style.u-custom-color-1.u-dialog-link.u-btn-1(href='#sec-newsv') Thêm sinh viên
+        a.u-border-none.u-btn.u-button-style.u-custom-color-1.u-dialog-link.u-btn-1( onclick=`showCreateModal()`) Thêm sinh viên
         .u-expanded-width.u-table.u-table-responsive.u-table-1
           table.u-table-entity.u-table-entity-1
             colgroup
@@ -41,7 +41,7 @@ html(style='font-size: 16px;' lang='en')
                 td.u-table-cell Đội / Nhóm
                 
               each student in studentList
-                tr(style='height: 65px;')
+                tr(style='height: 65px;' onclick=`showUpdateModal(${student.username})`)
                   td.u-table-cell #{student.username}
                   td.u-table-cell #{student.fullname}
                   td.u-table-cell #{student.SinhNhat}
@@ -56,25 +56,25 @@ html(style='font-size: 16px;' lang='en')
           .u-form.u-form-1
             form.u-clearfix.u-form-spacing-19.u-form-vertical.u-inner-form(action='/QuanLyBaiTap' method='POST' style='padding: 0px;' source='custom' name='form' id='formElem')
               .u-form-group.u-form-name.u-form-group-1
-                label.u-label(for='name-3e72') Username
-                input#name-3e72.u-border-2.u-border-grey-25.u-input.u-input-rectangle.u-radius-5(type='text' placeholder='Nhập username...' name='username' required='')
+                label.u-label(for='name-username') Username
+                input#name-username.u-border-2.u-border-grey-25.u-input.u-input-rectangle.u-radius-5(type='text' placeholder='Nhập username...' name='username' required='')
                 .u-form-group.u-form-name.u-form-group-1
-                label.u-label(for='name-3e72') Họ tên
-                input#name-3e72.u-border-2.u-border-grey-25.u-input.u-input-rectangle.u-radius-5(type='text' placeholder='Nhập họ tên sinh viên...' name='fullname' required='')
+                label.u-label(for='name-fullname') Họ tên
+                input#name-fullname.u-border-2.u-border-grey-25.u-input.u-input-rectangle.u-radius-5(type='text' placeholder='Nhập họ tên sinh viên...' name='fullname' required='')
                 .u-form-group.u-form-name.u-form-group-1
-                label.u-label(for='name-3e72') Sinh nhật
+                label.u-label(for='name-SinhNhat') Sinh nhật
                 input#date-a69e.u-border-2.u-border-grey-25.u-input.u-input-rectangle.u-radius-5(type='datetime-local' step='1' placeholder='MM/DD/YYYY' name='SinhNhat' required='')
                 .u-form-group.u-form-name.u-form-group-1
-                label.u-label(for='name-3e72') Email
-                input#name-3e72.u-border-2.u-border-grey-25.u-input.u-input-rectangle.u-radius-5(type='text' placeholder='Nhập email...' name='email' required='')
+                label.u-label(for='name-email') Email
+                input#name-SinhNhat.u-border-2.u-border-grey-25.u-input.u-input-rectangle.u-radius-5(type='text' placeholder='Nhập email...' name='email' required='')
                 
                 .u-form-group.u-form-name.u-form-group-1
-                label.u-label(for='name-3e72') Mật khẩu
-                input#name-3e72.u-border-2.u-border-grey-25.u-input.u-input-rectangle.u-radius-5(type='password' placeholder='Nhập mật khẩu...' name='password' required='')
+                label.u-label(for='name-password') Mật khẩu
+                input#name-password.u-border-2.u-border-grey-25.u-input.u-input-rectangle.u-radius-5(type='password' placeholder='Nhập mật khẩu...' name='password' required='')
 
                 .u-form-group.u-form-name.u-form-group-1
-                label.u-label(for='name-3e72') Số điện thoại
-                input#name-3e72.u-border-2.u-border-grey-25.u-input.u-input-rectangle.u-radius-5(type='text' placeholder='Nhập số điện thoại...' name='phoneNumber' required='')
+                label.u-label(for='name-phoneNumber') Số điện thoại
+                input#name-phoneNumber.u-border-2.u-border-grey-25.u-input.u-input-rectangle.u-radius-5(type='text' placeholder='Nhập số điện thoại...' name='phoneNumber' required='')
 
               .u-form-group.u-form-select.u-form-group-2
                 label.u-label(for='select-872c') Chọn nhóm
@@ -87,9 +87,9 @@ html(style='font-size: 16px;' lang='en')
                     path(fill='currentColor' d='M4 8L0 4h8z')
               
               .u-align-left.u-form-group.u-form-submit.u-form-group-6
-                a.u-border-none.u-btn.u-btn-round.u-btn-submit.u-button-style.u-custom-color-1.u-radius-5.u-btn-1(onclick="TaoBaiTap()") Submit
+                a.u-border-none.u-btn.u-btn-round.u-btn-submit.u-button-style.u-custom-color-1.u-radius-5.u-btn-1(onclick="SubmitFunc()") Submit
               
-        button.u-dialog-close-button.u-icon.u-text-grey-50.u-icon-1
+        button.u-dialog-close-button.u-icon.u-text-grey-50.u-icon-1(onclick='closeModal()')
           svg.u-svg-link(preserveAspectRatio='xMidYMin slice' viewBox='0 0 413.348 413.348' style='')
             use(xmlns:xlink='http://www.w3.org/1999/xlink' xlink:href='#svg-1ce9')
           svg#svg-1ce9.u-svg-content(xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' xml:space='preserve' viewBox='0 0 413.348 413.348')
@@ -203,7 +203,45 @@ html(style='font-size: 16px;' lang='en')
       }
 
 script. 
-    async function TaoBaiTap() {
+    const studentList = !{JSON.stringify(studentList)};
+    let currentAction = 'create';
+
+    function closeModal() {
+      document.getElementById('sec-newsv').style.display = '';
+    }
+
+    function showCreateModal() {
+      document.getElementsByName('username')[0].value = '';
+      document.getElementsByName('fullname')[0].value = '';
+      document.getElementsByName('SinhNhat')[0].value = '';
+      document.getElementsByName('email')[0].value = '';
+      document.getElementsByName('phoneNumber')[0].value = '';
+      document.getElementsByName('MaNhom')[0].value = '';
+
+      var elements = document.getElementsByTagName('h2')[0];
+      elements.innerHTML = 'Tạo sinh viên';
+
+      document.getElementById('sec-newsv').style.display = 'block';
+    }
+
+    function showUpdateModal(username) {
+      currentAction = 'update';
+      var elements = document.getElementsByTagName('h2')[0];
+      elements.innerHTML = 'Chỉnh sửa sinh viên';
+
+      const student = studentList.find(student => student.Username == username);
+
+      document.getElementsByName('username')[0].value = student.username;
+      document.getElementsByName('fullname')[0].value = student.fullname;
+      document.getElementsByName('SinhNhat')[0].value = student.SinhNhat;
+      document.getElementsByName('email')[0].value = student.email;
+      document.getElementsByName('phoneNumber')[0].value = student.phoneNumber;
+      document.getElementsByName('MaNhom')[0].value = student.MaNhom;
+      
+      document.getElementById('sec-newsv').style.display = 'block';
+    }
+  
+    async function SubmitFunc() {
         var form = document.querySelector("#formElem");
 
         data = {
@@ -219,16 +257,14 @@ script.
         let url = window.location.href;
 
         let response = await fetch(url, {
-                method: 'POST', 
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-                json: true
+          method: currentAction == 'create' ? 'POST' : 'PATCH',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+          json: true
         })
 
-        //selector button class btn btn-success from document
-        //document.querySelector('')
         let text = await response.json(); 
 
         //- document.querySelector("#encoded").innerHTML = text.message;
