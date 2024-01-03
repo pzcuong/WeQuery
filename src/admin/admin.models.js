@@ -209,7 +209,7 @@ async function DanhSachBaiTap() {
 
 async function DanhSachNhom() {
   try {
-    let SQLQuery = `SELECT Admin_Nhom.MaNhom, TenNhom, COUNT(*) AS SoLuong FROM Admin_Nhom FULL JOIN dbo.Admin_ThanhVienNhom ON Admin_ThanhVienNhom.MaNhom = Admin_Nhom.MaNhom GROUP BY Admin_Nhom.MaNhom, Admin_Nhom.TenNhom`;
+    let SQLQuery = `SELECT Admin_Nhom.MaNhom, TenNhom, COUNT(username) AS SoLuong FROM Admin_Nhom FULL JOIN dbo.Admin_ThanhVienNhom ON Admin_ThanhVienNhom.MaNhom = Admin_Nhom.MaNhom GROUP BY Admin_Nhom.MaNhom, Admin_Nhom.TenNhom`;
 
     let result = await TruyVan(SQLQuery);
     console.log("Danh sách nhóm", result);
