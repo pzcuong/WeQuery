@@ -312,16 +312,13 @@ async function NopBaiTap(MaBT, MaCH, SQLQueryClient, user) {
     let mlcs = stringComparison.mlcs; //Sử dụng kiểu so khớp kiểu mertric logest common subsequence
     let ComparePercent =
       mlcs.similarity(
-        JSON.stringify(resultClient.result.recordsets),
+        JSON.stringify(resultClient.result.recordset),
         resultOutput.result.Output
       ) * 100;
 
     await LuuKetQuaTruyVan(user.username, MaCH, SQLQueryClient, ComparePercent);
 
-    if (
-      JSON.stringify(resultClient.result.recordsets) ==
-      resultOutput.result.Output
-    )
+    if (ComparePercent == 100)
       return {
         statusCode: 200,
         message: "Đúng",

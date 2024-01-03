@@ -2,6 +2,7 @@ const sql = require("mssql");
 var fs = require("fs");
 var json2html = require("json2html");
 require("dotenv").config();
+const bcrypt = require("bcryptjs");
 
 const configAdmin = {
   user: process.env.admin,
@@ -32,7 +33,6 @@ async function LayCauHoi(MaCH) {
       };
     }
   } catch (err) {
-    console.log(err);
     return {
       statusCode: 400,
       message: "Lấy câu hỏi thất bại",
@@ -70,7 +70,6 @@ async function ThemCauHoi(data) {
       };
     }
   } catch (err) {
-    console.log(err);
     return {
       statusCode: 400,
       message: "Thêm Câu Hỏi Thất Bại",
@@ -210,8 +209,8 @@ async function DanhSachBaiTap() {
 
 async function DanhSachNhom() {
   try {
-    let SQLQuery = `SELECT MaNhom, TenNhom
-        FROM dbo.Admin_Nhom`;
+    let SQLQuery = `SELECT Admin_Nhom.MaNhom, TenNhom, COUNT(*) AS SoLuong FROM Admin_Nhom FULL JOIN dbo.Admin_ThanhVienNhom ON Admin_ThanhVienNhom.MaNhom = Admin_Nhom.MaNhom GROUP BY Admin_Nhom.MaNhom, Admin_Nhom.TenNhom`;
+
     let result = await TruyVan(SQLQuery);
     console.log("Danh sách nhóm", result);
     return result;
@@ -221,6 +220,19 @@ async function DanhSachNhom() {
       statusCode: 400,
       message: "Lỗi truy vấn SQL!",
       alert: "Kiểm tra lại câu lệnh SQL!",
+    };
+  }
+}
+
+async function ThemNhom(data) {
+  try {
+    let SQLQuery = `insert into Admin_Nhom (MaNhom, TenNhom) values (N'${data.MaNhom}', N'${data.TenNhom}')`;
+    let result = await TruyVan(SQLQuery);
+    return result;
+  } catch (err) {
+    return {
+      statusCode: 400,
+      message: "Thêm nhóm thất bại",
     };
   }
 }
@@ -378,6 +390,20 @@ async function DanhSachCauHoi() {
   }
 }
 
+async function DanhSachSinhVien() {
+  try {
+    let SQLQuery = `SELECT * FROM Admin_Users FULL JOIN dbo.Admin_ThanhVienNhom ON Admin_ThanhVienNhom.Username = Admin_Users.username`;
+    let result = await TruyVan(SQLQuery);
+    return result;
+  } catch (err) {
+    return {
+      statusCode: 400,
+      message: "Lỗi truy vấn SQL!",
+      alert: "Kiểm tra lại câu lệnh SQL!",
+    };
+  }
+}
+
 async function BangXepHang(MaBT) {
   try {
     let SQLQuery = `SELECT Admin_Users.username, fullname, KQ.KetQua, Admin_BaiTapCauHoi.MaCH, MaBT
@@ -436,6 +462,38 @@ async function XoaCauHoi(MaCH) {
   }
 }
 
+async function ThemSinhVien(data) {
+  try {
+    const SALT_ROUNDS = 10;
+    const hashPassword = bcrypt.hashSync(data.password, SALT_ROUNDS);
+
+    let SQLQuery = `insert into Admin_Users (username, rawpassword, password, fullname, email, role, phoneNumber, SinhNhat) 
+            values ('${data.username}', '${data.password}', '${hashPassword}', N'${data.fullname}', '${data.email}', 'SinhVien', '${data.phoneNumber}', '${data.SinhNhat}')`;
+    let result = await TruyVan(SQLQuery);
+    if (result.statusCode != 200)
+      return {
+        statusCode: 400,
+        message: "Thêm Sinh Viên Thất Bại",
+      };
+    else {
+      SQLQuery = `insert into Admin_ThanhVienNhom (Username, MaNhom) values ('${data.username}', '${data.MaNhom}')`;
+      result = await TruyVan(SQLQuery);
+      console.log("Thêm Sinh Viên ", result);
+      return {
+        statusCode: 200,
+        message: `Thêm Sinh Viên Thành Công`,
+      };
+    }
+  } catch (err) {
+    console.log(err);
+    return {
+      statusCode: 400,
+      message: "Thêm Sinh Viên Thất Bại",
+    };
+  }
+}
+
+exports.ThemSinhVien = ThemSinhVien;
 exports.DanhSachCauHoi = DanhSachCauHoi;
 exports.ChinhSuaCauHoi = ChinhSuaCauHoi;
 exports.LayCauHoi = LayCauHoi;
@@ -451,6 +509,8 @@ exports.ThemCauHoiVaoBaiTap = ThemCauHoiVaoBaiTap;
 exports.SuaBaiTap = SuaBaiTap;
 exports.BangXepHang = BangXepHang;
 exports.XoaCauHoi = XoaCauHoi;
+exports.DanhSachSinhVien = DanhSachSinhVien;
+exports.ThemNhom = ThemNhom;
 
 async function TruyVan(SQLQuery) {
   try {

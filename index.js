@@ -29,7 +29,6 @@ app.use(cors());
 app.use(compression());
 app.use("/public", express.static("./public"));
 
-console.log(process.env.PORT);
 var port = process.env.PORT || 8080;
 
 app.use("/auth", authRoute);

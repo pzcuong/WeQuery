@@ -1,2 +1,7 @@
 ./vscode
 ./node_modules
+vscode
+node_modules
+package-lock.json
+Table SQL.sql
+logs
