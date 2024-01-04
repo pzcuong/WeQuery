@@ -6,3 +6,4 @@ package-lock.json
 Table SQL.sql
 logs
 .env
+./env
