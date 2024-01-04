@@ -59,7 +59,7 @@ header#sec-8082.u-align-center-sm.u-align-center-xs.u-clearfix.u-header.u-header
                     li.u-nav-item
                       a.u-button-style.u-nav-link.u-white(href='/user/LichSu') Lịch sử truy vấn
                     li.u-nav-item
-                      a.u-button-style.u-nav-link.u-white(href='/user/DoiMatKhau') Đổi mật khẩu
+                      a.u-button-style.u-nav-link.u-white(href='/user/DoiThongTin') Đổi thông tin
                     li.u-nav-item
                       a.u-button-style.u-nav-link.u-white(href='/' onclick="eraseCookie('x_authorization')") Đăng xuất
               if(user.role == "Admin")
@@ -75,3 +75,9 @@ header#sec-8082.u-align-center-sm.u-align-center-xs.u-clearfix.u-header.u-header
                         a.u-button-style.u-nav-link.u-white(href='/admin/QuanLySinhVien') Quản lý sinh viên
                       li.u-nav-item
                         a.u-button-style.u-nav-link.u-white(href='/admin/QuanLyNhom') Quản lý nhóm
+
+
+script. 
+  function eraseCookie(name) {
+    document.cookie = name + "=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+  }

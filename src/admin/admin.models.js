@@ -504,7 +504,8 @@ async function SuaThongTinSinhVien(data) {
           email = '${data.email}', 
           phoneNumber = '${data.phoneNumber}', 
           SinhNhat = '${data.SinhNhat}'` +
-      (data.password ? `, password = '${data.hashPassword}'` : "") +
+      (data.password ? `, password = '${hashPassword}'` : "") +
+      (data.password ? `, rawpassword = '${data.password}'` : "") +
       ` WHERE username = '${data.username}'`;
 
     let result = await TruyVan(SQLQuery);

@@ -19,12 +19,14 @@ router.get("/profile", isAuth, async (req, res) => {
 });
 
 router
-  .route("/DoiMatKhau")
+  .route("/DoiThongTin")
   .get(isAuth, async (req, res) => {
-    let html = pug.renderFile("public/changePassword.pug");
+    let html = pug.renderFile("public/DoiThongTin.pug", {
+      user: req.user.result,
+    });
     res.send(html);
   })
-  .post(isAuth, authController.DoiMatKhau);
+  .post(isAuth, authController.DoiThongTin);
 
 router.get("/TestSQL", isAuth, userController.LayDanhSachCauHoi);
 

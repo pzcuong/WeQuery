@@ -24,16 +24,6 @@ router
     res.send(html);
   });
 
-router.get("/abc", (req, res) => {
-  let html = pug.renderFile("public/auth/changePassword.pug");
-  res.send(html);
-});
-
-router.get("/abc1", (req, res) => {
-  let html = pug.renderFile("public/changePassword.pug");
-  res.send(html);
-});
-
 router.post("/refresh", authController.refreshToken);
 
 module.exports = router;

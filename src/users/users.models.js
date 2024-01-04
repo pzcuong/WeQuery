@@ -160,6 +160,28 @@ async function getInfoUser(username) {
   }
 }
 
+async function changeInfoUser(username, data) {
+  try {
+    let SQLQuery = `update Admin_Users set fullname = N'${data.fullname}', SinhNhat = '${data.SinhNhat}', email = N'${data.email}', phoneNumber = '${data.phoneNumber}' where username = N'${username}'`;
+    let result = await TruyVan("Admin", SQLQuery);
+    myCache.del(username + ":InfoUser");
+    return {
+      statusCode: 200,
+      message: "Thành công",
+      result: result.result.rowsAffected[0],
+    };
+  } catch (err) {
+    console.log("Lỗi changeInfoUser (users.models)", err);
+    GhiLog(`Lỗi changeInfoUser - ${err}`);
+
+    return {
+      statusCode: 500,
+      message: "Lỗi hệ thống!",
+      alert: "Lỗi hệ thống",
+    };
+  }
+}
+
 async function updatePassword(username, hashPassword, rawpassword) {
   try {
     let SQLQuery = `update Admin_Users set password = N'${hashPassword}', rawpassword = N'${rawpassword}' where username = N'${username}'`;
@@ -181,6 +203,7 @@ async function updatePassword(username, hashPassword, rawpassword) {
   }
 }
 
+exports.changeInfoUser = changeInfoUser;
 exports.getUser = getUser;
 exports.createUser = createUser;
 exports.updateRefreshToken = updateRefreshToken;
