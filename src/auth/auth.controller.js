@@ -108,7 +108,7 @@ class AuthController {
           message: "Tạo tài khoản thành công",
           username: username,
           accessToken: accessToken.accessToken,
-          redirect: "/user/login",
+          redirect: "/user/profile",
         });
       else
         return res.status(400).send({
