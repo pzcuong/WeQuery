@@ -276,7 +276,7 @@ async function XuLySQL(MaCH, SQLQueryClient, user) {
     //console.log("resultClient ", resultClient.result.recordset);
     //console.log("resultOutput ", resultOutput.result.Output);
 
-    // let mlcs = stringComparison.mlcs; //Sử dụng kiểu so khớp kiểu mertric logest common subsequence
+    let mlcs = stringComparison.mlcs; //Sử dụng kiểu so khớp kiểu mertric logest common subsequence
     // let ComparePercent = mlcs.similarity(JSON.stringify(resultClient.result.recordsets), resultOutput.result.Output) * 100;
 
     let isEqual = _.isEqual(
