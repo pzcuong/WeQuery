@@ -1,6 +1,7 @@
 const sql = require("mssql");
 const fs = require("fs");
-const stringComparison = require("string-comparison");
+// const stringComparison = require("string-comparison");
+var stringSimilarity = require("string-similarity");
 const NodeCache = require("node-cache");
 const myCache = new NodeCache({ stdTTL: 100, checkperiod: 60 });
 const _ = require("lodash");
@@ -24,22 +25,14 @@ const configUser = {
 
 async function getUser(username) {
   try {
-    if (
-      !username ||
-      username.indexOf(" ") > -1 ||
-      username.indexOf("@") > -1 ||
-      username.indexOf(".") > -1
-    )
+    if (!username || username.indexOf(" ") > -1 || username.indexOf("@") > -1 || username.indexOf(".") > -1)
       return {
         statusCode: 400,
         message: "Username không hợp lệ!",
         alert: "Username không hợp lệ!",
       };
     else {
-      let result = await TruyVan(
-        "Admin",
-        `select * from Admin_Users where username = '${username}'`
-      );
+      let result = await TruyVan("Admin", `select * from Admin_Users where username = '${username}'`);
       console.log(result);
       if (result.statusCode == 200 && result.result.recordset.length > 0)
         return {
@@ -276,26 +269,20 @@ async function XuLySQL(MaCH, SQLQueryClient, user) {
     //console.log("resultClient ", resultClient.result.recordset);
     //console.log("resultOutput ", resultOutput.result.Output);
 
-    let mlcs = stringComparison.mlcs; //Sử dụng kiểu so khớp kiểu mertric logest common subsequence
+    // let mlcs = stringComparison.levenshtein; //Sử dụng kiểu so khớp kiểu mertric logest common subsequence
     // let ComparePercent = mlcs.similarity(JSON.stringify(resultClient.result.recordsets), resultOutput.result.Output) * 100;
 
-    let isEqual = _.isEqual(
-      resultClient.result.recordsets,
-      resultOutput.result.Output
-    );
-    let ComparePercent = isEqual
-      ? 100
-      : mlcs.similarity(
-          JSON.stringify(resultClient.result.recordsets),
-          resultOutput.result.Output
-        ) * 100;
-    
+    var ComparePercent =
+      stringSimilarity.compareTwoStrings(JSON.stringify(resultClient.result.recordsets), resultOutput.result.Output) *
+      100;
+
+    // let isEqual = _.isEqual(resultClient.result.recordsets, resultOutput.result.Output);
+    // let ComparePercent = isEqual
+    //   ? 100
+    //   : mlcs.distance(JSON.stringify(resultClient.result.recordsets), resultOutput.result.Output) * 100;
     await LuuKetQuaTruyVan(user.username, MaCH, SQLQueryClient, ComparePercent);
 
-    if (
-      JSON.stringify(resultClient.result.recordsets) ==
-      resultOutput.result.Output
-    )
+    if (JSON.stringify(resultClient.result.recordsets) == resultOutput.result.Output)
       return {
         statusCode: 200,
         message: "Đúng",
@@ -334,12 +321,12 @@ async function NopBaiTap(MaBT, MaCH, SQLQueryClient, user) {
       return resultOutput;
     }
 
-    let mlcs = stringComparison.mlcs; //Sử dụng kiểu so khớp kiểu mertric logest common subsequence
-    let ComparePercent =
-      mlcs.similarity(
-        JSON.stringify(resultClient.result.recordset),
-        resultOutput.result.Output
-      ) * 100;
+    // let mlcs = stringComparison.mlcs; //Sử dụng kiểu so khớp kiểu mertric logest common subsequence
+    // let ComparePercent =
+    //   mlcs.similarity(JSON.stringify(resultClient.result.recordset), resultOutput.result.Output) * 100;
+    var ComparePercent =
+      stringSimilarity.compareTwoStrings(JSON.stringify(resultClient.result.recordsets), resultOutput.result.Output) *
+      100;
 
     await LuuKetQuaTruyVan(user.username, MaCH, SQLQueryClient, ComparePercent);
 
@@ -393,8 +380,7 @@ async function LayCauHoi(MaCH, user) {
             WHERE (Username = N'${user.username}' OR Username IS NULL) AND LS.MaCH = N'${MaCH}'
             ORDER BY LS.ThoiGian DESC`;
       result = await TruyVan("Admin", SQLQuery);
-      if (LuocDo != null)
-        for (let i = 0; i < LuocDo.length; i++) schema[i] = LuocDo[i];
+      if (LuocDo != null) for (let i = 0; i < LuocDo.length; i++) schema[i] = LuocDo[i];
 
       return {
         statusCode: 200,
@@ -596,8 +582,7 @@ async function LayNoiDungBaiTap(MaBT, MaCH, user) {
         const LuocDo = data.LuocDo.match(regex);
 
         //console.log(LuocDo);
-        if (LuocDo != null)
-          for (let i = 0; i < LuocDo.length; i++) schema[i] = LuocDo[i];
+        if (LuocDo != null) for (let i = 0; i < LuocDo.length; i++) schema[i] = LuocDo[i];
 
         myCache.set(
           userCache,
