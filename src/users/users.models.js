@@ -277,18 +277,19 @@ async function XuLySQL(MaCH, SQLQueryClient, user) {
     //console.log("resultOutput ", resultOutput.result.Output);
 
     let mlcs = stringComparison.mlcs; //Sử dụng kiểu so khớp kiểu mertric logest common subsequence
-    let ComparePercent = mlcs.similarity(JSON.stringify(resultClient.result.recordsets), resultOutput.result.Output) * 100;
+    // let ComparePercent = mlcs.similarity(JSON.stringify(resultClient.result.recordsets), resultOutput.result.Output) * 100;
 
-    // let isEqual = _.isEqual(
-    //   resultClient.result.recordsets,
-    //   resultOutput.result.Output
-    // );
-    // let ComparePercent = isEqual
-    //   ? 100
-    //   : mlcs.similarity(
-    //       JSON.stringify(resultClient.result.recordsets),
-    //       resultOutput.result.Output
-    //     ) * 100;
+    let isEqual = _.isEqual(
+      resultClient.result.recordsets,
+      resultOutput.result.Output
+    );
+    let ComparePercent = isEqual
+      ? 100
+      : mlcs.similarity(
+          JSON.stringify(resultClient.result.recordsets),
+          resultOutput.result.Output
+        ) * 100;
+    
     await LuuKetQuaTruyVan(user.username, MaCH, SQLQueryClient, ComparePercent);
 
     if (
