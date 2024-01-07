@@ -1,8 +1,9 @@
 require("dotenv").config();
+const UserInfo = require("../users/user/user.models");
 
 class AuthController {
   constructor(SALT_ROUNDS = 10) {
-    this.userModel = require("../users/users.models");
+    this.userModel = new UserInfo();
     this.authMethod = require("../auth/auth.methods");
     this.randToken = require("rand-token");
     this.bcrypt = require("bcryptjs");
