@@ -1,9 +1,11 @@
 require("dotenv").config();
 const UserInfo = require("../users/user/user.models");
+const QueryService = require("../query/query.service");
 
 class AuthController {
   constructor(SALT_ROUNDS = 10) {
     this.userModel = new UserInfo();
+    this.queryService = new QueryService();
     this.authMethod = require("../auth/auth.methods");
     this.randToken = require("rand-token");
     this.bcrypt = require("bcryptjs");
@@ -147,34 +149,38 @@ class AuthController {
       });
 
     let user = await this.userModel.getUser(username);
+    console.log(user);
 
-    if (user.statusCode == 200) {
-      if (user.result.refreshToken == null) {
+    if (user) {
+      if (user.refreshToken == null) {
         const hashPassword = this.bcrypt.hashSync(
-          user.result.rawpassword,
+          user.rawpassword,
           this.SALT_ROUNDS
         );
-        let refreshToken = this.randToken.generate(24);
         let SQLQueryInsert = `UPDATE Admin_Users 
-                  SET password = '${hashPassword}', refreshToken = '${refreshToken}' 
-                  WHERE username = '${username}'`;
-        await this.userModel.TruyVan("Admin", SQLQueryInsert);
+                  SET password = @hashPassword, refreshToken = @refreshToken 
+                  WHERE username = @username`;
+
+        let parameters = {
+          hashPassword: hashPassword,
+          refreshToken: refreshToken,
+          username: username,
+        };
+
+        result = await this.queryService.query(SQLQueryInsert, parameters);
         user = await this.userModel.getUser(username);
       }
 
-      const isValid = this.bcrypt.compareSync(password, user.result.password);
+      const isValid = this.bcrypt.compareSync(password, user.password);
 
       if (!isValid)
         return res.status(400).send({
           statusCode: 400,
-          message: "Tài khoản hoặc Mật khẩu không đúng.", // Sai mật khẩu
+          message: "Tài khoản hoặc Mật khẩu không đúng.",
           alert: "Tài khoản hoặc Mật khẩu không đúng",
         });
 
-      let refreshToken = await this.createToken(
-        username,
-        user.result.refreshToken
-      );
+      let refreshToken = await this.createToken(username, user.refreshToken);
 
       if (refreshToken.statusCode === 200) {
         return res
@@ -184,22 +190,20 @@ class AuthController {
           .send({
             accessToken: refreshToken.accessToken,
             message: "Đăng nhập thành công",
-            username: user.message.username,
+            username: user.username,
             redirect: "/user/profile",
           });
       } else
         return res.status(400).send({
           statusCode: 400,
-          message: "Đăng nhập thất bại, vui lòng thử lại.", // Tạo access token không thành công
+          message: "Đăng nhập thất bại, vui lòng thử lại.",
           alert: "Đăng nhập thất bại, vui lòng thử lại.",
         });
     } else
       return res.status(400).send({
         statusCode: 400,
-        message: "Tài khoản không tồn tại", // 400: Username không hợp lệ
-        // 404: Không tìm thấy user
-        // 500: Lỗi server
-        alert: "Tài khoản không tồn tại",
+        message: "Tài khoản hoặc Mật khẩu không đúng.",
+        alert: "Tài khoản hoặc Mật khẩu không đúng.",
       });
   };
 

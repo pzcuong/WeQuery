@@ -38,7 +38,7 @@ class UserController {
 
   LayDanhSachCauHoi = async (req, res) => {
     let userCH = req.user.username + ":DSCH";
-    let value = myCache.get(userCH);
+    let value = this.myCache.get(userCH);
 
     if (value) {
       let html = pug.renderFile("public/user/LuyenTap.pug", {
@@ -48,7 +48,7 @@ class UserController {
       return res.send(html);
     } else {
       let result = await this.questionModel.LayDanhSachCauHoi(req.user);
-      myCache.set(userCH, result);
+      this.myCache.set(userCH, result);
       let html = pug.renderFile("public/user/LuyenTap.pug", {
         user: req.user,
         questionList: result,
