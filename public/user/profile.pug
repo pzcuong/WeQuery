@@ -36,10 +36,11 @@ html(style='font-size: 16px;' lang='en')
             tbody.u-table-body
               tr(style='height: 75px;')
                 td.u-border-1.u-border-grey-30.u-first-column.u-grey-5.u-table-cell.u-table-cell-6 #{user.fullname}
-                td.u-border-1.u-border-grey-30.u-table-cell #{user.birthday}
+                - var formattedDate = new Date(user.SinhNhat).toISOString().split('T')[0];
+                td.u-border-1.u-border-grey-30.u-table-cell #{formattedDate}
                 td.u-border-1.u-border-grey-30.u-table-cell #{user.email}
                 td.u-border-1.u-border-grey-30.u-table-cell #{user.phoneNumber}
-                td.u-border-1.u-border-grey-30.u-table-cell #{user.team}
+                td.u-border-1.u-border-grey-30.u-table-cell #{user.MaNhom}
 
   script(src="https://www.gstatic.com/charts/loader.js") 
   script(src="/public/source/js/script.js")

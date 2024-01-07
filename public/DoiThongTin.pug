@@ -1,0 +1,108 @@
+doctype html
+html(style='font-size: 16px;' lang='en')
+  head
+    meta(name='viewport' content='width=device-width, initial-scale=1.0')
+    meta(charset='utf-8')
+    title Đổi thông tin người dùng
+    link(rel='stylesheet' href='/public/source/css/Nicepage.css' media='screen')
+    link(rel='stylesheet' href='/public/source/css/Login.css' media='screen')
+    script.u-script(type='text/javascript' src='jquery.js' "='' defer='')
+    //script.u-script(type='text/javascript' src='/public/source/script.js' "='' defer='')
+    script(src="/public/source/js/script.js")
+
+    meta(name='theme-color' content='#478ac9')
+    meta(property='og:type' content='website')
+  body.u-body.u-xl-mode(data-lang='en')
+    include ./template/header.pug
+
+    section#carousel_4072.skrollable.u-clearfix.u-image.u-parallax.u-section-1()
+        .u-clearfix.u-expanded-width-sm.u-expanded-width-xs.u-grey-15.u-gutter-26.u-layout-wrap.u-layout-wrap-1
+              .u-container-style.u-layout-cell.u-size-34-md.u-size-34-sm.u-size-34-xs.u-size-37-lg.u-size-37-xl.u-white.u-layout-cell-2
+                .u-container-layout.u-container-layout-5
+                  h3.u-align-center.u-text.u-text-7
+                    | Đổi thông tin #{user.username}
+                   
+                  p#encoded.u-text.u-text-custom-color-3.u-text-8
+                  .u-align-left.u-expanded-width-xs.u-form.u-form-1
+                    form.u-clearfix.u-form-spacing-21.u-form-vertical.u-inner-form(action='/auth/dangnhap' method='POST' style='padding: 10px' source='custom' name='form' id='formElem')
+                      .u-form-group
+                        label.u-form-control-hidden.u-label(for='fullname-5a14') Họ và tên
+                        input#fullname-5a14.u-border-2.u-border-grey-30.u-input.u-input-rectangle.u-radius-10.u-white(type='text' placeholder='Họ và tên' name='fullname' value=user.fullname)
+
+                      .u-form-group
+                        label.u-form-control-hidden.u-label(for='dob-5a14') Ngày sinh
+                        - var formattedDate = new Date(user.SinhNhat).toISOString().split('T')[0];
+                        input#dob-5a14.u-border-2.u-border-grey-30.u-input.u-input-rectangle.u-radius-10.u-white(type='date' name='SinhNhat' value=formattedDate)
+
+                      .u-form-group
+                        label.u-form-control-hidden.u-label(for='phone-5a14') Số điện thoại
+                        input#phone-5a14.u-border-2.u-border-grey-30.u-input.u-input-rectangle.u-radius-10.u-white(type='tel' placeholder='Số điện thoại' name='phoneNumber', value=user.phoneNumber)
+
+                      .u-form-group
+                        label.u-form-control-hidden.u-label(for='mail-5a14') Email
+                        input#mail-5a14.u-border-2.u-border-grey-30.u-input.u-input-rectangle.u-radius-10.u-white(type='email' placeholder='Email' name='email', value=user.email)
+
+                      .u-form-group
+                        input#change-password.u-checkbox(type='checkbox' onclick='togglePasswordFields()')
+                        label.u-label(for='change-password')   Đổi mật khẩu?
+
+                      .u-form-group.password-field
+                        label.u-form-control-hidden.u-label(for='old-password') Mật khẩu cũ
+                        input#old-password.u-border-2.u-border-grey-30.u-input.u-input-rectangle.u-radius-10.u-white(type='password' placeholder='Mật khẩu cũ' name='oldPassword')
+
+                      .u-form-group.password-field
+                        label.u-form-control-hidden.u-label(for='new-password') Mật khẩu mới
+                        input#new-password.u-border-2.u-border-grey-30.u-input.u-input-rectangle.u-radius-10.u-white(type='password' placeholder='Mật khẩu mới' name='newPassword')
+
+                      .u-form-group.password-field
+                        label.u-form-control-hidden.u-label(for='confirm-password') Nhập lại mật khẩu mới
+                        input#confirm-password.u-border-2.u-border-grey-30.u-input.u-input-rectangle.u-radius-10.u-white(type='password' placeholder='Nhập lại mật khẩu mới' name='confirmPassword')
+
+                      .u-align-left.u-form-group.u-form-submit
+                        a.u-border-none.u-btn.u-btn-submit.u-button-style.u-custom-color-1.u-btn-1(onclick="changeInfo()")
+                          | Đổi thông tin
+                          br
+style.
+  .password-field {
+    display: none;
+  }
+
+script. 
+  function togglePasswordFields() {
+    let passwordFields = document.getElementsByClassName('password-field');
+    for (let i = 0; i < passwordFields.length; i++) {
+      let element = passwordFields[i].style.display;
+      if (!element || element == 'none') 
+        passwordFields[i].style.display = 'block';
+      else 
+        passwordFields[i].style.display = 'none';
+    }
+  }
+
+  async function changeInfo() {
+    const form = document.getElementById('formElem');
+    data = {
+      isChangePassword: document.getElementById('change-password').checked,
+      fullname: form.fullname.value,
+      SinhNhat: form.SinhNhat.value,
+      phoneNumber: form.phoneNumber.value,
+      email: form.email.value,
+      oldPassword: form.oldPassword.value,
+      newPassword: form.newPassword.value,
+      confirmPassword: form.confirmPassword.value
+    }
+
+    const response = await fetch(window.location.href, {
+      method: 'POST', 
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+      json: true
+    })
+
+    let text = await response.json(); 
+
+    alert(text.message);
+    if (text.statusCode == 200) location.reload();
+  }

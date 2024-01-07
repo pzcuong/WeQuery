@@ -53,7 +53,7 @@ html(style='font-size: 16px;' lang='en')
                         .u-container-layout.u-container-layout-2
                           h4.u-text.u-text-custom-color-1.u-text-2 #{message.TieuDe} (#{message.MucDo})
                           .fr-view.u-clearfix.u-rich-text.u-text.u-text-3
-                            #{message.NoiDung}/
+                            | !{message.NoiDung}
                       .u-container-style.u-layout-cell.u-size-30.u-layout-cell-2
                         .u-container-layout.u-container-layout-3
                           .u-form.u-form-1
@@ -187,7 +187,6 @@ script.
     })
 
     let text = await response.json(); 
-    console.log(text)
     
     if(text.redirect)
         window.location.href = text.redirect;

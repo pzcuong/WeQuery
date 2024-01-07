@@ -25,10 +25,10 @@ html(style='font-size: 16px;' lang='en')
           table.u-table-entity.u-table-entity-1
             colgroup
               col(width='10%')
-              col(width='50%')
+              col(width='40%')
               col(width='10%')
-              col(width='20%')
-              col(width='10%')
+              col(width='25%')
+              col(width='15%')
             tbody.u-table-alt-palette-1-light-3.u-table-body
               tr(style='height: 65px;')
                 td.u-table-cell Mã CH
@@ -43,8 +43,8 @@ html(style='font-size: 16px;' lang='en')
                   td.u-table-cell
                       a.u-active-none.u-border-none.u-button-link.u-button-style.u-hover-none.u-none.u-text-palette-1-base.u-btn-1(href='/admin/ChinhSua/'+question.MaCH+'/') #{question.TieuDe}
                   td.u-table-cell #{question.MucDo}
-                  td.u-table-cell #{question.LuocDo}
-                  td.u-table-cell #{question.TinhTrang}
+                  td.u-table-cell #{(question.LuocDo !== "undefined" && question.LuocDo) ? question.LuocDo : 'Không có lược đồ'}
+                  td.u-table-cell #{question.TinhTrang ? 'Công khai' : 'Riêng tư'}
 
 script. 
     async function TaoBaiTap() {

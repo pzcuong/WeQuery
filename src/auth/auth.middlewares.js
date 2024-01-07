@@ -1,95 +1,72 @@
-const userModle = require('../users/users.models');
-const authMethod = require('./auth.methods');
-const pug = require('pug');
+const UserInfo = require("../users/user/user.models");
+const userModel = require("../users/users.models");
+const authMethod = require("./auth.methods");
+const pug = require("pug");
 
-async function isAuth(req, res, next) {
-	const accessTokenFromHeader = req.cookies.x_authorization;
-	if (!accessTokenFromHeader) {
-		return res
-		.status(401)
-		.redirect('/auth/login');
-	}
+class authMiddleware {
+  constructor() {
+    this.userInfo = new UserInfo();
+  }
 
-	const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
+  isAuth = async (req, res, next) => {
+    const accessTokenFromHeader = req.cookies.x_authorization;
+    if (!accessTokenFromHeader) return res.status(401).redirect("/auth/login");
 
-	const verified = await authMethod.verifyToken(
-		accessTokenFromHeader,
-		accessTokenSecret,
-	);
-	if (verified.statusCode === 401) {
-        return res
-			.writeHead(302, {'Location': '/auth/login'})
-			.end();
-			/* .send({
-				statusCode: 401,
-				message: 'Hết phiên đăng nhập',
-				alert: 'Hết phiên đăng nhập, vui lòng đăng nhập lại',
-				redirect: '/auth/login',
-			}); */
-	}
+    const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
 
-	const user = await userModle.getInfoUser(verified.data.payload.username);
-	console.log(user);
-	req.user = user;
+    const verified = await authMethod.verifyToken(
+      accessTokenFromHeader,
+      accessTokenSecret
+    );
 
-	return next();
-};
+    if (verified.statusCode === 401)
+      return res.writeHead(302, { Location: "/auth/login" }).end();
 
+    const user = await this.userInfo.getUser(verified.data.payload.username);
+    req.user = user;
 
-async function isAuthAdmin(req, res, next) {
-	const accessTokenFromHeader = req.cookies.x_authorization;
-	if (!accessTokenFromHeader) {
-		return res
-			.writeHead(302, {'Location': '/auth/login'})
-			.end();
-	}
+    return next();
+  };
 
-	const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
+  isAuthAdmin = async (req, res, next) => {
+    const accessTokenFromHeader = req.cookies.x_authorization;
+    if (!accessTokenFromHeader)
+      return res.writeHead(302, { Location: "/auth/login" }).end();
 
-	const verified = await authMethod.verifyToken(
-		accessTokenFromHeader,
-		accessTokenSecret,
-	);
-	if (verified.statusCode === 401) {
-		return res
-			.writeHead(302, {'Location': '/auth/login'})
-			.end();
-	}
+    const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
 
-	const user = await userModle.getUser(verified.data.payload.username);
+    const verified = await authMethod.verifyToken(
+      accessTokenFromHeader,
+      accessTokenSecret
+    );
 
-	console.log(user.result.role);
-	if (user.result.role !== 'Admin') 
-		return res
-			.writeHead(302, {'Location': '/auth/login'})
-			.end();
+    if (verified.statusCode === 401)
+      return res.writeHead(302, { Location: "/auth/login" }).end();
 
-	req.user = user;
+    const user = await this.userInfo.getUser(verified.data.payload.username);
 
-	return next();
-};
+    if (user.role !== "Admin")
+      return res.writeHead(302, { Location: "/auth/login" }).end();
 
-async function isLogined(req, res, next) {
-	const accessTokenFromHeader = req.cookies.x_authorization;
-	if (!accessTokenFromHeader) 
-		return next();
+    req.user = user;
+    return next();
+  };
 
-	const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
+  isLogined = async (req, res, next) => {
+    const accessTokenFromHeader = req.cookies.x_authorization;
+    if (!accessTokenFromHeader) return next();
 
-	const verified = await authMethod.verifyToken(
-		accessTokenFromHeader,
-		accessTokenSecret,
-	);
-	console.log(verified);
+    const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
 
-	if (verified.statusCode != 200) 
-		return next();
+    const verified = await authMethod.verifyToken(
+      accessTokenFromHeader,
+      accessTokenSecret
+    );
 
-	console.log("verified", verified);
+    if (verified.statusCode != 200) return next();
 
-	return res.redirect('/user/profile');
+    return res.redirect("/user/profile");
+  };
 }
 
-exports.isAuth = isAuth;
-exports.isAuthAdmin = isAuthAdmin;
-exports.isLogined = isLogined;
+module.exports = authMiddleware;

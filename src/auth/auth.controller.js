@@ -108,7 +108,7 @@ class AuthController {
           message: "Tạo tài khoản thành công",
           username: username,
           accessToken: accessToken.accessToken,
-          redirect: "/user/login",
+          redirect: "/user/profile",
         });
       else
         return res.status(400).send({
@@ -257,64 +257,6 @@ class AuthController {
     return res.json({
       accessToken,
     });
-  };
-
-  DoiMatKhau = async (req, res) => {
-    try {
-      const username = req.user.result.username;
-      const password = req.body.password;
-      const newPassword = req.body.newPassword;
-      const confirmNewPassword = req.body.confirmPassword;
-      if (!username || !password || !newPassword || !confirmNewPassword)
-        return res.status(400).send({
-          statusCode: 400,
-          message: "Vui lòng nhập đầy đủ thông tin.",
-          alert: "Vui lòng nhập đầy đủ thông tin.",
-        });
-
-      const user = await this.userModel.getUser(username);
-      if (user.statusCode == 200) {
-        const isValid = this.bcrypt.compareSync(password, user.result.password);
-
-        if (!isValid)
-          return res.status(400).send({
-            statusCode: 400,
-            message: "Tài khoản hoặc Mật khẩu không đúng",
-            alert: "Tài khoản hoặc Mật khẩu không đúng",
-          });
-        if (newPassword !== confirmNewPassword)
-          return res.status(400).send({
-            statusCode: 400,
-            message: "Mật khẩu mới không khớp",
-            alert: "Mật khẩu mới không khớp",
-          });
-        const hashPassword = this.bcrypt.hashSync(newPassword, 10);
-        const updatePassword = await this.userModel.updatePassword(
-          username,
-          hashPassword,
-          password
-        );
-        if (updatePassword.statusCode == 200)
-          return res.status(200).send({
-            statusCode: 200,
-            message: "Đổi mật khẩu thành công",
-            alert: "Đổi mật khẩu thành công",
-          });
-        else
-          return res.status(400).send({
-            statusCode: 400,
-            message: "Đổi mật khẩu thất bại",
-            alert: "Đổi mật khẩu thất bại",
-          });
-      }
-    } catch (error) {
-      console.log("Lỗi DoiMatKhau (auth.controllers): ", error);
-      return res.status(500).send({
-        statusCode: 500,
-        message: "Lỗi server",
-        alert: "Lỗi server",
-      });
-    }
   };
 }
 

@@ -65,7 +65,7 @@ html(style='font-size: 16px;' lang='en')
                 input#name-fullname.u-border-2.u-border-grey-25.u-input.u-input-rectangle.u-radius-5(type='text' placeholder='Nhập họ tên sinh viên...' name='fullname' required='')
                 .u-form-group.u-form-name.u-form-group-1
                 label.u-label(for='name-SinhNhat') Sinh nhật
-                input#date-a69e.u-border-2.u-border-grey-25.u-input.u-input-rectangle.u-radius-5(type='datetime-local' step='1' placeholder='MM/DD/YYYY' name='SinhNhat' required='')
+                input#date-a69e.u-border-2.u-border-grey-25.u-input.u-input-rectangle.u-radius-5(type='date' step='1' placeholder='MM/DD/YYYY' name='SinhNhat' required='')
                 .u-form-group.u-form-name.u-form-group-1
                 label.u-label(for='name-email') Email
                 input#name-SinhNhat.u-border-2.u-border-grey-25.u-input.u-input-rectangle.u-radius-5(type='text' placeholder='Nhập email...' name='email' required='')
@@ -232,11 +232,11 @@ script.
       elements.innerHTML = 'Chỉnh sửa sinh viên';
 
       const student = studentList.find(student => student.username == username);
-      console.log(student)
 
       document.getElementsByName('username')[0].value = student.username;
       document.getElementsByName('fullname')[0].value = student.fullname;
-      document.getElementsByName('SinhNhat')[0].value = student.SinhNhat;
+      var formattedDate = new Date(student.SinhNhat).toISOString().split('T')[0];
+      document.getElementsByName('SinhNhat')[0].value = formattedDate;
       document.getElementsByName('email')[0].value = student.email;
       document.getElementsByName('phoneNumber')[0].value = student.phoneNumber;
       document.getElementsByName('MaNhom')[0].value = student.MaNhom;

@@ -131,10 +131,10 @@ async function ThemMoiCauHoi(req, res) {
 async function LayCauHoi(req, res, next) {
   try {
     const MaCH = req.params.MaCH;
-    let result = await adminModel.LayCauHoi(MaCH, req.user.result);
+    let result = await adminModel.LayCauHoi(MaCH, req.user);
     if (result.statusCode == 200) {
       let html = pug.renderFile("public/admin/ChinhSuaCauHoi.pug", {
-        user: req.user.result,
+        user: req.user,
         data: result.data,
       });
 
@@ -244,7 +244,7 @@ async function DanhSachCauHoi(req, res) {
   let result = await adminModel.DanhSachCauHoi();
   if (result.statusCode === 200) {
     let html = pug.renderFile("public/admin/QuanLyCauHoi.pug", {
-      user: req.user.result,
+      user: req.user,
       questionList: result.result.recordset,
     });
     res.send(html);
@@ -262,7 +262,7 @@ async function DanhSachBaiTap(req, res) {
   let dsNhom = await adminModel.DanhSachNhom();
   if (result.statusCode === 200) {
     let html = pug.renderFile("public/admin/QuanLyBaiTap.pug", {
-      user: req.user.result,
+      user: req.user,
       questionList: result.result.recordset,
       dsNhom: dsNhom.result.recordset,
     });
@@ -377,7 +377,7 @@ async function LayBaiTap(req, res) {
     console.log(BXH.user);
     if (result.statusCode === 200) {
       let html = pug.renderFile("public/admin/QuanLyCauHoiTrongBaiTap.pug", {
-        user: req.user.result,
+        user: req.user,
         TieuDeBaiTap: result.result.recordset[0].TieuDeBaiTap,
         questionList: result.result.recordset,
         dsNhom: dsNhom.result.recordset,
@@ -401,7 +401,7 @@ async function DanhSachSinhVien(req, res) {
   let dsNhom = await adminModel.DanhSachNhom();
   if (result.statusCode === 200) {
     let html = pug.renderFile("public/admin/QuanLySinhVien.pug", {
-      user: req.user.result,
+      user: req.user,
       studentList: result.result.recordset,
       dsNhom: dsNhom.result.recordset,
     });
@@ -419,7 +419,7 @@ async function DanhSachNhomSV(req, res) {
   let result = await adminModel.DanhSachNhom();
   if (result.statusCode === 200) {
     let html = pug.renderFile("public/admin/QuanLyNhom.pug", {
-      user: req.user.result,
+      user: req.user,
       groups: result.result.recordset,
     });
     res.send(html);

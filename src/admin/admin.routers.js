@@ -3,9 +3,10 @@ const pug = require("pug");
 const router = express.Router();
 
 const authMiddleware = require("../auth/auth.middlewares");
-
-const isAuthAdmin = authMiddleware.isAuthAdmin;
 const adminController = require("../admin/admin.controller");
+
+const middleware = new authMiddleware();
+const isAuthAdmin = middleware.isAuthAdmin;
 
 router
   .route("/QuanLyBaiTap/")
@@ -21,7 +22,7 @@ router
   .route("/QuanLyBaiTap/:MaBT/ThemCauHoi")
   .get(isAuthAdmin, (req, res) => {
     let html = pug.renderFile("public/admin/ThemMoiCauHoi.pug", {
-      user: req.user.result,
+      user: req.user,
     });
     res.send(html);
   })
@@ -38,7 +39,7 @@ router
   .route("/ThemCauHoi")
   .get(isAuthAdmin, (req, res) => {
     let html = pug.renderFile("public/admin/ThemMoiCauHoi.pug", {
-      user: req.user.result,
+      user: req.user,
     });
     res.send(html);
   })

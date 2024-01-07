@@ -6,12 +6,14 @@ const router = express.Router();
 const AuthController = require("./auth.controller");
 const authController = new AuthController();
 
-const middleware = require("./auth.middlewares");
+const authMiddleware = require("./auth.middlewares");
+const middleware = new authMiddleware();
+const isLogined = middleware.isLogined;
 
 router
   .route("/register")
   .post(authController.register)
-  .get(middleware.isLogined, (req, res) => {
+  .get(isLogined, (req, res) => {
     let html = pug.renderFile("public/auth/Register.pug");
     res.send(html);
   });
@@ -19,20 +21,10 @@ router
 router
   .route("/login")
   .post(authController.login)
-  .get(middleware.isLogined, (req, res) => {
+  .get(isLogined, (req, res) => {
     let html = pug.renderFile("public/auth/Login.pug");
     res.send(html);
   });
-
-router.get("/abc", (req, res) => {
-  let html = pug.renderFile("public/auth/changePassword.pug");
-  res.send(html);
-});
-
-router.get("/abc1", (req, res) => {
-  let html = pug.renderFile("public/changePassword.pug");
-  res.send(html);
-});
 
 router.post("/refresh", authController.refreshToken);
 

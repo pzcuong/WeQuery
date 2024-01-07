@@ -224,6 +224,5 @@ script.
 
         //- document.querySelector("#encoded").innerHTML = text.message;
         alert(text.message);
-        // reload lại trang
-        location.reload();
+        if (text.statusCode == 200) location.reload();
     }

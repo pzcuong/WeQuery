@@ -32,89 +32,90 @@ html(style='font-size: 16px;' lang='en')
     include ../template/header.pug
 
     section#sec-5722.u-align-center.u-clearfix.u-grey-15.u-section-1
-      .u-clearfix.u-sheet.u-sheet-1
-        h3.u-text.u-text-custom-color-1.u-text-default.u-text-1 #{question.TieuDe} (#{question.MucDo})
-        .u-tabs.u-tabs-1
-          ul.u-border-2.u-border-grey-75.u-tab-list.u-unstyled(role='tablist')
-            li.u-tab-item.u-tab-item-1(role='presentation')
-              a#link-tab-0da5.active.u-active-custom-color-1.u-button-style.u-custom-color-2.u-tab-link.u-tab-link-1(href='#tab-0da5' role='tab' aria-controls='tab-0da5' aria-selected='true') Nội dung
-            li.u-tab-item.u-tab-item-2(role='presentation')
-              a#link-tab-14b7.u-active-custom-color-1.u-button-style.u-custom-color-2.u-tab-link.u-tab-link-2(href='#tab-14b7' role='tab' aria-controls='tab-14b7' aria-selected='false') Lịch sử nộp bài
-            li.u-tab-item.u-tab-item-3(role='presentation')
-              a#link-tab-2917.u-active-custom-color-1.u-button-style.u-custom-color-2.u-tab-link.u-tab-link-3(href='#tab-2917' role='tab' aria-controls='tab-2917' aria-selected='false') Danh sách câu hỏi
-          .u-tab-content
-            #tab-0da5.u-container-style.u-tab-active.u-tab-pane.u-white.u-tab-pane-1(role='tabpanel' aria-labelledby='link-tab-0da5')
-              .u-container-layout.u-container-layout-1
-                .u-clearfix.u-expanded-width.u-layout-wrap.u-layout-wrap-1
-                  .u-layout
-                    .u-layout-row
-                      .u-container-style.u-layout-cell.u-size-30.u-layout-cell-1
-                        .u-container-layout.u-container-layout-2
-                          h4.u-text.u-text-custom-color-1.u-text-2 #{question.TieuDe} (#{question.MucDo})
-                          .fr-view.u-clearfix.u-rich-text.u-text.u-text-3
-                            #{question.NoiDung}/
-                      .u-container-style.u-layout-cell.u-size-30.u-layout-cell-2
-                        .u-container-layout.u-container-layout-3
-                          .u-form.u-form-1
-                            form.u-clearfix.u-form-spacing-10.u-form-vertical.u-inner-form(action='/NopBaiSQL' method='POST' source='custom' name='form' style='padding: 10px;' id='formElem')
-                              .u-form-group.u-form-message
-                                label.u-custom-font.u-heading-font.u-label.u-text-custom-color-1.u-label-1(for='message-79f8') Lệnh truy vấn MS SQL Server
-                                textarea#message-79f8.u-border-1.u-border-grey-30.u-input.u-input-rectangle.u-white(placeholder='/* Nhập lệnh truy vấn ở đây */' rows='20' cols='50' name='SQLQuery' required='')
-                              .u-align-left.u-form-group.u-form-submit
-                                a.u-border-none.u-btn.u-btn-submit.u-button-style.u-custom-color-1.u-dialog-link.u-btn-1(href='#popup' onclick='SubmitSQLWithEditor()') Nộp bài
-                          a.u-border-none.u-btn.u-button-style.u-custom-color-1.u-dialog-link.u-btn-2(href='#popup' onclick='SubmitSQLWithEditor()') Nộp bài
-            #tab-14b7.u-container-style.u-tab-pane.u-white.u-tab-pane-2(role='tabpanel' aria-labelledby='link-tab-14b7')
-              .u-container-layout.u-container-layout-4
-                .u-table.u-table-responsive.u-table-1
-                  table.u-table-entity
-                    colgroup
-                      col(width='55%')
-                      col(width='15%')
-                      col(width='30%')
+      if question
+        .u-clearfix.u-sheet.u-sheet-1
+          h3.u-text.u-text-custom-color-1.u-text-default.u-text-1 #{question.TieuDe} (#{question.MucDo})
+          .u-tabs.u-tabs-1
+            ul.u-border-2.u-border-grey-75.u-tab-list.u-unstyled(role='tablist')
+              li.u-tab-item.u-tab-item-1(role='presentation')
+                a#link-tab-0da5.active.u-active-custom-color-1.u-button-style.u-custom-color-2.u-tab-link.u-tab-link-1(href='#tab-0da5' role='tab' aria-controls='tab-0da5' aria-selected='true') Nội dung
+              li.u-tab-item.u-tab-item-2(role='presentation')
+                a#link-tab-14b7.u-active-custom-color-1.u-button-style.u-custom-color-2.u-tab-link.u-tab-link-2(href='#tab-14b7' role='tab' aria-controls='tab-14b7' aria-selected='false') Lịch sử nộp bài
+              li.u-tab-item.u-tab-item-3(role='presentation')
+                a#link-tab-2917.u-active-custom-color-1.u-button-style.u-custom-color-2.u-tab-link.u-tab-link-3(href='#tab-2917' role='tab' aria-controls='tab-2917' aria-selected='false') Danh sách câu hỏi
+            .u-tab-content
+              #tab-0da5.u-container-style.u-tab-active.u-tab-pane.u-white.u-tab-pane-1(role='tabpanel' aria-labelledby='link-tab-0da5')
+                .u-container-layout.u-container-layout-1
+                  .u-clearfix.u-expanded-width.u-layout-wrap.u-layout-wrap-1
+                    .u-layout
+                      .u-layout-row
+                        .u-container-style.u-layout-cell.u-size-30.u-layout-cell-1
+                          .u-container-layout.u-container-layout-2
+                            h4.u-text.u-text-custom-color-1.u-text-2 #{question.TieuDe} (#{question.MucDo})
+                            .fr-view.u-clearfix.u-rich-text.u-text.u-text-3
+                              | !{question.NoiDung}
+                        .u-container-style.u-layout-cell.u-size-30.u-layout-cell-2
+                          .u-container-layout.u-container-layout-3
+                            .u-form.u-form-1
+                              form.u-clearfix.u-form-spacing-10.u-form-vertical.u-inner-form(action='/NopBaiSQL' method='POST' source='custom' name='form' style='padding: 10px;' id='formElem')
+                                .u-form-group.u-form-message
+                                  label.u-custom-font.u-heading-font.u-label.u-text-custom-color-1.u-label-1(for='message-79f8') Lệnh truy vấn MS SQL Server
+                                  textarea#message-79f8.u-border-1.u-border-grey-30.u-input.u-input-rectangle.u-white(placeholder='/* Nhập lệnh truy vấn ở đây */' rows='20' cols='50' name='SQLQuery' required='')
+                                .u-align-left.u-form-group.u-form-submit
+                                  a.u-border-none.u-btn.u-btn-submit.u-button-style.u-custom-color-1.u-dialog-link.u-btn-1(href='#popup' onclick='SubmitSQLWithEditor()') Nộp bài
+                            a.u-border-none.u-btn.u-button-style.u-custom-color-1.u-dialog-link.u-btn-2(href='#popup' onclick='SubmitSQLWithEditor()') Nộp bài
+              #tab-14b7.u-container-style.u-tab-pane.u-white.u-tab-pane-2(role='tabpanel' aria-labelledby='link-tab-14b7')
+                .u-container-layout.u-container-layout-4
+                  .u-table.u-table-responsive.u-table-1
+                    table.u-table-entity
+                      colgroup
+                        col(width='55%')
+                        col(width='15%')
+                        col(width='30%')
 
-                    if history.length > 0 && history[0].KetQua != null
-                     thead.u-align-center.u-custom-color-1.u-table-header.u-table-header-1
-                      tr(style='height: 29px;')
-                        th.u-border-1.u-border-custom-color-1.u-table-cell Câu lệnh SQL
-                        th.u-border-1.u-border-custom-color-1.u-table-cell Kết quả
-                        th.u-border-1.u-border-custom-color-1.u-table-cell Thời gian nộp bài
-                      - const options = {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', timeZone: "Asia/Jakarta"};
+                      if history && history.length > 0 && history[0].KetQua != null
+                        thead.u-align-center.u-custom-color-1.u-table-header.u-table-header-1
+                          tr(style='height: 29px;')
+                            th.u-border-1.u-border-custom-color-1.u-table-cell Câu lệnh SQL
+                            th.u-border-1.u-border-custom-color-1.u-table-cell Kết quả
+                            th.u-border-1.u-border-custom-color-1.u-table-cell Thời gian nộp bài
+                          - const options = {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', timeZone: "Asia/Jakarta"};
 
-                      each ls of history
-                        tbody.u-table-body
-                          tr(style='height: 75px;')
-                            td.u-border-1.u-border-grey-30.u-first-column.u-grey-5.u-table-cell.u-table-cell-4 #{ls.SQLQuery}
-                            td.u-border-1.u-border-grey-30.u-table-cell #{ls.KetQua}
-                            td.u-border-1.u-border-grey-30.u-table-cell #{new Date(ls.ThoiGian).toLocaleString("vi-VN", options)}
-                    else
-                      h3.u-text.u-text-custom-color-1.u-text-default.u-text-3(style="padding-left: 10px;") Không có lịch sử!
-            #tab-2917.u-container-style.u-tab-pane.u-white.u-tab-pane-3(role='tabpanel' aria-labelledby='link-tab-2917')
-              .u-container-layout.u-container-layout-5
-                .u-table.u-table-responsive.u-table-2
-                  table.u-table-entity
-                    colgroup
-                      col(width='15%')
-                      col(width='15%')
-                      col(width='50%')
-                      col(width='20%')
-                    thead.u-align-center.u-custom-color-1.u-table-header.u-table-header-2
-                      tr(style='height: 28px;')
-                        th.u-border-1.u-border-custom-color-1.u-table-cell ID Câu hỏi
-                        th.u-border-1.u-border-custom-color-1.u-table-cell Độ khó
-                        th.u-border-1.u-border-custom-color-1.u-table-cell Tên câu hỏi
-                        th.u-border-1.u-border-custom-color-1.u-table-cell Đã hoàn thành
-                    tbody.u-table-body
-                      each ch in anotherQuestion
-                        tr(style='height: 62px;')
-                          td.u-border-1.u-border-grey-30.u-first-column.u-grey-5.u-table-cell.u-table-cell-11 #{ch.MaCH}
-                          td.u-border-1.u-border-grey-30.u-table-cell #{ch.MucDo}
-                          td.u-border-1.u-border-grey-30.u-table-cell
-                            a.u-active-none.u-border-none.u-btn.u-button-link.u-button-style.u-hover-none.u-none.u-text-palette-1-base.u-btn-1(href='/user/BaiTap/'+question.MaBT+'/'+ch.MaCH) #{ch.TieuDe}
+                          each ls of history
+                            tbody.u-table-body
+                              tr(style='height: 75px;')
+                                td.u-border-1.u-border-grey-30.u-first-column.u-grey-5.u-table-cell.u-table-cell-4 #{ls.SQLQuery}
+                                td.u-border-1.u-border-grey-30.u-table-cell #{ls.KetQua}
+                                td.u-border-1.u-border-grey-30.u-table-cell #{new Date(ls.ThoiGian).toLocaleString("vi-VN", options)}
+                      else
+                        h3.u-text.u-text-custom-color-1.u-text-default.u-text-3(style="padding-left: 10px;") Không có lịch sử!
+              #tab-2917.u-container-style.u-tab-pane.u-white.u-tab-pane-3(role='tabpanel' aria-labelledby='link-tab-2917')
+                .u-container-layout.u-container-layout-5
+                  .u-table.u-table-responsive.u-table-2
+                    table.u-table-entity
+                      colgroup
+                        col(width='15%')
+                        col(width='15%')
+                        col(width='50%')
+                        col(width='20%')
+                      thead.u-align-center.u-custom-color-1.u-table-header.u-table-header-2
+                        tr(style='height: 28px;')
+                          th.u-border-1.u-border-custom-color-1.u-table-cell ID Câu hỏi
+                          th.u-border-1.u-border-custom-color-1.u-table-cell Độ khó
+                          th.u-border-1.u-border-custom-color-1.u-table-cell Tên câu hỏi
+                          th.u-border-1.u-border-custom-color-1.u-table-cell Đã hoàn thành
+                      tbody.u-table-body
+                        each ch in anotherQuestion
+                          tr(style='height: 62px;')
+                            td.u-border-1.u-border-grey-30.u-first-column.u-grey-5.u-table-cell.u-table-cell-11 #{ch.MaCH}
+                            td.u-border-1.u-border-grey-30.u-table-cell #{ch.MucDo}
+                            td.u-border-1.u-border-grey-30.u-table-cell
+                              a.u-active-none.u-border-none.u-btn.u-button-link.u-button-style.u-hover-none.u-none.u-text-palette-1-base.u-btn-1(href='/user/BaiTap/'+question.MaBT+'/'+ch.MaCH) #{ch.TieuDe}
 
-                          if ch.KetQua
-                            td.u-border-1.u-border-grey-30.u-table-cell True
-                          else
-                            td.u-border-1.u-border-grey-30.u-table-cell False
+                            if ch.KetQua
+                              td.u-border-1.u-border-grey-30.u-table-cell True
+                            else
+                              td.u-border-1.u-border-grey-30.u-table-cell False
 
     section#popup.u-align-center.u-black.u-clearfix.u-container-style.u-dialog-block.u-opacity.u-opacity-70.u-dialog-section-8
       .u-container-style.u-dialog.u-radius-10.u-shape-round.u-white.u-dialog-1
@@ -190,6 +191,12 @@ html(style='font-size: 16px;' lang='en')
       }
 
 script. 
+  const question = !{JSON.stringify(question)}
+  const segments = window.location.href.split('/');
+  segments.pop();
+  const URL = segments.join('/') + '/' + question.MaCH;
+  history.pushState({}, '', URL);
+
   async function SubmitSQLWithEditor() {
     document.querySelector('.btn').style.visibility = 'hidden';
     document.querySelector('#encoded').innerHTML = "Đang gửi yêu cầu, vui lòng đợi!";

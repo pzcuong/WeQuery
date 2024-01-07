@@ -54,10 +54,10 @@ html(style='font-size: 16px;' lang='en')
                             td.u-border-1.u-border-grey-30.u-table-cell #{question.MucDo}
                             td.u-border-1.u-border-grey-30.u-table-cell 
                                 a.u-active-none.u-border-none.u-btn.u-button-link.u-button-style.u-hover-none.u-none.u-text-palette-1-base(href='/admin/ChinhSua/'+question.MaCH+'/') #{question.TieuDe}
-                            td.u-border-1.u-border-grey-30.u-table-cell #{question.LuocDo}
+                            td.u-border-1.u-border-grey-30.u-table-cell #{(question.LuocDo !== "undefined" && question.LuocDo) ? question.LuocDo : 'Không có lược đồ'}
                 a.u-btn.u-button-style.u-custom-color-1.u-btn-1(href='' style='font-weight: 100') Thêm từ thư viện
                 a.u-border-none.u-btn.u-btn-round.u-button-style.u-palette-4-base.u-radius-2.u-btn-2(href='./ThemCauHoi')
-                  span(style='font-weight: 100; padding-top: 10px; padding-bottom: 10px') Tạo câu hỏi mới 
+                  span(style='font-weight: 100; padding-top: 10px; padding-bottom: 10px') Tạo câu hỏi mới
                   span.u-icon.u-text-white
                     svg.u-svg-content(viewBox='0 0 512 512' x='0px' y='0px' style='width: 1em; height: 1em;')
                       path(d='M506.134,241.843c-0.006-0.006-0.011-0.013-0.018-0.019l-104.504-104c-7.829-7.791-20.492-7.762-28.285,0.068 c-7.792,7.829-7.762,20.492,0.067,28.284L443.558,236H20c-11.046,0-20,8.954-20,20c0,11.046,8.954,20,20,20h423.557 l-70.162,69.824c-7.829,7.792-7.859,20.455-0.067,28.284c7.793,7.831,20.457,7.858,28.285,0.068l104.504-104 c0.006-.006,0.011-.013,0.018-.019C513.968,262.339,513.943,249.635,506.134,241.843z')
@@ -84,8 +84,9 @@ html(style='font-size: 16px;' lang='en')
                         tr(style='height: 65px;')
                           td.u-table-cell #{user[0].username}
                           td.u-table-cell #{user[0].fullname}
-                          each i in user
-                            td.u-table-cell #{Math.round(i.KetQua)}     
+                          each i in BXH.dsCH
+                            - let result = user.find(u => u.MaCH === i)
+                            td.u-table-cell #{result ? Math.round(result.KetQua) : ''}
 
             #tab-8609.u-container-style.u-shape-rectangle.u-tab-pane.u-tab-pane-3(role='tabpanel' aria-labelledby='link-tab-8609')
               .u-container-layout.u-container-layout-2

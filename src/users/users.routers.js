@@ -4,29 +4,38 @@ var pug = require("pug");
 const router = express.Router();
 
 const authMiddleware = require("../auth/auth.middlewares");
-const AuthController = require("../auth/auth.controller");
-const authController = new AuthController();
-const userController = require("./users.controller");
+const UserController = require("./users.controller");
+const getQuestionValidations = require("./dto/getQuestion.dto");
 
-const isAuth = authMiddleware.isAuth;
+const middleware = new authMiddleware();
+const userController = new UserController();
+
+const isAuth = middleware.isAuth;
 
 router.get("/profile", isAuth, async (req, res) => {
   let html = pug.renderFile("public/user/profile.pug", {
-    user: req.user.result,
+    user: req.user,
     image: req.image,
   });
   res.send(html);
 });
 
 router
-  .route("/DoiMatKhau")
+  .route("/DoiThongTin")
   .get(isAuth, async (req, res) => {
-    let html = pug.renderFile("public/changePassword.pug");
+    let html = pug.renderFile("public/DoiThongTin.pug", {
+      user: req.user,
+    });
     res.send(html);
   })
-  .post(isAuth, authController.DoiMatKhau);
+  .post(isAuth, userController.DoiThongTin);
 
-router.get("/TestSQL", isAuth, userController.LayDanhSachCauHoi);
+router.get(
+  "/TestSQL",
+  isAuth,
+  getQuestionValidations,
+  userController.LayDanhSachCauHoi
+);
 
 router.get("/BaiTap", isAuth, userController.LayDanhSachBaiTap);
 
@@ -35,7 +44,7 @@ router
   .get(isAuth, userController.LayNoiDungBaiTap)
   .post(isAuth, userController.NopBaiTap);
 
-router.get("/LichSu", isAuth, userController.LayLichSuTruyVan);
+// router.get("/LichSu", isAuth, userController.LayLichSuTruyVan);
 
 router
   .route("/TestSQL/:MaCH")

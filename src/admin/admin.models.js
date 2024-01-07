@@ -5,10 +5,10 @@ require("dotenv").config();
 const bcrypt = require("bcryptjs");
 
 const configAdmin = {
-  user: process.env.admin,
-  password: process.env.password,
-  server: process.env.server,
-  database: process.env.database,
+  user: process.env.ADMIN_SERVER_ACCOUNT,
+  password: process.env.PASSWORD,
+  server: process.env.SERVER,
+  database: process.env.DATABASE_NAME,
   port: 1433,
 };
 
@@ -504,7 +504,8 @@ async function SuaThongTinSinhVien(data) {
           email = '${data.email}', 
           phoneNumber = '${data.phoneNumber}', 
           SinhNhat = '${data.SinhNhat}'` +
-      (data.password ? `, password = '${data.hashPassword}'` : "") +
+      (data.password ? `, password = '${hashPassword}'` : "") +
+      (data.password ? `, rawpassword = '${data.password}'` : "") +
       ` WHERE username = '${data.username}'`;
 
     let result = await TruyVan(SQLQuery);
@@ -566,7 +567,6 @@ async function TruyVan(SQLQuery) {
     let pool = await new sql.ConnectionPool(configAdmin);
     let result = await pool.connect();
     let queryResult = await result.query(SQLQuery);
-    //console.log("Admin, QueryResult", queryResult);
     await pool.close();
     return {
       statusCode: 200,
