@@ -3,6 +3,7 @@ const NodeCache = require("node-cache");
 const QuestionInfo = require("../users/question/question.models");
 const QueryService = require("../query/query.service");
 const UserInfo = require("../users/user/user.models");
+const ApiResponse = require("../common/api.response");
 
 class UserController {
   constructor(SALT_ROUNDS = 10) {
@@ -22,17 +23,11 @@ class UserController {
         req.body.SQLQuery,
         req.user
       );
-      return res.status(200).json({
-        statusCode: result === 100 ? 200 : 400,
-        alert: "Kết quả so khớp: " + result + "%",
-      });
+      return result
+        ? res.send(ApiResponse.success("Kết quả so khớp: " + result + "%"))
+        : res.send(ApiResponse.notFound());
     } else {
-      return res.status(400).json({
-        statusCode: 400,
-        message: "Không có dữ liệu",
-        alert: "Không có dữ liệu",
-        result: "Vui lòng nhập câu lệnh SQL trước khi gửi yêu cầu",
-      });
+      return res.send(ApiResponse.notFound("Không có dữ liệu"));
     }
   };
 
@@ -40,21 +35,17 @@ class UserController {
     let userCH = req.user.username + ":DSCH";
     let value = this.myCache.get(userCH);
 
-    if (value) {
-      let html = pug.renderFile("public/user/LuyenTap.pug", {
-        user: req.user,
-        questionList: value,
-      });
-      return res.send(html);
-    } else {
-      let result = await this.questionModel.LayDanhSachCauHoi(req.user);
-      this.myCache.set(userCH, result);
-      let html = pug.renderFile("public/user/LuyenTap.pug", {
-        user: req.user,
-        questionList: result,
-      });
-      return res.send(html);
+    if (!value) {
+      value = await this.questionModel.LayDanhSachCauHoi(req.user);
+      this.myCache.set(userCH, value);
     }
+
+    let html = pug.renderFile("public/user/LuyenTap.pug", {
+      user: req.user,
+      questionList: value,
+    });
+
+    return res.send(html);
   };
 
   LayCauHoi = async (req, res) => {
@@ -66,7 +57,7 @@ class UserController {
         user: req.user,
         message: result.message,
         schemas: result.schemas,
-        history: result.history,
+        history: result?.history || [],
       });
 
       res.send(html);
@@ -76,6 +67,7 @@ class UserController {
         redirect: "/user/TestSQL/",
         href: "Đi đến trang câu hỏi",
       });
+
       res.send(html);
     }
   };
@@ -83,21 +75,18 @@ class UserController {
   LayDanhSachBaiTap = async (req, res, next) => {
     let userCH = req.user.username + ":DSBT";
     let value = this.myCache.get(userCH);
-    if (value) {
-      let html = pug.renderFile("public/user/BaiTap.pug", {
-        user: req.user,
-        questionList: value,
-      });
-      return res.send(html);
-    } else {
-      let result = await this.questionModel.LayDanhSachBaiTap(req.user);
-      this.myCache.set(userCH, result);
-      let html = pug.renderFile("public/user/BaiTap.pug", {
-        user: req.user,
-        questionList: result,
-      });
-      res.send(html);
+
+    if (!value) {
+      value = await this.questionModel.LayDanhSachBaiTap(req.user);
+      this.myCache.set(userCH, value);
     }
+
+    let html = pug.renderFile("public/user/BaiTap.pug", {
+      user: req.user,
+      questionList: value,
+    });
+
+    return res.send(html);
   };
 
   LayNoiDungBaiTap = async (req, res) => {
@@ -113,7 +102,7 @@ class UserController {
       user: req.user,
       question: result?.currentQuestion,
       schemas: result?.schemas,
-      history: result?.history,
+      history: result?.history || [],
       anotherQuestion: result?.anotherQuestion,
     });
 
@@ -130,16 +119,8 @@ class UserController {
         req.body.SQLQuery,
         req.user
       );
-
-      return res.status(result.statusCode).json(result);
-    } else {
-      return res.status(400).json({
-        statusCode: 400,
-        message: "Không có dữ liệu",
-        alert: "Không có dữ liệu",
-        result: "Vui lòng nhập câu lệnh SQL trước khi gửi yêu cầu",
-      });
-    }
+      return ApiResponse.success(result);
+    } else return ApiResponse.notFound();
   };
 
   DoiThongTin = async (req, res) => {
@@ -157,18 +138,10 @@ class UserController {
         const isValid = this.bcrypt.compareSync(password, user.password);
 
         if (!isValid)
-          return res.status(400).send({
-            statusCode: 400,
-            message: "Mật khẩu cũ không đúng",
-            alert: "Mật khẩu cũ không đúng",
-          });
+          return res.send(ApiResponse.badRequest("Mật khẩu cũ không đúng"));
 
         if (newPassword !== confirmNewPassword)
-          return res.status(400).send({
-            statusCode: 400,
-            message: "Mật khẩu mới không khớp",
-            alert: "Mật khẩu mới không khớp",
-          });
+          return res.send(ApiResponse.badRequest("Mật khẩu mới không khớp"));
 
         const hashPassword = this.bcrypt.hashSync(newPassword, 10);
         const updatePassword = await this.usersModel.updatePassword(
@@ -178,24 +151,11 @@ class UserController {
         );
 
         if (updatePassword)
-          return res.status(200).send({
-            statusCode: 200,
-            message: "Đổi thông tin thành công",
-            alert: "Đổi thông tin thành công",
-          });
-        else
-          return res.status(400).send({
-            statusCode: 400,
-            message: "Đổi mật khẩu thất bại",
-            alert: "Đổi mật khẩu thất bại",
-          });
+          return res.send(ApiResponse.success("Đổi thông tin thành công"));
+        else return res.send(ApiResponse.badRequest("Đổi thông tin thất bại"));
       }
     } else {
-      return res.status(200).send({
-        statusCode: 200,
-        message: "Đổi thông tin thành công",
-        alert: "Đổi thông tin thành công",
-      });
+      return res.send(ApiResponse.success("Đổi thông tin thành công"));
     }
   };
 }

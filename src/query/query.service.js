@@ -36,10 +36,11 @@ class QueryService {
 
       return (
         (queryResult.recordset &&
+          queryResult.recordset.length &&
           (queryResult.recordset.length === 1
             ? queryResult.recordset[0]
             : queryResult.recordset)) ||
-        queryResult
+        (queryResult.rowsAffected[0] ? true : null)
       );
     } catch (err) {
       return null;

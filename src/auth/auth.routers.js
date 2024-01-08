@@ -10,9 +10,12 @@ const authMiddleware = require("./auth.middlewares");
 const middleware = new authMiddleware();
 const isLogined = middleware.isLogined;
 
+const loginValidations = require("./dto/login.dto");
+const registerValidations = require("./dto/register.dto");
+
 router
   .route("/register")
-  .post(authController.register)
+  .post(registerValidations, authController.register)
   .get(isLogined, (req, res) => {
     let html = pug.renderFile("public/auth/Register.pug");
     res.send(html);
@@ -20,7 +23,7 @@ router
 
 router
   .route("/login")
-  .post(authController.login)
+  .post(loginValidations, authController.login)
   .get(isLogined, (req, res) => {
     let html = pug.renderFile("public/auth/Login.pug");
     res.send(html);

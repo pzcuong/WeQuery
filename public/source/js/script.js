@@ -19,13 +19,14 @@ async function login(button) {
 
   button.disabled = false;
 
-  let text = await response.json();
-  setCookie("x_authorization", text.accessToken);
-  console.log(text);
-  //alert(text.message);
-  if (text.redirect) window.location.href = text.redirect;
-  document.querySelector("#encoded").innerHTML = text.message;
-  //window.open(text.captcha_url, "mywindow","menubar=1,resizable=1,width=350,height=250").focus();
+  let res = await response.json();
+
+  if (res.statusCode === 200) {
+    setCookie("x_authorization", res.data.accessToken);
+    window.location.href = window.location.origin + "/user/profile";
+  }
+
+  document.querySelector("#encoded").innerHTML = res.message;
 }
 
 async function register(button) {
@@ -52,13 +53,14 @@ async function register(button) {
 
   button.disabled = false;
 
-  let text = await response.json();
-  setCookie("x_authorization", text.accessToken);
-  console.log(text);
-  //alert(text.message);
-  if (text.redirect) window.location.href = text.redirect;
-  document.querySelector("#encoded").innerHTML = text.message;
-  //window.open(text.captcha_url, "mywindow","menubar=1,resizable=1,width=350,height=250").focus();
+  let res = await response.json();
+
+  if (res.statusCode === 200) {
+    setCookie("x_authorization", res.data.accessToken);
+    window.location.href = window.location.origin + "/user/profile";
+  }
+
+  document.querySelector("#encoded").innerHTML = res.message;
 }
 
 function setCookie(name, value) {

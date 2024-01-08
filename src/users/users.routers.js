@@ -44,8 +44,6 @@ router
   .get(isAuth, userController.LayNoiDungBaiTap)
   .post(isAuth, userController.NopBaiTap);
 
-// router.get("/LichSu", isAuth, userController.LayLichSuTruyVan);
-
 router
   .route("/TestSQL/:MaCH")
   .get(isAuth, userController.LayCauHoi)
