@@ -38,6 +38,7 @@ class QuestionController {
   };
 
   ThemMoiCauHoi = async (req, res) => {
+    const data = req.body;
     switch (req.body.type) {
       case "TaoCauHoi":
         return this.handleTaoCauHoi(data, res);

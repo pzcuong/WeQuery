@@ -33,6 +33,7 @@ html(style='font-size: 16px;' lang='en')
                 th.u-border-3.u-border-custom-color-1.u-table-cell.u-table-cell-3 Tên
                 th.u-border-3.u-border-custom-color-1.u-table-cell.u-table-cell-6 Đã hoàn thành
             tbody.u-table-body
+              if questionList.length
                 each question in questionList
                     tr(style='height: 75px;')
                         td.u-border-1.u-border-grey-30.u-first-column.u-grey-5.u-table-cell.u-table-cell-7 #{question.MaCH}

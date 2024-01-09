@@ -36,6 +36,8 @@ class QuestionController {
       this.myCache.set(userCH, value);
     }
 
+    if (!Array.isArray(value)) value = [value];
+
     let html = pug.renderFile("public/user/LuyenTap.pug", {
       user: req.user,
       questionList: value,

@@ -1,5 +1,11 @@
+const UserInfo = require("../users/user/user.models");
+
 class AuthModels {
-  constructor() {}
+  constructor() {
+    this.userModel = new UserInfo();
+    this.authMethod = require("../auth/auth.methods");
+    this.randToken = require("rand-token");
+  }
 
   createToken = async (username, refreshToken) => {
     const accessTokenLife = process.env.ACCESS_TOKEN_LIFE;
