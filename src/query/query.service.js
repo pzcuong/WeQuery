@@ -43,6 +43,7 @@ class QueryService {
         (queryResult.rowsAffected[0] ? true : null)
       );
     } catch (err) {
+      console.log("Lỗi TruyVan (query.service)", query, err);
       return null;
     }
   };

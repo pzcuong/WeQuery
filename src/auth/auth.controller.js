@@ -2,44 +2,18 @@ require("dotenv").config();
 const UserInfo = require("../users/user/user.models");
 const QueryService = require("../query/query.service");
 const ApiResponse = require("../common/api.response");
+const AuthModels = require("./auth.models");
 
 class AuthController {
   constructor(SALT_ROUNDS = 10) {
     this.userModel = new UserInfo();
     this.queryService = new QueryService();
+    this.authModels = new AuthModels();
     this.authMethod = require("../auth/auth.methods");
     this.randToken = require("rand-token");
     this.bcrypt = require("bcryptjs");
     this.SALT_ROUNDS = SALT_ROUNDS;
   }
-
-  createToken = async (username, refreshToken) => {
-    const accessTokenLife = process.env.ACCESS_TOKEN_LIFE;
-    const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
-
-    const dataForAccessToken = {
-      username: username,
-    };
-
-    const accessToken = await this.authMethod.generateToken(
-      dataForAccessToken,
-      accessTokenSecret,
-      accessTokenLife
-    );
-
-    if (!accessToken) return null;
-
-    if (!refreshToken) {
-      refreshToken = this.randToken.generate(24);
-      await this.userModel.updateRefreshToken(username, refreshToken);
-    }
-
-    return {
-      accessToken: accessToken,
-      refreshToken: refreshToken,
-      username: username,
-    };
-  };
 
   register = async (req, res) => {
     const username = req.body.username;
@@ -68,7 +42,10 @@ class AuthController {
     };
 
     const newUser = await this.userModel.createUser(data);
-    const accessToken = await this.createToken(username, refreshToken);
+    const accessToken = await this.authModels.createToken(
+      username,
+      refreshToken
+    );
 
     if (newUser && accessToken)
       return res.send(
@@ -111,7 +88,10 @@ class AuthController {
           ApiResponse.badRequest("Tài khoản hoặc mật khẩu không đúng.")
         );
 
-      let refreshToken = await this.createToken(username, user.refreshToken);
+      let refreshToken = await this.authModels.createToken(
+        username,
+        user.refreshToken
+      );
 
       if (refreshToken) {
         return res.send(

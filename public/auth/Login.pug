@@ -75,12 +75,50 @@ html(style='font-size: 16px;' lang='en')
                         input#email-5a14.u-border-2.u-border-grey-30.u-input.u-input-rectangle.u-radius-10.u-white(type='password' placeholder='Mật khẩu' name='password' required='required')
                       .u-align-left.u-form-group.u-form-submit
                         a.u-border-none.u-btn.u-btn-submit.u-button-style.u-custom-color-1.u-btn-1(onclick="login(this)")
-                          span.u-icon
-                            svg.u-svg-content(viewBox='0 0 512 512' x='0px' y='0px' style='width: 1em; height: 1em;')
-                              path(d='m19.98,200.65909l180.67121,0l55.82879,-171.63684l55.82883,171.63684l180.67118,0l-146.16581,106.07619l55.83168,171.63684l-146.16587,-106.07908l-146.16584,106.07908l55.8317,-171.63684l-146.16586,-106.07619z')
-                            img
-                          |  Đăng nhập
+                          span.text  Đăng nhập
                           br
                   p.u-text.u-text-9
                     | Chưa có tài khoản? 
                     a.u-active-none.u-border-none.u-btn.u-button-link.u-button-style.u-hover-none.u-none.u-text-palette-1-base.u-btn-2(href='/auth/register') Đăng kí ngay
+
+
+script. 
+  let isProcessing = false;
+  async function login(button) {
+    if (isProcessing) return;
+    isProcessing = true;
+
+    var form = document.querySelector("#formElem");
+    document.querySelector("#encoded").innerHTML = "";
+
+    const text = button.querySelector('.text');
+    const originalText = text.textContent;
+
+    text.textContent = 'Loading...';
+
+    data = {
+      username: form.querySelector("input[name=username]").value,
+      password: form.querySelector("input[name=password]").value,
+    };
+
+    let response = await fetch("/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+      json: true,
+    });
+
+    let res = await response.json();
+
+    if (res.statusCode === 200) {
+      setCookie("x_authorization", res.data.accessToken);
+      window.location.href = window.location.origin + "/user/profile";
+    }
+
+    text.textContent = originalText;
+    isProcessing = false;
+
+    document.querySelector("#encoded").innerHTML = res.message;
+  }

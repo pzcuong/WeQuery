@@ -94,12 +94,15 @@ html(style='font-size: 16px;' lang='en')
                   form.u-clearfix.u-form-spacing-10.u-form-vertical.u-inner-form(action='#' method='POST' source='custom' name='form' style='padding: 10px;' id='formElem')
                     .u-form-group.u-form-name
                       label.u-label(for='name-570b') Tên bài tập
-                      input#name-570b.u-border-1.u-border-grey-30.u-input.u-input-rectangle.u-white(type='text' placeholder='Nhập vào tên bài tập' name='TieuDe' required='' value=questionList[0].TieuDeBaiTap)
+                      input#name-570b.u-border-1.u-border-grey-30.u-input.u-input-rectangle.u-white(type='text' placeholder='Nhập vào tên bài tập' name='TieuDe' required='' value=TieuDeBaiTap)
                     .u-form-group.u-form-select.u-form-group-2
                       label.u-label(for='select-b344') Chọn nhóm
                       .u-form-select-wrapper
                         select#select-872c.u-border-1.u-border-grey-30.u-input.u-input-rectangle.u-white(name='MaNhom' required='required')
                           each Nhom in dsNhom
+                            if (Nhom.MaNhom == questionList[0].MaNhom)
+                              option(value=Nhom.MaNhom selected) #{Nhom.TenNhom}
+                            else
                               option(value=Nhom.MaNhom) #{Nhom.TenNhom}
                         svg.u-caret(xmlns='http://www.w3.org/2000/svg' width='14' height='12' version='1')
                           path(fill='currentColor' d='M4 8L0 4h8z')

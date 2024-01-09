@@ -4,11 +4,12 @@ var pug = require("pug");
 const router = express.Router();
 
 const authMiddleware = require("../auth/auth.middlewares");
-const UserController = require("./users.controller");
+const UsersController = require("./users.controller");
 const getQuestionValidations = require("./dto/getQuestion.dto");
+const changeInfoValidations = require("./dto/changeInfo.dto");
 
 const middleware = new authMiddleware();
-const userController = new UserController();
+const userController = new UsersController();
 
 const isAuth = middleware.isAuth;
 
@@ -28,25 +29,33 @@ router
     });
     res.send(html);
   })
-  .post(isAuth, userController.DoiThongTin);
+  .post(
+    isAuth,
+    changeInfoValidations,
+    userController.userController.DoiThongTin
+  );
 
 router.get(
   "/TestSQL",
   isAuth,
   getQuestionValidations,
-  userController.LayDanhSachCauHoi
+  userController.questionController.LayDanhSachCauHoi
 );
 
-router.get("/BaiTap", isAuth, userController.LayDanhSachBaiTap);
+router.get(
+  "/BaiTap",
+  isAuth,
+  userController.questionController.LayDanhSachBaiTap
+);
 
 router
   .route("/BaiTap/:MaBT/:MaCH")
-  .get(isAuth, userController.LayNoiDungBaiTap)
-  .post(isAuth, userController.NopBaiTap);
+  .get(isAuth, userController.questionController.LayNoiDungBaiTap)
+  .post(isAuth, userController.questionController.NopBaiTap);
 
 router
   .route("/TestSQL/:MaCH")
-  .get(isAuth, userController.LayCauHoi)
-  .post(isAuth, userController.TestSQL);
+  .get(isAuth, userController.questionController.LayCauHoi)
+  .post(isAuth, userController.questionController.TestSQL);
 
 module.exports = router;

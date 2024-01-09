@@ -59,8 +59,8 @@ html(style='font-size: 16px;' lang='en')
                         input#confirm-password.u-border-2.u-border-grey-30.u-input.u-input-rectangle.u-radius-10.u-white(type='password' placeholder='Nhập lại mật khẩu mới' name='confirmPassword')
 
                       .u-align-left.u-form-group.u-form-submit
-                        a.u-border-none.u-btn.u-btn-submit.u-button-style.u-custom-color-1.u-btn-1(onclick="changeInfo()")
-                          | Đổi thông tin
+                        a.u-border-none.u-btn.u-btn-submit.u-button-style.u-custom-color-1.u-btn-1(onclick="changeInfo(this)")
+                          span.text  Đổi thông tin
                           br
 style.
   .password-field {
@@ -68,6 +68,8 @@ style.
   }
 
 script. 
+  let isProcessing = false;
+
   function togglePasswordFields() {
     let passwordFields = document.getElementsByClassName('password-field');
     for (let i = 0; i < passwordFields.length; i++) {
@@ -79,7 +81,14 @@ script.
     }
   }
 
-  async function changeInfo() {
+  async function changeInfo(button) {
+    if (isProcessing) return;
+    isProcessing = true;
+
+    const text = button.querySelector('.text');
+    const originalText = text.textContent;
+    text.textContent = 'Loading...';
+    
     const form = document.getElementById('formElem');
     data = {
       isChangePassword: document.getElementById('change-password').checked,
@@ -101,8 +110,11 @@ script.
       json: true
     })
 
-    let text = await response.json(); 
+    let res = await response.json(); 
 
-    alert(text.message);
-    if (text.statusCode == 200) location.reload();
+    text.textContent = originalText;
+    isProcessing = false;
+
+    alert(res.message);
+    if (res.statusCode == 200) location.reload();
   }

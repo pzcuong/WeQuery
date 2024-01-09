@@ -1,34 +1,3 @@
-async function login(button) {
-  button.disabled = true;
-  var form = document.querySelector("#formElem");
-  document.querySelector("#encoded").innerHTML = "";
-
-  data = {
-    username: form.querySelector("input[name=username]").value,
-    password: form.querySelector("input[name=password]").value,
-  };
-
-  let response = await fetch("/auth/login", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-    json: true,
-  });
-
-  button.disabled = false;
-
-  let res = await response.json();
-
-  if (res.statusCode === 200) {
-    setCookie("x_authorization", res.data.accessToken);
-    window.location.href = window.location.origin + "/user/profile";
-  }
-
-  document.querySelector("#encoded").innerHTML = res.message;
-}
-
 async function register(button) {
   button.disabled = true;
   var form = document.querySelector("#formElem");

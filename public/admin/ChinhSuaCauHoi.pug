@@ -271,7 +271,7 @@ html(style='font-size: 16px;' lang='en')
       if(text.statusCode != 200)
         document.querySelector("#encoded").innerHTML = text.message;
       else
-        document.querySelector("#encoded").innerHTML = text.result;
+        document.querySelector("#encoded").innerHTML = JSON.stringify(text.data);
       document.querySelector("#encoded").style="margin: auto"
     }
   
