@@ -14,9 +14,9 @@ class QuestionModel {
   };
 
   ThemCauHoi = async (data) => {
-    let SQLQuery = `insert into Admin_CauHoi (MucDo, TieuDe, NoiDung, LuocDo, TinhTrang) 
+    let SQLQuery = `insert into Admin_CauHoi (MucDo, TieuDe, NoiDung, LuocDo, TinhTrang, InputData) 
               OUTPUT INSERTED.MaCH
-              values (N'${data.MucDo}', N'${data.TieuDe}', N'${data.NoiDung}', N'${data.LuocDo}', '${data.TinhTrang}')`;
+              values (N'${data.MucDo}', N'${data.TieuDe}', N'${data.NoiDung}', N'${data.LuocDo}', '${data.TinhTrang}', '${data.InputData}')`;
     let insertedData = await this.queryService.query(SQLQuery);
 
     return await this.ThemTestCase(insertedData.MaCH, data.SQLQuery);
@@ -60,7 +60,7 @@ class QuestionModel {
 
   ChinhSuaCauHoi = async (MaCH, data) => {
     let SQLQuery = `update Admin_CauHoi 
-              set LuocDo =  N'${data.LuocDo}', MucDo = N'${data.MucDo}', TieuDe = N'${data.TieuDe}', NoiDung = N'${data.NoiDung}', TinhTrang = '${data.TinhTrang}'
+              set LuocDo =  N'${data.LuocDo}', InputData = N'${data.InputData}', MucDo = N'${data.MucDo}', TieuDe = N'${data.TieuDe}', NoiDung = N'${data.NoiDung}', TinhTrang = '${data.TinhTrang}'
               where MaCH = '${MaCH}'`;
 
     const updateResult = await this.queryService.query(SQLQuery);

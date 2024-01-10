@@ -61,7 +61,7 @@ html(style='font-size: 16px;' lang='en')
                       input#name-0b5c.u-border-1.u-border-grey-30.u-input.u-input-rectangle.u-white(type='text' placeholder='Nhập tên lược đồ sử dụng...' name='LuocDo' required='')
                     .u-form-group.u-form-message.u-label-top
                       label.u-label(for='message-0b5c') Lược đồ
-                      textarea#message-0b5c.u-border-1.u-border-grey-30.u-input.u-input-rectangle.u-white(placeholder='Tạo quan hệ mới với lệnh SQL' rows='10' cols='50' name='SQLSchema' required='')
+                      textarea#message-0b5c.u-border-1.u-border-grey-30.u-input.u-input-rectangle.u-white(placeholder='Tạo quan hệ mới với lệnh SQL' rows='10' cols='50' name='InputData' required='')
                     .u-align-left.u-form-group.u-form-submit.u-label-top
                     //a.u-border-none.u-btn.u-button-style.u-dialog-link.u-palette-4-base.u-btn-4(href='#sec-949c') Tạo quan hệ mới
                     a.u-border-none.u-btn.u-btn-submit.u-dialog-link.u-button-style.u-custom-color-1.u-btn-2(href='#sec-949c' style='margin-left: 10px' onclick='TaoQuanHe()') Tạo quan hệ mới
@@ -193,7 +193,7 @@ html(style='font-size: 16px;' lang='en')
 
       data = {
         LuocDo: form.querySelector("input[name='LuocDo']").value,
-        SQLSchema: form.querySelector("textarea[name='SQLSchema']").value,
+        SQLSchema: form.querySelector("textarea[name='InputData']").value,
         type: 'TaoQuanHe'     
       }
 
@@ -231,6 +231,7 @@ html(style='font-size: 16px;' lang='en')
         SQLQuery: formOutput.querySelector("textarea[name='SQLQuery']").value,
         LuocDo: form.querySelector("input[name='LuocDo']").value,
         TinhTrang: TinhTrang,
+        InputData: form.querySelector("textarea[name='InputData']").value,
         type: 'TaoCauHoi'
       }
 

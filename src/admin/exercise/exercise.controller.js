@@ -12,9 +12,9 @@ class ExerciseController {
   }
 
   handleTaoQuanHe = async (data, res) => {
-    const result = await this.questionModel.TaoQuanHe(data);
+    const result = await this.questionModel.TaoQuanHe(data.SQLSchema);
     if (result) return res.send(ApiResponse.success({ MaCH: result.MaCH }));
-    else return res.send(ApiResponse.error("Thêm câu hỏi thất bại"));
+    else return res.send(ApiResponse.error("Tạo quan hệ thất bại"));
   };
 
   handleTaoCauHoi = async (MaBT, data, res) => {
