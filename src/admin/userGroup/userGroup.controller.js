@@ -18,6 +18,7 @@ class UserGroupController {
 
   DanhSachNhomSV = async (req, res) => {
     let groups = await this.userGroupModel.DanhSachNhom();
+    if (!Array.isArray(groups)) groups = [groups];
     let html;
 
     if (groups)
@@ -27,7 +28,7 @@ class UserGroupController {
       });
     else
       html = pug.renderFile("public/404.pug", {
-        message: result.message,
+        message: "Không tìm thấy danh sách nhóm sinh viên",
         redirect: "/admin/QuanLySinhVien",
       });
 

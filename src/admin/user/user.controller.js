@@ -36,7 +36,7 @@ class UserController {
       });
     else
       html = pug.renderFile("public/404.pug", {
-        message: result.message,
+        message: "Không tìm thấy danh sách sinh viên",
         redirect: "/admin/QuanLySinhVien",
       });
     res.send(html);

@@ -93,17 +93,11 @@ class QuestionController {
 
   DanhSachCauHoi = async (req, res) => {
     let result = await this.questionModel.DanhSachCauHoi();
-    let html;
-    if (result)
-      html = pug.renderFile("public/admin/QuanLyCauHoi.pug", {
-        user: req.user,
-        questionList: result,
-      });
-    else
-      html = pug.renderFile("public/404.pug", {
-        message: result,
-        redirect: "/admin/QuanLyCauHoi",
-      });
+    let html = pug.renderFile("public/admin/QuanLyCauHoi.pug", {
+      user: req.user,
+      questionList: result || [],
+    });
+
     res.send(html);
   };
 }

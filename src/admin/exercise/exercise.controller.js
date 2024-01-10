@@ -54,19 +54,11 @@ class ExerciseController {
   DanhSachBaiTap = async (req, res) => {
     let questionList = await this.exerciseModel.DanhSachBaiTap();
     let dsNhom = await this.userGroupModel.DanhSachNhom();
-    let html;
-
-    if (questionList)
-      html = pug.renderFile("public/admin/QuanLyBaiTap.pug", {
-        user: req.user,
-        questionList: questionList,
-        dsNhom: dsNhom,
-      });
-    else
-      html = pug.renderFile("public/404.pug", {
-        message: result,
-        redirect: "/admin/QuanLyBaiTap",
-      });
+    let html = pug.renderFile("public/admin/QuanLyBaiTap.pug", {
+      user: req.user,
+      questionList: questionList || [],
+      dsNhom: dsNhom,
+    });
 
     res.send(html);
   };
