@@ -93,11 +93,13 @@ class ExerciseController {
     let dsNhom = await this.userGroupModel.DanhSachNhom();
     let BXH = await this.questionModel.BangXepHang(MaBT);
 
+    if (!Array.isArray(exercise)) exercise = [exercise];
+
     let html;
     if (exercise)
       html = pug.renderFile("public/admin/QuanLyCauHoiTrongBaiTap.pug", {
         user: req.user,
-        TieuDeBaiTap: exercise[0].TieuDeBaiTap,
+        TieuDeBaiTap: exercise[0]?.TieuDeBaiTap,
         questionList: exercise,
         dsNhom: dsNhom,
         BXH: BXH,

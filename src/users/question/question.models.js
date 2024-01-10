@@ -88,7 +88,7 @@ class QuestionInfo {
               )`;
       let result = await this.queryService.query(SQLQuery);
 
-      if (result.length) {
+      if (result?.length) {
         let history;
         let currentQuestion = result.findIndex((item) => item.MaCH == MaCH);
         if (currentQuestion === -1) currentQuestion = 0;

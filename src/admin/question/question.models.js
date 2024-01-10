@@ -86,11 +86,11 @@ class QuestionModel {
     let result = await this.queryService.query(SQLQuery);
     let user = {};
     let dsCH = [];
-    for (let i = 0; i < result.length; i++)
+    for (let i = 0; i < result?.length; i++)
       if (!dsCH.includes(result[i].MaCH)) dsCH.push(result[i].MaCH);
 
-    for (let i = 0; i < result.length; i++) {
-      if (user[result[i].username] == undefined) user[result[i].username] = [];
+    for (let i = 0; i < result?.length; i++) {
+      if (!user[result[i].username]) user[result[i].username] = [];
 
       user[result[i].username].push({
         username: result[i].username,
