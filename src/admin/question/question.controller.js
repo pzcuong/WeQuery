@@ -93,6 +93,7 @@ class QuestionController {
 
   DanhSachCauHoi = async (req, res) => {
     let result = await this.questionModel.DanhSachCauHoi();
+    if (!Array.isArray(result)) result = [result];
     let html = pug.renderFile("public/admin/QuanLyCauHoi.pug", {
       user: req.user,
       questionList: result || [],

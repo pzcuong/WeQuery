@@ -54,6 +54,10 @@ class ExerciseController {
   DanhSachBaiTap = async (req, res) => {
     let questionList = await this.exerciseModel.DanhSachBaiTap();
     let dsNhom = await this.userGroupModel.DanhSachNhom();
+
+    if (!Array.isArray(questionList)) questionList = [questionList];
+    if (!Array.isArray(dsNhom)) dsNhom = [dsNhom];
+
     let html = pug.renderFile("public/admin/QuanLyBaiTap.pug", {
       user: req.user,
       questionList: questionList || [],
