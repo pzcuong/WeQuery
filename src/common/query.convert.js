@@ -1,12 +1,17 @@
 class ConvertSQLQuery {
   constructor() {}
 
-  convertSQLQuery = async (MaCH, SQLQuery) => {
-    const regex = /\bFROM\s+(\w+)|JOIN\s+(\w+)\b/gi;
+  convertSQLQuery = (randomString, SQLQuery) => {
+    if (!SQLQuery) throw new Error("SQLQuery is null");
+
+    SQLQuery = SQLQuery.toLowerCase();
+
+    const regex =
+      /\b(FROM|JOIN|INTO|UPDATE|DELETE FROM|CREATE TABLE)\s+(\w+)\b/gi;
 
     const convertedQuery = SQLQuery.replace(regex, (match, p1, p2) => {
-      const tableName = p1 || p2;
-      const uniqueTableName = `${tableName}_${MaCH}`;
+      const tableName = p2;
+      const uniqueTableName = `${tableName}_${randomString}`;
       return match.replace(tableName, uniqueTableName);
     });
 
@@ -14,4 +19,4 @@ class ConvertSQLQuery {
   };
 }
 
-module.exports = new ConvertSQLQuery();
+module.exports = ConvertSQLQuery;

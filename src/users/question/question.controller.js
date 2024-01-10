@@ -17,7 +17,8 @@ class QuestionController {
       const result = await this.queryService.testQuery(
         MaCH,
         req.body.SQLQuery,
-        req.user
+        req.user,
+        req.body.randomString
       );
       return result
         ? res.send(ApiResponse.success("Kết quả so khớp: " + result + "%"))
@@ -115,10 +116,11 @@ class QuestionController {
         MaBT,
         MaCH,
         req.body.SQLQuery,
-        req.user
+        req.user,
+        req.body.randomString
       );
-      return ApiResponse.success(result);
-    } else return ApiResponse.notFound();
+      return res.send(ApiResponse.success(result));
+    } else return res.send(ApiResponse.notFound());
   };
 }
 

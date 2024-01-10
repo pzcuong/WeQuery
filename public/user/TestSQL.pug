@@ -165,6 +165,8 @@ html(style='font-size: 16px;' lang='en')
       }
 
 script. 
+  const questionData = !{JSON.stringify(message)};
+  
   async function SubmitSQLWithEditor() {
     document.querySelector('.btn').style.visibility = 'hidden';
     document.querySelector('#encoded').innerHTML = "Đang gửi yêu cầu, vui lòng đợi!";
@@ -172,18 +174,19 @@ script.
     var SQLQuery = editAreaLoader.getValue("message-79f8")
     
     data = {
-        SQLQuery : SQLQuery,
+      randomString: questionData.RandomString,
+      SQLQuery: SQLQuery,
     }
 
     let url = window.location.href;
 
     let response = await fetch(url, {
-            method: 'POST', 
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-            json: true
+      method: 'POST', 
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+      json: true
     })
 
     let text = await response.json(); 

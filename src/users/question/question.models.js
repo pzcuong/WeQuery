@@ -8,7 +8,7 @@ class QuestionInfo {
   }
 
   LayCauHoi = async (MaCH, user) => {
-    let SQLQuery = `SELECT CH.MaCH, CH.MucDo, CH.TieuDe, CH.NoiDung, CH.LuocDo
+    let SQLQuery = `SELECT CH.MaCH, CH.MucDo, CH.TieuDe, CH.NoiDung, CH.LuocDo, CH.RandomString
               FROM Admin_CauHoi CH
               WHERE CH.MaCH = @MaCH AND CH.TinhTrang = 1`;
 
@@ -75,7 +75,7 @@ class QuestionInfo {
     let userCache = user.MaNhom + "-BT:" + MaBT + "-CH:" + MaCH;
     let value = this.myCache.get(userCache);
     if (!value) {
-      let SQLQuery = `SELECT DISTINCT CH.MaCH, CH.MucDo, CH.TieuDe, CH.NoiDung, CH.LuocDo, KQ.KetQua, BTCH.MaBT
+      let SQLQuery = `SELECT DISTINCT CH.MaCH, CH.MucDo, CH.TieuDe, CH.NoiDung, CH.LuocDo, KQ.KetQua, BTCH.MaBT, CH.RandomString
               FROM (
                       SELECT MaCH, LS.KetQua, LS.SQLQuery, LS.ThoiGian
                       FROM Admin_SQLSubmitHistory LS 
@@ -87,6 +87,8 @@ class QuestionInfo {
                   WHERE TVN.Username = N'${user.username}' AND BTN.MaBT = N'${MaBT}'
               )`;
       let result = await this.queryService.query(SQLQuery);
+
+      if (!Array.isArray(result)) result = [result];
 
       if (result?.length) {
         let history;
@@ -166,13 +168,14 @@ class QuestionInfo {
       };
   };
 
-  NopBaiTap = async (MaBT, MaCH, SQLQueryClient, user) => {
+  NopBaiTap = async (MaBT, MaCH, SQLQueryClient, user, randomString) => {
     SQLQueryClient = SQLQueryClient.toLowerCase();
 
     let resultClient = await this.queryService.testQuery(
       MaCH,
       SQLQueryClient,
-      user
+      user,
+      randomString
     );
 
     const resultOutput = await this.GetOutputWithTime(MaBT, MaCH);

@@ -59,11 +59,11 @@ html(style='font-size: 16px;' lang='en')
                 .u-form.u-form-2
                   form.u-clearfix.u-form-spacing-10.u-form-vertical.u-inner-form(action='#' method='POST' source='custom' name='form-1' style='padding: 10px;' id='formQH')
                     .u-form-group.u-form-name.u-label-top
-                      label.u-label(for='name-0b5c') Tên lược đồ
-                      input#name-0b5c.u-border-1.u-border-grey-30.u-input.u-input-rectangle.u-white(type='text' placeholder='Nhập tên lược đồ sử dụng...' name='LuocDo' required='' value=data.LuocDo)
+                      label.u-label(for='name-0b5c') Tên quan hệ
+                      input#name-0b5c.u-border-1.u-border-grey-30.u-input.u-input-rectangle.u-white(type='text' placeholder='Nhập tên lược đồ sử dụng...' name='LuocDo' disabled value=data.LuocDo)
                     .u-form-group.u-form-message.u-label-top
                       label.u-label(for='message-0b5c') Lược đồ
-                      textarea#message-0b5c.u-border-1.u-border-grey-30.u-input.u-input-rectangle.u-white(placeholder='Tạo quan hệ mới với lệnh SQL' rows='10' cols='50' name='SQLSchema' required='')
+                      textarea#message-0b5c.u-border-1.u-border-grey-30.u-input.u-input-rectangle.u-white(placeholder='Tạo quan hệ mới với lệnh SQL' rows='10' cols='50' name='SQLSchema' required='') #{data.InputData}
                     .u-align-left.u-form-group.u-form-submit.u-label-top
                     //a.u-border-none.u-btn.u-button-style.u-dialog-link.u-palette-4-base.u-btn-4(href='#sec-949c') Tạo quan hệ mới
                     a.u-border-none.u-btn.u-btn-submit.u-dialog-link.u-button-style.u-custom-color-1.u-btn-2(href='#sec-949c' style='margin-left: 10px' onclick='TaoQuanHe()') Tạo quan hệ mới
@@ -188,11 +188,14 @@ html(style='font-size: 16px;' lang='en')
     });
   
   script.
+    const questionData = !{JSON.stringify(data)};
+
     async function TaoQuanHe() {
       document.querySelector("#encoded").innerHTML = "Đang xử lý..."
       var form = document.querySelector("#formQH");
 
       data = {
+        randomString: questionData.RandomString,
         LuocDo: form.querySelector("input[name='LuocDo']").value,
         SQLSchema: form.querySelector("textarea[name='SQLSchema']").value,
         type: 'TaoQuanHe'     
@@ -208,11 +211,9 @@ html(style='font-size: 16px;' lang='en')
       })
 
       let text = await response.json(); 
-      //alert(text.message);
       document.querySelector("#encoded").innerHTML = text.message;
     }
 
-  script.
     async function TaoCauHoiVaTestcase() {
       document.querySelector("#encoded").innerHTML = "Đang xử lý..."
       var formCH = document.querySelector("#formCH");
@@ -225,6 +226,7 @@ html(style='font-size: 16px;' lang='en')
       }
 
       data = {
+        randomString: questionData.RandomString,
         TieuDe: formCH.querySelector("input[name='TieuDe']").value,
         NoiDung: formCH.querySelector("textarea[name='NoiDung']").value,
         MucDo: formCH.querySelector("select[name='DoKho']").value,
@@ -247,12 +249,12 @@ html(style='font-size: 16px;' lang='en')
       document.querySelector("#encoded").innerHTML = text.message;
     }
 
-  script.
     async function KiemThuTestCase() {
       document.querySelector("#encoded").innerHTML = "Đang xử lý..."
       var formOutput = document.querySelector("#formOutput");
 
       data = {
+        randomString: questionData.RandomString,
         SQLQuery: formOutput.querySelector("textarea[name='SQLQuery']").value,
         type: 'KiemThuTestCase'
       }
@@ -275,7 +277,6 @@ html(style='font-size: 16px;' lang='en')
       document.querySelector("#encoded").style="margin: auto"
     }
   
-  script.
     async function XoaCauHoi() {
       if(!window.confirm("Bạn có chắc chắn muốn xóa câu hỏi này không?")) 
         return;

@@ -204,18 +204,19 @@ script.
     var SQLQuery = editAreaLoader.getValue("message-79f8")
     
     data = {
-        SQLQuery : SQLQuery,
+      randomString: question.RandomString,
+      SQLQuery : SQLQuery,
     }
 
     let url = window.location.href;
 
     let response = await fetch(url, {
-            method: 'POST', 
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-            json: true
+      method: 'POST', 
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+      json: true
     })
 
     let text = await response.json(); 
@@ -223,11 +224,11 @@ script.
     if(text.redirect)
         window.location.href = text.redirect;
     
-    if(text.statusCode == 200) 
+    if(text.data.statusCode == 200) 
       document.querySelector('#encoded').style.color = "green";
     else
       document.querySelector('#encoded').style.color = "red";
 
-    document.querySelector("#encoded").innerHTML = JSON.stringify(text.alert);
+    document.querySelector("#encoded").innerHTML = JSON.stringify(text.data.alert);
     document.querySelector('.btn').style.visibility = "visible";
   };

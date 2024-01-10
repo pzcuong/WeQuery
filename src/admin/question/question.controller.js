@@ -28,7 +28,8 @@ class QuestionController {
   };
 
   handleKiemThuTestCase = async (data, res) => {
-    const result = await this.questionModel.KiemThuTestCase(data.SQLQuery);
+    const result = await this.questionModel.KiemThuTestCase(data);
+
     return res.send(ApiResponse.success(result));
   };
 
@@ -42,6 +43,8 @@ class QuestionController {
     switch (req.body.type) {
       case "TaoCauHoi":
         return this.handleTaoCauHoi(data, res);
+      case "TaoQuanHe":
+        return this.handleTaoQuanHe(data, res);
       case "KiemThuTestCase":
         return this.handleKiemThuTestCase(data, res);
       default:

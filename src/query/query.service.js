@@ -1,6 +1,7 @@
 const sql = require("mssql");
 const _ = require("lodash");
 const stringSimilarity = require("string-similarity");
+const ConvertSQLQuery = require("../common/query.convert");
 
 function createConfig(user, password) {
   return {
@@ -19,6 +20,7 @@ class QueryService {
 
     this.poolAdmin = new sql.ConnectionPool(this.configAdmin);
     this.poolUser = new sql.ConnectionPool(this.configUser);
+    this.convertQuery = new ConvertSQLQuery();
   }
 
   query = async (query, parameters, TypeUser = "Admin") => {
@@ -48,10 +50,14 @@ class QueryService {
     }
   };
 
-  testQuery = async (MaCH, SQLQueryClient, user) => {
+  testQuery = async (MaCH, SQLQueryClient, user, randomString) => {
     SQLQueryClient = SQLQueryClient.toLowerCase();
+    let SQLQuery = this.convertQuery.convertSQLQuery(
+      randomString,
+      SQLQueryClient
+    );
 
-    let resultClient = await this.query(SQLQueryClient, null, "User");
+    let resultClient = await this.query(SQLQuery, null, "User");
     const resultOutput = await this.getOutput(MaCH);
 
     let comparePercent =
@@ -71,7 +77,6 @@ class QueryService {
 
   getOutput = async (MaCH) => {
     let SQLQuery = `select Output from Admin_TestCase where MaCH = ${MaCH}`;
-    console.log(SQLQuery);
     return await this.query(SQLQuery);
   };
 

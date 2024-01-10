@@ -187,11 +187,18 @@ html(style='font-size: 16px;' lang='en')
     });
   
   script.
+    function generateRandomString(length) {
+      return Math.random().toString(36).substring(2, 2 + length);
+    }
+
+    const randomString = generateRandomString(20);
+
     async function TaoQuanHe() {
       document.querySelector("#encoded").innerHTML = "Đang xử lý..."
       var form = document.querySelector("#formQH");
 
       data = {
+        randomString: randomString,
         LuocDo: form.querySelector("input[name='LuocDo']").value,
         SQLSchema: form.querySelector("textarea[name='InputData']").value,
         type: 'TaoQuanHe'     
@@ -218,13 +225,14 @@ html(style='font-size: 16px;' lang='en')
       var formCH = document.querySelector("#formCH");
       var formOutput = document.querySelector("#formOutput");
       var TinhTrang = formCH.querySelector("input[name='TinhTrang']").value;
-      if(TinhTrang.checked == true) {
+      if(TinhTrang.checked == true) 
         TinhTrang = 1;
-      } else {
+       else 
         TinhTrang = 0;
-      }
+      
 
       data = {
+        randomString: randomString,
         TieuDe: formCH.querySelector("input[name='TieuDe']").value,
         NoiDung: formCH.querySelector("textarea[name='NoiDung']").value,
         MucDo: formCH.querySelector("select[name='DoKho']").value,
@@ -245,7 +253,6 @@ html(style='font-size: 16px;' lang='en')
       })
 
       let text = await response.json(); 
-      //alert(text.message);
       document.querySelector("#encoded").innerHTML = text.message;  
       
       if(text.statusCode == 200) {
@@ -264,6 +271,7 @@ html(style='font-size: 16px;' lang='en')
       var formOutput = document.querySelector("#formOutput");
 
       data = {
+        randomString: randomString,
         SQLQuery: formOutput.querySelector("textarea[name='SQLQuery']").value,
         type: 'KiemThuTestCase'
       }
@@ -278,9 +286,8 @@ html(style='font-size: 16px;' lang='en')
       })
 
       let text = await response.json(); 
-      //alert(text.message);
       if(text.statusCode != 200)
         document.querySelector("#encoded").innerHTML = text.message;
       else
-        document.querySelector("#encoded").innerHTML = text.result;
+        document.querySelector("#encoded").innerHTML = text.data;
     }

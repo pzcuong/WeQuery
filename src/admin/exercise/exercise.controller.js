@@ -12,7 +12,7 @@ class ExerciseController {
   }
 
   handleTaoQuanHe = async (data, res) => {
-    const result = await this.questionModel.TaoQuanHe(data.SQLSchema);
+    const result = await this.questionModel.TaoQuanHe(data);
     if (result) return res.send(ApiResponse.success({ MaCH: result.MaCH }));
     else return res.send(ApiResponse.error("Tạo quan hệ thất bại"));
   };
@@ -29,7 +29,8 @@ class ExerciseController {
   };
 
   handleKiemThuTestCase = async (data, res) => {
-    return await this.questionModel.KiemThuTestCase(data.SQLQuery);
+    const result = await this.questionModel.KiemThuTestCase(data);
+    return res.send(ApiResponse.success(result));
   };
 
   ThemCauHoiTrongBaiTap = async (req, res) => {

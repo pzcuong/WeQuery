@@ -1,12 +1,14 @@
 const QueryService = require("../../query/query.service");
+const ConvertSQLQuery = require("../../common/query.convert");
 
 class QuestionModel {
   constructor() {
     this.queryService = new QueryService();
+    this.convertQuery = new ConvertSQLQuery();
   }
 
   LayCauHoi = async (MaCH) => {
-    let SQLQuery = `SELECT TieuDe, MucDo, NoiDung, LuocDo, Input
+    let SQLQuery = `SELECT TieuDe, MucDo, NoiDung, LuocDo, Input, InputData, RandomString
               FROM dbo.Admin_CauHoi LEFT JOIN dbo.Admin_TestCase ON Admin_TestCase.MaCH = Admin_CauHoi.MaCH
               WHERE Admin_CauHoi.MaCH = '${MaCH}'`;
 
@@ -14,46 +16,71 @@ class QuestionModel {
   };
 
   ThemCauHoi = async (data) => {
-    let SQLQuery = `insert into Admin_CauHoi (MucDo, TieuDe, NoiDung, LuocDo, TinhTrang, InputData) 
-              OUTPUT INSERTED.MaCH
-              values (N'${data.MucDo}', N'${data.TieuDe}', N'${data.NoiDung}', N'${data.LuocDo}', '${data.TinhTrang}', '${data.InputData}')`;
-    let insertedData = await this.queryService.query(SQLQuery);
+    let InputData = data.InputData.replace(/'/g, '"');
 
-    return await this.ThemTestCase(insertedData.MaCH, data.SQLQuery);
+    let SQLQuery = `INSERT INTO Admin_CauHoi (MucDo, TieuDe, NoiDung, LuocDo, TinhTrang, InputData, RandomString) 
+    OUTPUT INSERTED.MaCH
+    VALUES (@MucDo, @TieuDe, @NoiDung, @LuocDo, @TinhTrang, @InputData, @RandomString)`;
+
+    let parameters = {
+      MucDo: data.MucDo,
+      TieuDe: data.TieuDe,
+      NoiDung: data.NoiDung,
+      LuocDo: data.LuocDo,
+      TinhTrang: data.TinhTrang ? "1" : "0",
+      InputData: InputData,
+      RandomString: data.randomString,
+    };
+
+    let insertedData = await this.queryService.query(SQLQuery, parameters);
+
+    data.MaCH = insertedData.MaCH;
+    if (!insertedData) throw new Error("Thêm câu hỏi thất bại");
+
+    await this.ThemTestCase(data);
+
+    return insertedData;
   };
 
-  ThemTestCase = async (MaCH, SQLQuery) => {
-    let queryData = await this.queryService.query(SQLQuery);
-    if (!queryData) return null;
+  ThemTestCase = async (data) => {
+    const KiemThuTestCase = await this.KiemThuTestCase(data);
 
-    SQLQuery = SQLQuery.replace(/'/g, '"');
+    let SQLQuery = data.SQLQuery.replace(/'/g, '"');
     let insertSQLQuery = `insert into Admin_TestCase (MaCH, Input, Output) 
-              values ('${MaCH}', '${SQLQuery}', '${JSON.stringify(
-      queryData
+      values ('${data.MaCH}', '${SQLQuery}', '${JSON.stringify(
+      KiemThuTestCase
     )}')`;
 
     return await this.queryService.query(insertSQLQuery);
   };
 
-  KiemThuTestCase = async (SQLQuery) => {
+  KiemThuTestCase = async (data) => {
+    let SQLQuery = this.convertQuery.convertSQLQuery(
+      data.randomString,
+      data.SQLQuery
+    );
+
     return await this.queryService.query(SQLQuery);
   };
 
-  SuaTestCase = async (MaCH, SQLQuery) => {
-    let queryData = await this.queryService.query(SQLQuery);
-    if (!queryData) return null;
+  SuaTestCase = async (data) => {
+    const KiemThuTestCase = await this.KiemThuTestCase(data);
 
-    SQLQuery = SQLQuery.replace(/'/g, '"');
+    let SQLQuery = data.SQLQuery.replace(/'/g, '"');
 
     let updateSQLQuery = `update Admin_TestCase 
               set Input = '${SQLQuery}', Output = '${JSON.stringify(
-      queryData
-    )}' where MaCH = '${MaCH}'`;
+      KiemThuTestCase
+    )}' where MaCH = '${data.MaCH}'`;
 
     return await this.queryService.query(updateSQLQuery);
   };
 
-  TaoQuanHe = async (SQLSchema) => {
+  TaoQuanHe = async (data) => {
+    let SQLSchema = this.convertQuery.convertSQLQuery(
+      data.randomString,
+      data.SQLSchema
+    );
     let result = await this.queryService.query(SQLSchema);
     return result;
   };
@@ -64,7 +91,7 @@ class QuestionModel {
               where MaCH = '${MaCH}'`;
 
     const updateResult = await this.queryService.query(SQLQuery);
-    const updateTestCase = await this.SuaTestCase(MaCH, data.SQLQuery);
+    const updateTestCase = await this.SuaTestCase(data);
 
     return { updateResult, updateTestCase };
   };
